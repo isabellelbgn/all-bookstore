@@ -18,6 +18,6 @@
 * Time-saving: Users can save time and effort by easily finding books of interest, accessing them from anywhere, and engaging in meaningful discussions within the community.
 * Knowledge Expansion: The platform facilitates lifelong learning and knowledge expansion by providing access to a vast repository of educational resources, literature, and informational content.
 * Community Building: ALL Bookstore connects like-minded individuals who share a passion for reading, fostering a sense of belonging and camaraderie within the literary community.
-* Convenience: With its seamless interface and robust functionality, BookWise Connect offers unmatched convenience in discovering, purchasing, and consuming books online.
+* Convenience: With its seamless interface and robust functionality, ALL Bookstore offers unmatched convenience in discovering, purchasing, and consuming books online.
 
 In summary, **ALL Bookstore** is not just a web application; it's a gateway to a world of knowledge, exploration, and community for book enthusiasts and learners worldwide.
