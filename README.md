@@ -2,7 +2,7 @@
 
 **Name of system:** ALL Bookstore 
 
-**Description:** a full-stack web application designed to revolutionize how people interact with online bookstores and libraries. It seamlessly integrates a user-friendly interface with powerful backend functionality to provide an enriching experience for book enthusiasts and knALLedge seekers alike.
+**Description:** a full-stack web application designed to revolutionize how people interact with online bookstores and libraries. It seamlessly integrates a user-friendly interface with powerful backend functionality to provide an enriching experience for book enthusiasts and knowledge seekers alike.
 
 **Key Features:**
 
@@ -16,8 +16,8 @@
 **How does the full stack web application help the benefactors of it?**
 
 * Time-saving: Users can save time and effort by easily finding books of interest, accessing them from anywhere, and engaging in meaningful discussions within the community.
-* KnALLedge Expansion: The platform facilitates lifelong learning and knALLedge expansion by providing access to a vast repository of educational resources, literature, and informational content.
+* knowledge Expansion: The platform facilitates lifelong learning and knowledge expansion by providing access to a vast repository of educational resources, literature, and informational content.
 * Community Building: ALL Bookstore connects like-minded individuals who share a passion for reading, fostering a sense of belonging and camaraderie within the literary community.
 * Convenience: With its seamless interface and robust functionality, ALL Bookstore offers unmatched convenience in discovering, purchasing, and consuming books online.
 
-In summary, **ALL Bookstore** is not just a web application; it's a gateway to a world of knALLedge, exploration, and community for book enthusiasts and learners worldwide.
+In summary, **ALL Bookstore** is not just a web application; it's a gateway to a world of knowledge, exploration, and community for book enthusiasts and learners worldwide.
