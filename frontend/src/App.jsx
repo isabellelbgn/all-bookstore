@@ -1,9 +1,13 @@
-import './App.css'
+import React from 'react';
+import { BrowserRouter as Router } from 'react-router-dom';
+import Navigation from './components/Navigation';
 
 export default function App() {
   return (
-    <h1 className="text-3xl font-bold">
-      All Bookstore
-    </h1>
+    <Router>
+    <div>
+      <Navigation/>
+    </div>
+    </Router>
   )
 }
