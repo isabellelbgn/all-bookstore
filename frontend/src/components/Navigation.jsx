@@ -5,7 +5,7 @@ import { IoSearchSharp } from "react-icons/io5";
 
 export default function Navigation() {
   return (
-    <header className="bg-navigation py-5 px-10 rounded-md">
+    <header className="bg-gray-50 py-5 px-10 rounded-md">
       <nav className="flex flex-col lg:flex-row justify-between items-center">
         <div className="flex items-center mb-5 lg:mb-0">
           <VscBook className="mr-5 icon" />
