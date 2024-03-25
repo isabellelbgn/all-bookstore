@@ -6,6 +6,9 @@ export default {
       colors: {
         navigation: "#F1F1F1",
         search: "#3F2A2A",
+        green: {
+          50: '#A2AD84'
+        }
       },
     },
   },
