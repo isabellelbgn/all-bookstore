@@ -5,14 +5,14 @@ const GreenNav = () => {
   return (
     <header className=' bg-green-50 py-4 px-10'>
         <nav>
-            <div className='flex items-center space-x-5 lg:space-x-12'>
-                <Link className=' font-[montserrat] text-white'>
+            <div className='font-montserrat flex items-center space-x-5 lg:space-x-12'>
+                <Link className='text-white'>
                     Personal Info
                 </Link>
-                <Link className=' font-[montserrat] text-white'> 
+                <Link className='text-white'> 
                     Order History
                 </Link>
-                <Link className=' font-[montserrat] text-white'>
+                <Link className='text-white'>
                     Logout
                 </Link>
         
@@ -25,4 +25,4 @@ const GreenNav = () => {
   )
 }
 
-export default GreenNav
+export default GreenNav;
