@@ -6,16 +6,16 @@ import InputBox from "./InputBox";
 
 export default function Navigation() {
   return (
-    <header className="bg-gray-100 rounded-b-2xl py-5 px-10 rounded-md">
+    <header className="sticky top-0 bg-gray-100 rounded-b-2xl py-5 px-10 rounded-md">
       <nav className="flex flex-col lg:flex-row justify-between items-center">
-        <div className="font-montserrat flex items-center mb-5 lg:mb-0">
+        <div className="font-montserrat flex items-center mb-4 lg:mb-0">
           <VscBook className="mr-5 icon" />
           <div className="relative flex items-center">
             <IoSearchSharp className="absolute right-0 mr-2 text-search icon-search" />
             <input
               type="text"
               placeholder="I'm looking for..."
-              className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-full focus:ring-primary-600 focus:border-primary-600 block w-96 p-2.5"
+              className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-2xl focus:ring-primary-600 focus:border-primary-600 block w-96 p-2.5"
             />
           </div>
         </div>
