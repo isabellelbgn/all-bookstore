@@ -15,7 +15,7 @@ export default function Navigation() {
             <input
               type="text"
               placeholder="I'm looking for..."
-              className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-2xl focus:ring-primary-600 focus:border-primary-600 block w-96 p-2.5"
+              className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-full focus:ring-primary-600 focus:border-primary-600 block w-96 p-2.5"
             />
           </div>
         </div>
