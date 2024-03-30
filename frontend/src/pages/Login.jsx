@@ -1,7 +1,6 @@
 import InputBox from "../components/InputBox";
 import Navigation from "../components/Navigation";
 import React from 'react'
-import { Typography } from "@material-tailwind/react";
 import { Footer } from "../components/Footer";
 
 export const Login = () => {
@@ -13,7 +12,7 @@ export const Login = () => {
                 <div class="w-full bg-gray-50 rounded-2xl md:mt-0 sm:max-w-2xl xl:p-10  ">
                     <div class="font-montserrat p-6 space-y-4 md:space-y-6 sm:p-8">
                         <h1 class="text-xl text-center leading-tight tracking-tight text-gray-900 md:text-2xl dark:text-black">
-                            Login
+                            Log In
                         </h1>
                         <form class=" font-normal space-y-4 md:space-y-6" action="#">
                             <div>
@@ -37,11 +36,12 @@ export const Login = () => {
                                 <a href="#" class="text-sm font-medium text-primary-600 hover:underline">Forgot password?</a>
                             </div>
                             <button type="submit" class="w-full text-white bg-green-50 hover:bg-primary-700 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800">Sign in</button>
+                            <hr class="my-12 border-dotted border-t-1 bg-gray-500"/>
                             <div class="flex items-center justify-between">
-                            <p class="text-sm font-light text-gray-400">
+                            <p class="text-sm font-light text-gray-400 mt-6">
                                 Don’t have an account yet? 
                             </p>
-                                <a href="#" class="text-sm text-primary-600 hover:underline ">Sign up</a>
+                                <a href="#" class="text-sm text-green-50 hover:underline mt-6">Sign up</a>
                             </div>
                         </form>
                     </div>
