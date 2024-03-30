@@ -2,24 +2,25 @@ import React from "react";
 import { Link } from "react-router-dom";
 import { VscAccount, VscBook } from "react-icons/vsc";
 import { IoSearchSharp } from "react-icons/io5";
+import InputBox from "./InputBox";
 
 export default function Navigation() {
   return (
-    <header className="bg-gray-50 py-5 px-10 rounded-md">
+    <header className="sticky top-0 bg-gray-100 rounded-b-2xl py-5 px-10 rounded-md">
       <nav className="flex flex-col lg:flex-row justify-between items-center">
-        <div className="flex items-center mb-5 lg:mb-0">
+        <div className="font-montserrat flex items-center mb-4 lg:mb-0">
           <VscBook className="mr-5 icon" />
           <div className="relative flex items-center">
             <IoSearchSharp className="absolute right-0 mr-2 text-search icon-search" />
             <input
               type="text"
               placeholder="I'm looking for..."
-              className="pl-2 pr-2 py-2 text-sm text-search rounded-lg border border-gray-100 lg:w-80"
+              className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-full focus:ring-primary-600 focus:border-primary-600 block w-96 p-2.5"
             />
           </div>
         </div>
 
-        <div className="flex items-center space-x-5 lg:space-x-12">
+        <div className="font-montserrat text-sm flex items-center space-x-5 lg:space-x-12">
           <Link to="/" className="text-black">
             Home
           </Link>

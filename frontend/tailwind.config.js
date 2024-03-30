@@ -1,5 +1,8 @@
 /** @type {import('tailwindcss').Config} */
-export default {
+
+
+// tailwind.config.js
+module.exports = {
   content: ["./index.html", "./src/**/*.{js,ts,jsx,tsx}"],
   theme: {
     extend: {
@@ -7,10 +10,16 @@ export default {
         navigation: "#F1F1F1",
         search: "#3F2A2A",
         green: {
-          50: '#A2AD84'
-        }
+          50: '#A2AD84',
+        },
+      },
+      fontFamily: {
+        'montserrat': ['Montserrat', 'sans-serif'],
+        
       },
     },
   },
   plugins: [],
 };
+
+
