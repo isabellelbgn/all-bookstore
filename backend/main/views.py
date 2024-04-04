@@ -6,9 +6,15 @@ from . import models
 class AdminList(generics.ListCreateAPIView):
     queryset=models.Admin.objects.all()
     serializer_class=serializers.AdminSerializer
-    # permission_classes=[permissions.IsAuthenticated]
 
 class AdminDetail(generics.RetrieveUpdateDestroyAPIView):
     queryset=models.Admin.objects.all()
     serializer_class=serializers.AdminDetailSerializer
-    # permission_classes=[permissions.IsAuthenticated]
+
+class BookList(generics.ListCreateAPIView):
+    queryset=models.Book.objects.all()
+    serializer_class=serializers.BookListSerializer
+
+class BookDetail(generics.RetrieveUpdateDestroyAPIView):
+    queryset=models.Book.objects.all()
+    serializer_class=serializers.BookDetailSerializer

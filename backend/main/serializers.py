@@ -18,3 +18,21 @@ class AdminDetailSerializer(serializers.ModelSerializer):
     def __init__(self, *args, **kwargs):
         super(AdminDetailSerializer, self).__init__(*args, **kwargs)
         self.Meta.depth = 1
+
+class BookListSerializer(serializers.ModelSerializer):
+    class Meta:
+        model=models.Book
+        fields=['id', 'category', 'admin', 'title', 'description', 'publishDate', 'price']
+
+    def __init__(self, *args, **kwargs):
+        super(BookListSerializer, self).__init__(*args, **kwargs)
+        self.Meta.depth = 1
+
+class BookDetailSerializer(serializers.ModelSerializer):
+    class Meta:
+        model=models.Book
+        fields=['id', 'category', 'admin', 'title', 'description', 'publishDate', 'price']
+
+    def __init__(self, *args, **kwargs):
+        super(BookDetailSerializer, self).__init__(*args, **kwargs)
+        self.Meta.depth = 1

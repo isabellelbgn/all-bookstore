@@ -7,18 +7,8 @@ class Admin(models.Model):
     user=models.ForeignKey(User,on_delete=models.CASCADE)
     address=models.TextField(null=True)
 
-# Product Model
-class Book(models.Model):
-    id = models.AutoField(primary_key=True)  # Explicitly define id field
-
-    title = models.CharField(max_length=100)
-    author = models.CharField(max_length=100)
-    description = models.TextField()
-    publishDate = models.DateField()
-    price = models.FloatField()
-
     def __str__(self):
-        return self.title
+        return self.user.username
 
 # Product Category Model
 class BookCategory(models.Model):
@@ -29,3 +19,20 @@ class BookCategory(models.Model):
 
     def __str__(self):
         return self.title
+    
+# Product Model
+class Book(models.Model):
+    id = models.AutoField(primary_key=True)  # Explicitly define id field
+
+    category = models.ForeignKey(BookCategory,on_delete=models.SET_NULL, null=True)
+    admin = models.ForeignKey(Admin,on_delete=models.SET_NULL, null=True)
+
+    title = models.CharField(max_length=100)
+    author = models.CharField(max_length=100)
+    description = models.TextField()
+    publishDate = models.DateField()
+    price = models.FloatField()
+
+    def __str__(self):
+        return self.title
+
