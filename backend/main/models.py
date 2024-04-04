@@ -7,7 +7,7 @@ class Admin(models.Model):
     user=models.ForeignKey(User,on_delete=models.CASCADE)
     address=models.TextField(null=True)
 
-# Product
+# Product Model
 class Book(models.Model):
     id = models.AutoField(primary_key=True)  # Explicitly define id field
 
@@ -20,7 +20,7 @@ class Book(models.Model):
     def __str__(self):
         return self.title
 
-# Product Category
+# Product Category Model
 class BookCategory(models.Model):
     id = models.AutoField(primary_key=True)  # Explicitly define id field
 
