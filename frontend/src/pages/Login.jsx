@@ -2,6 +2,7 @@ import InputBox from "../components/InputBox";
 import Navigation from "../components/Navigation";
 import React from 'react'
 import { Footer } from "../components/Footer";
+import { PrimaryButton } from "../components/PrimaryButton";
 
 export const Login = () => {
   return (
@@ -35,7 +36,7 @@ export const Login = () => {
                                 </div>
                                 <a href="#" class="text-sm font-medium text-primary-600 hover:underline">Forgot password?</a>
                             </div>
-                            <button type="submit" class="w-full text-white bg-green-50 hover:bg-primary-700 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800">Sign in</button>
+                            <PrimaryButton className="w-full font-medium text-sm">Log in</PrimaryButton>          
                             <hr class="my-12 border-dotted border-t-1 bg-gray-500"/>
                             <div class="flex items-center justify-between">
                             <p class="text-sm font-light text-gray-400 mt-6">

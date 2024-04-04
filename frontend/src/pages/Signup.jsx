@@ -3,6 +3,7 @@ import InputBox from "../components/InputBox";
 import Navigation from "../components/Navigation";
 import { Footer } from '../components/Footer';
 import { Typography } from '@material-tailwind/react';
+import { PrimaryButton } from '../components/PrimaryButton';
 
 
 export const Signup = () => {
@@ -51,7 +52,7 @@ export const Signup = () => {
                                         Use at least 8 characters, one uppercase, one lowercase and one number.
                                     </Typography>
                             </div>
-                            <button type="submit" class="w-full text-white bg-green-50 hover:bg-primary-700 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-full text-sm px-5 py-3 text-center">Sign Up</button>
+                            <PrimaryButton className="w-full font-medium text-sm">Sign Up</PrimaryButton>
                             <hr class="my-12 border-dotted border-t-1 bg-gray-500"/>
                             <div class="flex items-center justify-between">
                             <p class="text-sm font-light text-gray-400 mt-6">
