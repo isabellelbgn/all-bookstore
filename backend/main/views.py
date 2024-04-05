@@ -1,4 +1,4 @@
-from rest_framework import generics, permissions
+from rest_framework import generics, permissions, pagination, viewsets
 from . import serializers
 from . import models
 # Create your views here.
@@ -14,6 +14,7 @@ class AdminDetail(generics.RetrieveUpdateDestroyAPIView):
 class BookList(generics.ListCreateAPIView):
     queryset = models.Book.objects.all()
     serializer_class = serializers.BookListSerializer
+    pagination_class = pagination.LimitOffsetPagination
 
 class BookDetail(generics.RetrieveUpdateDestroyAPIView):
     queryset = models.Book.objects.all()
@@ -36,7 +37,11 @@ class OrderDetail(generics.ListAPIView):
     serializer_class = serializers.OrderDetailSerializer
 
     def get_queryset(self):
-        order_id = self.kwargs['pk']
+        order_id = self.kwargs.get('pk')
         order = models.Order.objects.get(id = order_id)
         order_items = models.OrderItems.objects.filter(order = order)
         return order_items
+    
+class CustomerAddressViewSet(viewsets.ModelViewSet):
+    serializer_class = serializers.CustomerAddressSerializer
+    queryset = models.CustomerAddress.objects.all().order_by('id')
