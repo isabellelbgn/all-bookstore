@@ -8,7 +8,7 @@ class AdminSerializer(serializers.ModelSerializer):
 
     def __init__(self, *args, **kwargs):
         super(AdminSerializer, self).__init__(*args, **kwargs)
-        self.Meta.depth = 1
+        # self.Meta.depth = 1
 
 class AdminDetailSerializer(serializers.ModelSerializer):
     class Meta:
@@ -17,7 +17,7 @@ class AdminDetailSerializer(serializers.ModelSerializer):
 
     def __init__(self, *args, **kwargs):
         super(AdminDetailSerializer, self).__init__(*args, **kwargs)
-        self.Meta.depth = 1
+        # self.Meta.depth = 1
 
 class BookListSerializer(serializers.ModelSerializer):
     class Meta:
@@ -26,7 +26,7 @@ class BookListSerializer(serializers.ModelSerializer):
 
     def __init__(self, *args, **kwargs):
         super(BookListSerializer, self).__init__(*args, **kwargs)
-        self.Meta.depth = 1
+        # self.Meta.depth = 1
 
 class BookDetailSerializer(serializers.ModelSerializer):
     class Meta:
@@ -35,4 +35,22 @@ class BookDetailSerializer(serializers.ModelSerializer):
 
     def __init__(self, *args, **kwargs):
         super(BookDetailSerializer, self).__init__(*args, **kwargs)
+       # self.Meta.depth = 1
+
+class CustomerSerializer(serializers.ModelSerializer):
+    class Meta:
+        model=models.Customer
+        fields=['id', 'user', 'contactNumber']
+
+    def __init__(self, *args, **kwargs):
+        super(CustomerSerializer, self).__init__(*args, **kwargs)
+        self.Meta.depth = 1
+
+class CustomerDetailSerializer(serializers.ModelSerializer):
+    class Meta:
+        model=models.Customer
+        fields=['id', 'user', 'contactNumber']
+
+    def __init__(self, *args, **kwargs):
+        super(CustomerDetailSerializer, self).__init__(*args, **kwargs)
         self.Meta.depth = 1

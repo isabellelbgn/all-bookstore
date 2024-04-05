@@ -5,3 +5,4 @@ from . import models
 admin.site.register(models.Admin)
 admin.site.register(models.BookCategory)
 admin.site.register(models.Book)
+admin.site.register(models.Customer)
