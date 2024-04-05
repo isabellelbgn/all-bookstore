@@ -46,8 +46,11 @@ class Customer(models.Model):
 
 # Order Model
 class Order(models.Model):
-    customer = models.ForeignKey(Customer, on_delete=models.SET_NULL, null=True)
+    customer = models.ForeignKey(Customer, on_delete=models.CASCADE, related_name='customer_orders')
     orderDate = models.DateTimeField(auto_now_add=True)
+
+    def __unicode__(self):
+        return '%s' % (self.orderDate)
 
 # Order Item Model
 class OrderItems(models.Model):
