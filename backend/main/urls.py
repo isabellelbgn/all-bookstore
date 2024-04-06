@@ -4,6 +4,7 @@ from rest_framework import routers
 
 router = routers.DefaultRouter()
 router.register('address', views.CustomerAddressViewSet)
+router.register('bookrating', views.BookRatingViewSet)
 
 urlpatterns = [
     path('admins/', views.AdminList.as_view()),

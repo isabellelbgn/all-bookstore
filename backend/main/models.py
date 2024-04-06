@@ -30,7 +30,7 @@ class Book(models.Model):
     title = models.CharField(max_length=100)
     author = models.CharField(max_length=100)
     description = models.TextField()
-    publishDate = models.DateField()
+    publish_date = models.DateField()
     price = models.FloatField()
 
     def __str__(self):
@@ -39,7 +39,7 @@ class Book(models.Model):
 # Customer Model
 class Customer(models.Model):
     user = models.ForeignKey(User, on_delete = models.CASCADE)
-    contactNumber = models.PositiveBigIntegerField()
+    contact_number = models.PositiveBigIntegerField()
 
     def __str__(self):
         return self.user.username
@@ -47,7 +47,7 @@ class Customer(models.Model):
 # Order Model
 class Order(models.Model):
     customer = models.ForeignKey(Customer, on_delete=models.CASCADE, related_name='customer_orders')
-    orderDate = models.DateTimeField(auto_now_add=True)
+    order_date = models.DateTimeField(auto_now_add=True)
 
     def __unicode__(self):
         return '%s' % (self.orderDate)
@@ -68,3 +68,14 @@ class CustomerAddress(models.Model):
 
     def __str__(self):
         return self.address
+    
+# Book Rating and Reviews
+class BookRating(models.Model):
+    customer = models.ForeignKey(Customer, on_delete = models.CASCADE, related_name = 'rating_customers')
+    book = models.ForeignKey(Book, on_delete = models.CASCADE, related_name='book_ratings')
+    rating = models.IntegerField()
+    reviews = models.TextField()
+    review_date = models.DateTimeField(auto_now_add = True)
+
+    def __str__(self):
+        return f'{self.rating} - {self.reviews}'
