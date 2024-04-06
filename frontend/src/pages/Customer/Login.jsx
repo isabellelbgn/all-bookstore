@@ -1,21 +1,19 @@
-import InputBox from "../components/InputBox";
-import Navigation from "../components/Navigation";
 import React from "react";
-import { Footer } from "../components/Footer";
-import { PrimaryButton } from "../components/PrimaryButton";
+import { Link } from "react-router-dom";
+import InputBox from "../../components/InputBox";
+import { PrimaryButton } from "../../components/PrimaryButton";
 
-export const Login = () => {
+const Login = () => {
   return (
     <div>
-      <Navigation />
       <section className="bg-white">
-        <div className="flex flex-col items-center justify-center px-6 py-8 mx-auto md:h-screen lg:py-0">
+        <div className="flex flex-col items-center justify-center px-6 py-8">
           <div className="w-full bg-gray-50 rounded-2xl md:mt-0 sm:max-w-2xl xl:p-10  ">
             <div className="font-montserrat p-6 space-y-4 md:space-y-6 sm:p-8">
               <h1 className="text-xl text-center leading-tight tracking-tight text-gray-900 md:text-2xl dark:text-black">
                 Log In
               </h1>
-              <form className=" font-normal space-y-4 md:space-y-6" action="#">
+              <form className="font-normal space-y-4 md:space-y-6" action="#">
                 <div>
                   <label for="email" className="block mb-2 text-sm text-black ">
                     Email
@@ -73,19 +71,20 @@ export const Login = () => {
                   <p className="text-sm font-light text-gray-400 mt-6">
                     Don’t have an account yet?
                   </p>
-                  <a
-                    href="#"
+                  <Link
+                    to="/register"
                     className="text-sm text-green-50 hover:underline mt-6"
                   >
                     Sign up
-                  </a>
+                  </Link>
                 </div>
               </form>
             </div>
           </div>
         </div>
       </section>
-      <Footer />
     </div>
   );
 };
+
+export default Login;

@@ -1,17 +1,15 @@
 import React from "react";
-import InputBox from "../components/InputBox";
-import Navigation from "../components/Navigation";
-import { Footer } from "../components/Footer";
+import { Link } from "react-router-dom";
+import InputBox from "../../components/InputBox";
 import { Typography } from "@material-tailwind/react";
-import { PrimaryButton } from "../components/PrimaryButton";
+import { PrimaryButton } from "../../components/PrimaryButton";
 
-export const Signup = () => {
+const Register = () => {
   return (
     <div>
-      <Navigation />
       <section className="bg-white">
-        <div className="flex flex-col items-center justify-center px-6 py-8 mx-auto md:h-screen lg:py-0">
-          <div className="w-full bg-gray-50 rounded-2xl md:mt-0 sm:max-w-2xl xl:p-10  ">
+        <div className="flex flex-col items-center justify-center px-6 py-8">
+          <div className="w-full bg-gray-50 rounded-2xl md:mt-0 sm:max-w-2xl xl:px-10">
             <div className="font-montserrat p-6 space-y-4 md:space-y-6 sm:p-8">
               <h1 className="text-xl text-center leading-tight tracking-tight text-gray-900 md:text-2xl dark:text-black">
                 Sign Up
@@ -96,19 +94,21 @@ export const Signup = () => {
                   <p className="text-sm font-light text-gray-400 mt-6">
                     Have an account?
                   </p>
-                  <a
+                  <Link
+                    to="/login"
                     href="#"
                     className="text-sm text-green-50 hover:underline mt-6"
                   >
                     Log in
-                  </a>
+                  </Link>
                 </div>
               </form>
             </div>
           </div>
         </div>
       </section>
-      <Footer />
     </div>
   );
 };
+
+export default Register;

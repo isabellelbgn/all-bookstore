@@ -1,71 +1,49 @@
 import React from "react";
-import { BrowserRouter as Router } from "react-router-dom";
-import { HiOutlineArrowLongRight } from "react-icons/hi2";
+import { Routes, Route } from "react-router-dom";
+
+// Components
 import Navigation from "./components/Navigation";
-import { Footer } from "./components/Footer";
-import { ProductContainer } from "./components/ProductContainer";
-import { CategoryContainer } from "./components/CategoryContainer";
+import Footer from "./components/Footer";
+
+//Website
+import Home from "./pages/Home";
+import Categories from "./pages/Categories";
+import Books from "./pages/Books";
+import Book from "./pages/Book";
+import CategoryBooks from "./pages/CategoryBooks";
+import Checkout from "./pages/Checkout";
+import OrderSuccess from "./pages/OrderSuccess";
+
+//Customer Panel
+import Register from "./pages/Customer/Register";
+import Login from "./pages/Customer/Login";
+import Dashboard from "./pages/Customer/Dashboard";
+import Orders from "./pages/Customer/Orders";
 
 export default function App() {
   return (
-    <Router>
-      <div>
-        <Navigation />
-        <div className="container mx-auto px-1">
-          <main className="mt-4">
-            <h1 className="text-xl font-medium flex justify-between items-center">
-              Most Popular Categories
-              <a
-                href="#"
-                className="text-xs text-gray-500 font-normal flex items-center"
-              >
-                {" "}
-                View All <HiOutlineArrowLongRight className="ml-1" />
-              </a>
-            </h1>
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-3">
-              <div className="col-span-1">
-                <CategoryContainer />
-              </div>
-              <div className="col-span-1">
-                <CategoryContainer />
-              </div>
-              <div className="col-span-1">
-                <CategoryContainer />
-              </div>
-              <div className="col-span-1">
-                <CategoryContainer />
-              </div>
-            </div>
+    <>
+      <Navigation />
+      <Routes>
+        <Route path="/" element={<Home />} />
+        <Route path="/books" element={<Books />} />
+        <Route path="/book/:book_slug/:book_id" element={<Book />} />
 
-            <h1 className="text-xl font-medium flex justify-between items-center">
-              New Books
-              <a
-                href="#"
-                className="text-xs text-gray-500 font-normal flex items-center"
-              >
-                {" "}
-                View All <HiOutlineArrowLongRight className="ml-1" />
-              </a>
-            </h1>
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-3">
-              <div className="col-span-1">
-                <ProductContainer />
-              </div>
-              <div className="col-span-1">
-                <ProductContainer />
-              </div>
-              <div className="col-span-1">
-                <ProductContainer />
-              </div>
-              <div className="col-span-1">
-                <ProductContainer />
-              </div>
-            </div>
-          </main>
-        </div>
-        <Footer />
-      </div>
-    </Router>
+        <Route path="/categories" element={<Categories />} />
+        <Route
+          path="/category/:category_slug/:category_id"
+          element={<CategoryBooks />}
+        />
+
+        <Route path="/checkout" element={<Checkout />} />
+        <Route path="/order/success" element={<OrderSuccess />} />
+
+        <Route path="/customer/login" element={<Login />} />
+        <Route path="/customer/register" element={<Register />} />
+        <Route path="/customer/dashboard" element={<Dashboard />} />
+        <Route path="/customer/orders" element={<Orders />} />
+      </Routes>
+      <Footer />
+    </>
   );
 }
