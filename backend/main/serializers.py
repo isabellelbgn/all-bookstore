@@ -4,7 +4,7 @@ from . import models
 class AdminSerializer(serializers.ModelSerializer):
     class Meta:
         model = models.Admin
-        fields=['id', 'user', 'address']
+        fields = ['id', 'user', 'address']
 
     def __init__(self, *args, **kwargs):
         super(AdminSerializer, self).__init__(*args, **kwargs)
@@ -13,7 +13,7 @@ class AdminSerializer(serializers.ModelSerializer):
 class AdminDetailSerializer(serializers.ModelSerializer):
     class Meta:
         model = models.Admin
-        fields=['id', 'user', 'address']
+        fields = ['id', 'user', 'address']
 
     def __init__(self, *args, **kwargs):
         super(AdminDetailSerializer, self).__init__(*args, **kwargs)
@@ -93,3 +93,21 @@ class BookRatingSerializer(serializers.ModelSerializer):
         def __init__(self, *args, **kwargs):
             super(BookRatingSerializer, self).__init__(*args, **kwargs)
             self.Meta.depth = 1
+
+class CategorySerializer(serializers.ModelSerializer):
+    class Meta:
+        model = models.BookCategory
+        fields = ['id', 'title', 'description']
+
+    def __init__(self, *args, **kwargs):
+        super(CategorySerializer, self).__init__(*args, **kwargs)
+        self.Meta.depth = 1
+
+class CategoryDetailSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = models.BookCategory
+        fields = ['id', 'title', 'description']
+
+    def __init__(self, *args, **kwargs):
+        super(CategoryDetailSerializer, self).__init__(*args, **kwargs)
+        self.Meta.depth = 1
