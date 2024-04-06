@@ -49,3 +49,11 @@ class CustomerAddressViewSet(viewsets.ModelViewSet):
 class BookRatingViewSet(viewsets.ModelViewSet):
     serializer_class = serializers.BookRatingSerializer
     queryset = models.BookRating.objects.all()
+
+class CategoryList(generics.ListCreateAPIView):
+    queryset = models.BookCategory.objects.all()
+    serializer_class = serializers.CategorySerializer
+
+class CategoryDetail(generics.RetrieveUpdateDestroyAPIView):
+    queryset = models.BookCategory.objects.all()
+    serializer_class = serializers.CategoryDetailSerializer
