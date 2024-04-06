@@ -6,7 +6,7 @@ import InputBox from "./InputBox";
 
 export default function Navigation() {
   return (
-    <header className="sticky top-0 bg-gray-100 rounded-b-2xl py-5 px-10 rounded-md">
+    <header className="sticky top-0 z-10 bg-gray-100 rounded-b-2xl py-5 px-10 rounded-md">
       <nav className="flex flex-col lg:flex-row justify-between items-center">
         <div className="font-montserrat flex items-center mb-4 lg:mb-0">
           <VscBook className="mr-5 icon" />
@@ -30,7 +30,7 @@ export default function Navigation() {
           <Link to="/cart" className="text-black">
             Cart
           </Link>
-          <Link to="/products" className="text-black">
+          <Link to="/account" className="text-black">
             <VscAccount className="icon" />
           </Link>
         </div>
