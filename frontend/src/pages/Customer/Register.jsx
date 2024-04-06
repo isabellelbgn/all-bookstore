@@ -18,7 +18,7 @@ const Register = () => {
                 <div className="grid grid-cols-2 gap-6">
                   <div className="relative z-0 w-full group">
                     <label
-                      for="firstname"
+                      htmlFor="firstname"
                       className="block mb-2 text-sm text-black "
                     >
                       First Name
@@ -32,7 +32,7 @@ const Register = () => {
                   </div>
                   <div className="relative z-0 w-full group">
                     <label
-                      for="lastname"
+                      htmlFor="lastname"
                       className="block mb-2 text-sm text-black "
                     >
                       Last Name
@@ -46,7 +46,10 @@ const Register = () => {
                   </div>
                 </div>
                 <div>
-                  <label for="email" className="block mb-2 text-sm text-black ">
+                  <label
+                    htmlFor="email"
+                    className="block mb-2 text-sm text-black "
+                  >
                     Email
                   </label>
                   <InputBox
@@ -58,7 +61,7 @@ const Register = () => {
                 </div>
                 <div>
                   <label
-                    for="password"
+                    htmlFor="password"
                     className="block mb-2 text-sm text-black"
                   >
                     Password
