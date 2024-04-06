@@ -15,7 +15,10 @@ const Login = () => {
               </h1>
               <form className="font-normal space-y-4 md:space-y-6" action="#">
                 <div>
-                  <label for="email" className="block mb-2 text-sm text-black ">
+                  <label
+                    htmlFor="email"
+                    className="block mb-2 text-sm text-black "
+                  >
                     Email
                   </label>
                   <InputBox
@@ -27,7 +30,7 @@ const Login = () => {
                 </div>
                 <div>
                   <label
-                    for="password"
+                    htmlFor="password"
                     className="block mb-2 text-sm text-black"
                   >
                     Password
@@ -51,7 +54,7 @@ const Login = () => {
                       />
                     </div>
                     <div className="ml-3 text-sm">
-                      <label for="remember" className="text-gray-400">
+                      <label htmlFor="remember" className="text-gray-400">
                         Remember me
                       </label>
                     </div>
@@ -72,7 +75,7 @@ const Login = () => {
                     Don’t have an account yet?
                   </p>
                   <Link
-                    to="/register"
+                    to="/customer/register"
                     className="text-sm text-green-50 hover:underline mt-6"
                   >
                     Sign up
