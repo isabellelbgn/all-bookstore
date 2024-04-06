@@ -14,7 +14,7 @@ class AdminDetail(generics.RetrieveUpdateDestroyAPIView):
 class BookList(generics.ListCreateAPIView):
     queryset = models.Book.objects.all()
     serializer_class = serializers.BookListSerializer
-    pagination_class = pagination.LimitOffsetPagination
+    pagination_class = pagination.PageNumberPagination
 
 class BookDetail(generics.RetrieveUpdateDestroyAPIView):
     queryset = models.Book.objects.all()
@@ -53,6 +53,8 @@ class BookRatingViewSet(viewsets.ModelViewSet):
 class CategoryList(generics.ListCreateAPIView):
     queryset = models.BookCategory.objects.all()
     serializer_class = serializers.CategorySerializer
+    pagination_class = pagination.PageNumberPagination
+
 
 class CategoryDetail(generics.RetrieveUpdateDestroyAPIView):
     queryset = models.BookCategory.objects.all()

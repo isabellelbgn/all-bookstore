@@ -24,7 +24,7 @@ class BookListSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = models.Book
-        fields = ['id', 'category', 'admin', 'title', 'description', 'publish_date', 'price', 'book_ratings']
+        fields = ['id', 'category', 'admin', 'title', 'author', 'description', 'publish_date', 'price', 'book_ratings']
 
     def __init__(self, *args, **kwargs):
         super(BookListSerializer, self).__init__(*args, **kwargs)
@@ -34,7 +34,7 @@ class BookDetailSerializer(serializers.ModelSerializer):
     book_ratings = serializers.StringRelatedField(many = True, read_only = True)
     class Meta:
         model = models.Book
-        fields = ['id', 'category', 'admin', 'title', 'description', 'publish_date', 'price', 'book_ratings']
+        fields = ['id', 'category', 'author', 'title', 'author', 'description', 'publish_date', 'price', 'book_ratings']
 
     def __init__(self, *args, **kwargs):
         super(BookDetailSerializer, self).__init__(*args, **kwargs)
@@ -101,7 +101,7 @@ class CategorySerializer(serializers.ModelSerializer):
 
     def __init__(self, *args, **kwargs):
         super(CategorySerializer, self).__init__(*args, **kwargs)
-        self.Meta.depth = 1
+        # self.Meta.depth = 1
 
 class CategoryDetailSerializer(serializers.ModelSerializer):
     class Meta:
@@ -110,4 +110,4 @@ class CategoryDetailSerializer(serializers.ModelSerializer):
 
     def __init__(self, *args, **kwargs):
         super(CategoryDetailSerializer, self).__init__(*args, **kwargs)
-        self.Meta.depth = 1
+        # self.Meta.depth = 1
