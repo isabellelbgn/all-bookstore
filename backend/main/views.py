@@ -16,6 +16,17 @@ class BookList(generics.ListCreateAPIView):
     serializer_class = serializers.BookListSerializer
     pagination_class = pagination.PageNumberPagination
 
+    def get_queryset(self):
+        qs = super().get_queryset()
+        category_id = self.request.GET.get('category')
+        if category_id:
+            try:
+                category = models.BookCategory.objects.get(id=category_id)
+                qs = qs.filter(category=category)
+            except models.BookCategory.DoesNotExist:
+                qs = qs.none()
+        return qs
+
 class BookDetail(generics.RetrieveUpdateDestroyAPIView):
     queryset = models.Book.objects.all()
     serializer_class = serializers.BookDetailSerializer
@@ -54,7 +65,6 @@ class CategoryList(generics.ListCreateAPIView):
     queryset = models.BookCategory.objects.all()
     serializer_class = serializers.CategorySerializer
     pagination_class = pagination.PageNumberPagination
-
 
 class CategoryDetail(generics.RetrieveUpdateDestroyAPIView):
     queryset = models.BookCategory.objects.all()
