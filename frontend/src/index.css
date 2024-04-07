@@ -1,10 +1,8 @@
-@import url('https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap');
-
+@import url("https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap");
 
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
-
 
 .icon {
   width: 1.5em;
@@ -14,4 +12,23 @@
 .icon-search {
   width: 1.2em;
   height: 1.2em;
+}
+
+.fixed-image {
+  width: 300px;
+  height: 400px;
+}
+
+@media (max-width: 768px) {
+  .fixed-image {
+    width: 250px; /* Adjust width for smaller screens */
+    height: 300px; /* Adjust height for smaller screens */
+  }
+}
+
+@media (max-width: 480px) {
+  .fixed-image {
+    width: 200px; /* Adjust width for even smaller screens */
+    height: 250px; /* Adjust height for even smaller screens */
+  }
 }
