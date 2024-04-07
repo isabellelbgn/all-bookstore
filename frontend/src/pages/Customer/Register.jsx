@@ -98,7 +98,7 @@ const Register = () => {
                     Have an account?
                   </p>
                   <Link
-                    to="/login"
+                    to="/customer/login"
                     href="#"
                     className="text-sm text-green-50 hover:underline mt-6"
                   >
