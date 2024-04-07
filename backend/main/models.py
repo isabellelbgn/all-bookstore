@@ -32,6 +32,7 @@ class Book(models.Model):
     description = models.TextField()
     publish_date = models.DateField()
     price = models.FloatField()
+    image = models.ImageField(upload_to='book_images/', null = True)
 
     def __str__(self):
         return self.title
@@ -79,3 +80,11 @@ class BookRating(models.Model):
 
     def __str__(self):
         return f'{self.rating} - {self.reviews}'
+
+# Book Images 
+class BookImage(models.Model):
+    book = models.ForeignKey(Book, on_delete=models.CASCADE, related_name = 'book_images')
+    image = models.ImageField(upload_to='book_images/', null = True)
+
+    def __str__(self):
+        return self.image.url
