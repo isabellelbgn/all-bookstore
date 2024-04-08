@@ -60,6 +60,7 @@ const Register = () => {
 
   return (
     <div>
+      <Navigation />
       <PageTemplate>
         <GrayBox>
           <h1 className="text-xl text-center leading-tight tracking-tight text-gray-900 md:text-2xl dark:text-black">

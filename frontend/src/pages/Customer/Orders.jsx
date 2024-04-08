@@ -1,9 +1,11 @@
 import React from "react";
 import DashboardNavigation from "../../components/DashboardNavigation";
+import Navigation from "../../components/Navigation";
 
 function Orders() {
   return (
     <>
+      <Navigation />
       <DashboardNavigation />
       <div className="container mx-auto px-4">
         <main className="mt-4">

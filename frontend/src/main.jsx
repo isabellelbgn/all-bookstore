@@ -4,8 +4,6 @@ import "./index.css";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 
 import { NotFound } from "./components/NotFound";
-
-// Components
 import Navigation from "./components/Navigation";
 import Footer from "./components/Footer";
 
@@ -25,7 +23,6 @@ import Dashboard from "./pages/Customer/Dashboard";
 import Orders from "./pages/Customer/Orders";
 
 const router = createBrowserRouter([
-  <Navigation />,
   {
     path: "/customer/register",
     element: <Register />,
@@ -81,7 +78,6 @@ const router = createBrowserRouter([
     element: <Orders />,
     errorElement: <NotFound />,
   },
-  <Footer />,
 ]);
 
 ReactDOM.createRoot(document.getElementById("root")).render(

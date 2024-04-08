@@ -42,19 +42,22 @@ function CategoryBooks() {
   ));
 
   return (
-    <div className="container mx-auto px-1">
-      <main className="mt-4">
-        <h1 className="text-xl font-medium flex justify-between items-center">
-          {categoryTitle ? categoryTitle : "Category Title"}
-        </h1>
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-3">
-          {bookContainers.length ? (
-            bookContainers
-          ) : (
-            <p>No books found in this category.</p>
-          )}
-        </div>
-      </main>
+    <div>
+      <Navigation />
+      <div className="container mx-auto px-1">
+        <main className="mt-4">
+          <h1 className="text-xl font-medium flex justify-between items-center">
+            {categoryTitle ? categoryTitle : "Category Title"}
+          </h1>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-3">
+            {bookContainers.length ? (
+              bookContainers
+            ) : (
+              <p>No books found in this category.</p>
+            )}
+          </div>
+        </main>
+      </div>
     </div>
   );
 }
