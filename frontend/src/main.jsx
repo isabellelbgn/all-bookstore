@@ -41,22 +41,22 @@ const router = createBrowserRouter([
   {
     path: "/books",
     element: <Books />,
-    children: [
-      {
-        path: "/books/book/:book_slug/:book_id", // Corrected nested route path
-        element: <Book />,
-      },
-    ],
+    errorElement: <NotFound />,
+  },
+  {
+    path: "/book/:book_slug/:book_id", // Corrected nested route path
+    element: <Book />,
+    errorElement: <NotFound />,
   },
   {
     path: "/categories",
     element: <Categories />,
-    children: [
-      {
-        path: "/categories/category/:category_slug/:category_id", // Corrected nested route path
-        element: <CategoryBooks />,
-      },
-    ],
+    errorElement: <NotFound />,
+  },
+  {
+    path: "/category/:category_slug/:category_id", // Corrected nested route path
+    element: <CategoryBooks />,
+    errorElement: <NotFound />,
   },
   {
     path: "/checkout",

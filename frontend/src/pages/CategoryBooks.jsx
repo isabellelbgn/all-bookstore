@@ -1,6 +1,7 @@
 import { Link, useParams } from "react-router-dom";
 import { BookContainer } from "../components/BookContainer";
 import { useState, useEffect } from "react";
+import Navigation from "../components/Navigation";
 
 function CategoryBooks() {
   const baseUrl = "http://127.0.0.1:8000/api";
