@@ -29,13 +29,20 @@ class Book(models.Model):
 
     title = models.CharField(max_length=100)
     author = models.CharField(max_length=100)
-    description = models.TextField()
-    publish_date = models.DateField()
-    price = models.FloatField()
+    description = models.TextField(null=True)
+    publish_date = models.DateField(null=True)
+    price = models.DecimalField(max_digits = 10, decimal_places = 2)
+    tags = models.TextField(null=True)
+    isbn = models.CharField(max_length=13, unique=True, null=True)
     image = models.ImageField(upload_to='book_images/', null = True)
+    # availability
 
     def __str__(self):
         return self.title
+    
+    def tag_list(self):
+        tagList = self.tags.split(',')
+        return (tagList)
 
 # Customer Model
 class Customer(models.Model):

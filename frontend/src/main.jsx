@@ -11,6 +11,7 @@ import Footer from "./components/Footer";
 import Home from "./pages/Home";
 import Categories from "./pages/Categories";
 import Books from "./pages/Books";
+import TagBooks from "./pages/TagBooks";
 import Book from "./pages/Book";
 import CategoryBooks from "./pages/CategoryBooks";
 import Checkout from "./pages/Checkout";
@@ -44,7 +45,12 @@ const router = createBrowserRouter([
     errorElement: <NotFound />,
   },
   {
-    path: "/book/:book_slug/:book_id", // Corrected nested route path
+    path: "/books/tag/:tag",
+    element: <TagBooks />,
+    errorElement: <NotFound />,
+  },
+  {
+    path: "/book/:book_slug/:book_id",
     element: <Book />,
     errorElement: <NotFound />,
   },
@@ -54,7 +60,7 @@ const router = createBrowserRouter([
     errorElement: <NotFound />,
   },
   {
-    path: "/category/:category_slug/:category_id", // Corrected nested route path
+    path: "/category/:category_slug/:category_id",
     element: <CategoryBooks />,
     errorElement: <NotFound />,
   },
