@@ -30,7 +30,7 @@ class BookListSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = models.Book
-        fields = ['id', 'category', 'author', 'title', 'author', 'description', 'publish_date', 'price', 'book_images','book_ratings']
+        fields = ['id', 'category', 'author', 'title', 'author', 'description', 'publish_date', 'price', 'tag_list', 'isbn', 'book_images', 'book_ratings']
 
     def __init__(self, *args, **kwargs):
         super(BookListSerializer, self).__init__(*args, **kwargs)
@@ -42,7 +42,7 @@ class BookDetailSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = models.Book
-        fields = ['id', 'category', 'author', 'title', 'author', 'description', 'publish_date', 'price', 'book_images','book_ratings']
+        fields = ['id', 'category', 'author', 'title', 'author', 'description', 'publish_date', 'price', 'tag_list', 'isbn', 'book_images', 'book_ratings']
 
     def __init__(self, *args, **kwargs):
         super(BookDetailSerializer, self).__init__(*args, **kwargs)
