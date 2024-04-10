@@ -2,6 +2,7 @@ import { Link } from "react-router-dom";
 import { CategoryContainer } from "../components/CategoryContainer";
 import { useState, useEffect } from "react";
 import Navigation from "../components/Navigation";
+import Footer from "../components/Footer";
 
 function Categories() {
   const baseUrl = "http://127.0.0.1:8000/api";
@@ -62,6 +63,7 @@ function Categories() {
           </nav>
         </main>
       </div>
+      <Footer />
     </div>
   );
 }

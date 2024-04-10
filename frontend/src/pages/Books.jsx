@@ -2,6 +2,7 @@ import { Link } from "react-router-dom";
 import { BookContainer } from "../components/BookContainer";
 import { useState, useEffect } from "react";
 import Navigation from "../components/Navigation";
+import Footer from "../components/Footer";
 
 function Books() {
   const baseUrl = "http://127.0.0.1:8000/api";
@@ -62,6 +63,7 @@ function Books() {
           </nav>
         </main>
       </div>
+      <Footer />
     </div>
   );
 }

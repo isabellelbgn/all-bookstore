@@ -4,6 +4,7 @@ import { TagButton } from "../components/TagButton";
 import { useParams } from "react-router-dom";
 import { useState, useEffect } from "react";
 import Navigation from "../components/Navigation";
+import Footer from "../components/Footer";
 
 function Book() {
   const baseUrl = "http://127.0.0.1:8000/api";
@@ -61,6 +62,7 @@ function Book() {
           </div>
         </main>
       </div>
+      <Footer />
     </div>
   );
 }

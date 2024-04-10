@@ -5,6 +5,7 @@ import { BookContainer } from "../components/BookContainer";
 import { CategoryContainer } from "../components/CategoryContainer";
 import Navigation from "../components/Navigation";
 import { Header } from "../components/Header";
+import Footer from "../components/Footer";
 
 function Home() {
   const [books, setBooks] = useState([]);
@@ -85,6 +86,7 @@ function Home() {
           </div>
         </main>
       </div>
+      <Footer />
     </div>
   );
 }
