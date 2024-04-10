@@ -12,7 +12,9 @@ urlpatterns = [
     path('admin/<int:pk>', views.AdminDetail.as_view()),
     #Books
     path('books/', views.BookList.as_view()),
+    path('books/<str:tag>', views.TagBookList.as_view()),
     path('book/<int:pk>', views.BookDetail.as_view()),
+
     #Book Categories
     path('categories/', views.CategoryList.as_view()),
     path('category/<int:pk>', views.CategoryDetail.as_view()),

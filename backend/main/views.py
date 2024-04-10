@@ -27,6 +27,17 @@ class BookList(generics.ListCreateAPIView):
                 qs = qs.none()
         return qs
 
+class TagBookList(generics.ListCreateAPIView):
+    queryset = models.Book.objects.all()
+    serializer_class = serializers.BookListSerializer
+    pagination_class = pagination.PageNumberPagination
+
+    def get_queryset(self):
+        qs = super().get_queryset()
+        tag = self.kwargs['tag']
+        qs = qs.filter(tags__icontains=tag)
+        return qs
+
 class BookDetail(generics.RetrieveUpdateDestroyAPIView):
     queryset = models.Book.objects.all()
     serializer_class = serializers.BookDetailSerializer
@@ -69,3 +80,4 @@ class CategoryList(generics.ListCreateAPIView):
 class CategoryDetail(generics.RetrieveUpdateDestroyAPIView):
     queryset = models.BookCategory.objects.all()
     serializer_class = serializers.CategoryDetailSerializer
+    pagination_class = pagination.PageNumberPagination
