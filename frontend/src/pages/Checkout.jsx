@@ -1,4 +1,5 @@
 import CartNavigation from "../components/CartNavigation";
+import Footer from "../components/Footer";
 
 function Checkout() {
   return (
@@ -50,6 +51,7 @@ function Checkout() {
             </table>
           </div>
         </main>
+        <Footer />
       </div>
     </>
   );

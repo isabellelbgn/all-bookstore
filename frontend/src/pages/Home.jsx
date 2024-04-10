@@ -4,6 +4,8 @@ import { HiOutlineArrowLongRight } from "react-icons/hi2";
 import { BookContainer } from "../components/BookContainer";
 import { CategoryContainer } from "../components/CategoryContainer";
 import Navigation from "../components/Navigation";
+import { Header } from "../components/Header";
+import Footer from "../components/Footer";
 
 function Home() {
   const [books, setBooks] = useState([]);
@@ -36,6 +38,7 @@ function Home() {
   return (
     <div>
       <Navigation />
+      <Header />
       <div className="container mx-auto px-1">
         <main className="mt-4">
           <h1 className="text-xl font-medium flex justify-between items-center">
@@ -83,6 +86,7 @@ function Home() {
           </div>
         </main>
       </div>
+      <Footer />
     </div>
   );
 }

@@ -1,6 +1,7 @@
 import { Link } from "react-router-dom";
 import { FaCheckCircle } from "react-icons/fa";
 import Navigation from "../components/Navigation";
+import Footer from "../components/Footer";
 
 function OrderSuccess() {
   return (
@@ -33,6 +34,7 @@ function OrderSuccess() {
             </div>
           </div>
         </main>
+        <Footer />
       </div>
     </>
   );

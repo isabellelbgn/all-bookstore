@@ -2,6 +2,7 @@ import React from "react";
 import { Link, useParams } from "react-router-dom";
 import { useState, useEffect } from "react";
 import Navigation from "../components/Navigation";
+import Footer from "../components/Footer";
 import { AddToCartButton } from "../components/AddToCartButton";
 import { TagButton } from "../components/TagButton";
 
@@ -65,6 +66,7 @@ function Book() {
           </div>
         </main>
       </div>
+      <Footer />
     </div>
   );
 }
