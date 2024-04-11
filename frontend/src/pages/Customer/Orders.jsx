@@ -1,6 +1,6 @@
 import React from "react";
 import DashboardNavigation from "../../components/DashboardNavigation";
-import Navigation from "../../components/Navigation";
+import Navigation from "../../components/Main Components/Navigation";
 
 function Orders() {
   return (

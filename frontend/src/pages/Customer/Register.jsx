@@ -1,12 +1,12 @@
 import React, { useState } from "react";
-import InputBox from "../../components/InputBox";
-import Navigation from "../../components/Navigation";
-import Footer from "../../components/Footer";
+import InputBox from "../../components/Main Components/InputBox";
+import Navigation from "../../components/Main Components/Navigation";
+import Footer from "../../components/Main Components/Footer";
 import { Typography } from "@material-tailwind/react";
-import { PrimaryButton } from "../../components/PrimaryButton";
+import { PrimaryButton } from "../../components/Buttons/PrimaryButton";
 import { Link } from "react-router-dom";
-import { PageTemplate } from "../../components/PageTemplate";
-import { GrayBox } from "../../components/GrayBox";
+import { PageTemplate } from "../../components/Main Components/PageTemplate";
+import { GrayBox } from "../../components/Main Components/GrayBox";
 
 const Register = () => {
   const [firstname, setFirstName] = useState("");

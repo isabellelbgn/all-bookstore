@@ -1,8 +1,9 @@
 import { Link } from "react-router-dom";
-import { CategoryContainer } from "../components/CategoryContainer";
+import { CategoryContainer } from "../components/Containers/CategoryContainer";
 import { useState, useEffect } from "react";
-import Navigation from "../components/Navigation";
-import Footer from "../components/Footer";
+import Navigation from "../components/Main Components/Navigation";
+import Footer from "../components/Main Components/Footer";
+import { PageTemplate } from "../components/Main Components/PageTemplate";
 
 function Categories() {
   const baseUrl = "http://127.0.0.1:8000/api";
@@ -44,25 +45,27 @@ function Categories() {
   return (
     <div>
       <Navigation />
-      <div className="container mx-auto px-1">
-        <main className="mt-4">
-          <h1 className="text-xl font-medium flex justify-between items-center">
-            All Categories
-          </h1>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-3">
-            {categories &&
-              categories.map((category) => (
-                <div key={category.id} className="col-span-1">
-                  <CategoryContainer category={category} />
-                </div>
-              ))}
-          </div>
+      <PageTemplate>
+        <div className="container mx-auto px-1">
+          <main className="mt-4">
+            <h1 className="text-xl font-medium flex justify-between items-center">
+              All Categories
+            </h1>
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-3">
+              {categories &&
+                categories.map((category) => (
+                  <div key={category.id} className="col-span-1">
+                    <CategoryContainer category={category} />
+                  </div>
+                ))}
+            </div>
 
-          <nav>
-            <ul className="inline-flex -space-x-px text-sm mt-3">{links}</ul>
-          </nav>
-        </main>
-      </div>
+            <nav>
+              <ul className="inline-flex -space-x-px text-sm mt-3">{links}</ul>
+            </nav>
+          </main>
+        </div>
+      </PageTemplate>
       <Footer />
     </div>
   );
