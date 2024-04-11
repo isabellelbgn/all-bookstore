@@ -1,7 +1,7 @@
 import { Link } from "react-router-dom";
 import { FaCheckCircle } from "react-icons/fa";
-import Navigation from "../components/Navigation";
-import Footer from "../components/Footer";
+import Navigation from "../components/Main Components/Navigation";
+import Footer from "../components/Main Components/Footer";
 
 function OrderSuccess() {
   return (

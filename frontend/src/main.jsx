@@ -3,9 +3,9 @@ import ReactDOM from "react-dom/client";
 import "./index.css";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 
-import { NotFound } from "./components/NotFound";
-import Navigation from "./components/Navigation";
-import Footer from "./components/Footer";
+import { NotFound } from "./pages/NotFound";
+import Navigation from "./components/Main Components/Navigation";
+import Footer from "./components/Main Components/Footer";
 
 //Website
 import Home from "./pages/Home";

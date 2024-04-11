@@ -1,6 +1,6 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import { SecondaryButton } from "./SecondaryButton";
+import { SecondaryButton } from "../Buttons/SecondaryButton";
 
 const CategoryContainer = (props) => {
   return (

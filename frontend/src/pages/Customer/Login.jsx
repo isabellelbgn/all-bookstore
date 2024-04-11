@@ -1,13 +1,13 @@
 import React, { useState } from "react";
-import InputBox from "../../components/InputBox";
-import Navigation from "../../components/Navigation";
-import Footer from "../../components/Footer";
-import { PrimaryButton } from "../../components/PrimaryButton";
+import InputBox from "../../components/Main Components/InputBox";
+import Navigation from "../../components/Main Components/Navigation";
+import Footer from "../../components/Main Components/Footer";
+import { PrimaryButton } from "../../components/Buttons/PrimaryButton";
 import { toast } from "react-toastify";
 import { Link } from "react-router-dom";
-import { PageTemplate } from "../../components/PageTemplate";
-import { GrayBox } from "../../components/GrayBox";
-import GreenNav from "../../components/GreenNav";
+import { PageTemplate } from "../../components/Main Components/PageTemplate";
+import { GrayBox } from "../../components/Main Components/GrayBox";
+import GreenNav from "../../components/Main Components/GreenNav";
 import axios from "axios";
 
 const Login = () => {

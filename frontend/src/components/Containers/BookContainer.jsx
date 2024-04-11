@@ -1,5 +1,5 @@
 import React from "react";
-import { AddToCartButton } from "./AddToCartButton";
+import { AddToCartButton } from "../Buttons/AddToCartButton";
 import { Link } from "react-router-dom";
 
 const BookContainer = (props) => {

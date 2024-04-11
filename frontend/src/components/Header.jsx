@@ -1,13 +1,13 @@
 import React from "react";
-import Container from "./Container";
+import Container from "./Containers/Container";
 import logo from "./images/PrideandPrejudice.jpeg"; // relative path to image
-import { SecondaryButton } from "./SecondaryButton";
+import { SecondaryButton } from "./Buttons/SecondaryButton";
 import { HiOutlineArrowLongRight } from "react-icons/hi2";
 
 export const Header = () => {
   return (
     <div>
-      <Container className="flex flex-wrap items-center">
+      <Container className="flex flex-wrap items-center -mt-24">
         <div className="flex-1 ml-16 lg:w-1/2">
           <div className="font-montserrat max-w-2xl mb-8">
             <h1 className="text-4xl font-bold leading-snug tracking-tight text-gray-800 lg:text-4xl lg:leading-tight xl:text-6xl xl:leading-tight">

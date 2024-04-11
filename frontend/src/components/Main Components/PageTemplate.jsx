@@ -2,7 +2,7 @@ import React from "react";
 
 export const PageTemplate = ({ children }) => {
   return (
-    <section className="flex flex-col items-center justify-center px-6 py-8 mx-auto mt-20 mb-50 lg:py-0">
+    <section className="flex flex-col min-h-screen items-center px-6 py-8 mx-auto lg:py-0">
       {children}
     </section>
   );
