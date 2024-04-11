@@ -10,6 +10,7 @@ urlpatterns = [
     #Admins
     path('admins/', views.AdminList.as_view()),
     path('admin/<int:pk>', views.AdminDetail.as_view()),
+
     #Books
     path('books/', views.BookList.as_view()),
     path('books/<str:tag>', views.TagBookList.as_view()),
@@ -19,8 +20,11 @@ urlpatterns = [
     path('categories/', views.CategoryList.as_view()),
     path('category/<int:pk>', views.CategoryDetail.as_view()),
     # Customers
+
     path('customers/', views.CustomerList.as_view()),
     path('customer/<int:pk>', views.CustomerDetail.as_view()),
+    path('customer/login/', views.customer_login, name='customer_login'),
+
     # Orders
     path('orders/', views.OrderList.as_view()),
     path('order/<int:pk>', views.OrderDetail.as_view()),
