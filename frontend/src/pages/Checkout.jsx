@@ -1,10 +1,11 @@
 import CartNavigation from "../components/CartNavigation";
-import Footer from "../components/Footer";
+import Footer from "../components/Main Components/Footer";
 
 function Checkout() {
   return (
     <>
       <CartNavigation />
+
       <div className="container mx-auto px-4">
         <main className="mt-4">
           <h1 className="text-2xl font-medium flex justify-between items-center">

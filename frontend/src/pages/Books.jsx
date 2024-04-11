@@ -1,8 +1,9 @@
 import { Link } from "react-router-dom";
-import { BookContainer } from "../components/BookContainer";
+import { BookContainer } from "../components/Containers/BookContainer";
 import { useState, useEffect } from "react";
-import Navigation from "../components/Navigation";
-import Footer from "../components/Footer";
+import Navigation from "../components/Main Components/Navigation";
+import Footer from "../components/Main Components/Footer";
+import { PageTemplate } from "../components/Main Components/PageTemplate";
 
 function Books() {
   const baseUrl = "http://127.0.0.1:8000/api";
@@ -44,25 +45,27 @@ function Books() {
   return (
     <div>
       <Navigation />
-      <div className="container mx-auto px-1">
-        <main className="mt-4">
-          <h1 className="text-xl font-medium flex justify-between items-center">
-            All Books
-          </h1>
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3">
-            {books &&
-              books.map((book) => (
-                <div key={book.id} className="col-span-1">
-                  <BookContainer book={book} />
-                </div>
-              ))}
-          </div>
+      <PageTemplate>
+        <div className="container mx-auto px-1">
+          <main className="mt-4">
+            <h1 className="text-xl font-medium flex justify-between items-center">
+              All Books
+            </h1>
+            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3">
+              {books &&
+                books.map((book) => (
+                  <div key={book.id} className="col-span-1">
+                    <BookContainer book={book} />
+                  </div>
+                ))}
+            </div>
 
-          <nav>
-            <ul className="inline-flex -space-x-px text-sm mt-3">{links}</ul>
-          </nav>
-        </main>
-      </div>
+            <nav>
+              <ul className="inline-flex -space-x-px text-sm mt-3">{links}</ul>
+            </nav>
+          </main>
+        </div>
+      </PageTemplate>
       <Footer />
     </div>
   );

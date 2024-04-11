@@ -1,10 +1,11 @@
 import React from "react";
 import { Link, useParams } from "react-router-dom";
 import { useState, useEffect } from "react";
-import Navigation from "../components/Navigation";
-import Footer from "../components/Footer";
-import { AddToCartButton } from "../components/AddToCartButton";
-import { TagButton } from "../components/TagButton";
+import Navigation from "../components/Main Components/Navigation";
+import Footer from "../components/Main Components/Footer";
+import { AddToCartButton } from "../components/Buttons/AddToCartButton";
+import { TagButton } from "../components/Buttons/TagButton";
+import { PageTemplate } from "../components/Main Components/PageTemplate";
 
 function Book() {
   const baseUrl = "http://127.0.0.1:8000/api";
@@ -36,36 +37,38 @@ function Book() {
   return (
     <div>
       <Navigation />
-      <div className="container mx-auto px-4">
-        <main className="mt-10">
-          <div className="grid grid-cols-12 gap-4">
-            <div className="col-span-3">
-              {bookImages.map((image, index) => (
-                <img
-                  key={index}
-                  src={image.image}
-                  className="img-thumbnail fixed-image"
-                  alt={`Book Image ${index + 1}`}
-                />
-              ))}
-            </div>
-            <div className="col-span-8 flex flex-col justify-between">
-              <div>
-                <h3 className="text-2xl font-bold mb-3">{bookData.title}</h3>
-                <p className="text-gray-700 mb-3">{bookData.description}</p>
-                <p className="text-zinc-800 text-base font-semibold mb-3">
-                  Price: ₱{bookData.price}
-                </p>
-                <AddToCartButton />
+      <PageTemplate>
+        <div className="container mx-auto px-4">
+          <main className="mt-10">
+            <div className="grid grid-cols-12 gap-4">
+              <div className="col-span-3">
+                {bookImages.map((image, index) => (
+                  <img
+                    key={index}
+                    src={image.image}
+                    className="img-thumbnail fixed-image"
+                    alt={`Book Image ${index + 1}`}
+                  />
+                ))}
               </div>
-              <div className="mt-3 mb-3">
-                <h5 className="text-zinc-800 text-sm font-semibold">Tags</h5>
-                <div className="flex">{tagLinks}</div>
+              <div className="col-span-8 flex flex-col justify-between">
+                <div>
+                  <h3 className="text-2xl font-bold mb-3">{bookData.title}</h3>
+                  <p className="text-gray-700 mb-3">{bookData.description}</p>
+                  <p className="text-zinc-800 text-base font-semibold mb-3">
+                    Price: ₱{bookData.price}
+                  </p>
+                  <AddToCartButton />
+                </div>
+                <div className="mt-3 mb-3">
+                  <h5 className="text-zinc-800 text-sm font-semibold">Tags</h5>
+                  <div className="flex">{tagLinks}</div>
+                </div>
               </div>
             </div>
-          </div>
-        </main>
-      </div>
+          </main>
+        </div>
+      </PageTemplate>
       <Footer />
     </div>
   );
