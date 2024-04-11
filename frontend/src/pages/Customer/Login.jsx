@@ -60,82 +60,91 @@ const Login = () => {
   return (
     <div>
       <Navigation />
-      <main>
-        <section className="container mx-auto py-8">
-          <h1 className="text-3xl font-semibold text-center mb-8">Log In</h1>
-          <form onSubmit={handleSubmit}>
-            <div className="mb-4">
-              <label htmlFor="username" className="block mb-2 text-sm">
-                Username
-              </label>
-              <InputBox
-                type="text"
-                name="username"
-                id="username"
-                placeholder="Enter username"
-                value={loginFormData.username}
-                onChange={handleInputChange}
-              />
-            </div>
-            <div className="mb-4">
-              <label htmlFor="password" className="block mb-2 text-sm">
-                Password
-              </label>
-              <InputBox
-                type="password"
-                name="password"
-                id="password"
-                placeholder="••••••••"
-                value={loginFormData.password}
-                onChange={handleInputChange}
-              />
-            </div>
+      <PageTemplate>
+        <GrayBox>
+          <main>
+            <section className="container mx-auto py-8">
+              <h1 className="text-3xl font-semibold text-center mb-8">
+                Log In
+              </h1>
+              <form onSubmit={handleSubmit}>
+                <div className="mb-4">
+                  <label htmlFor="username" className="block mb-2 text-sm">
+                    Username
+                  </label>
+                  <InputBox
+                    type="text"
+                    name="username"
+                    id="username"
+                    placeholder="Enter username"
+                    value={loginFormData.username}
+                    onChange={handleInputChange}
+                  />
+                </div>
+                <div className="mb-4">
+                  <label htmlFor="password" className="block mb-2 text-sm">
+                    Password
+                  </label>
+                  <InputBox
+                    type="password"
+                    name="password"
+                    id="password"
+                    placeholder="••••••••"
+                    value={loginFormData.password}
+                    onChange={handleInputChange}
+                  />
+                </div>
 
-            {error && (
-              <div className="text-red-500 text-sm mb-4">{errorMessage}</div>
-            )}
+                {error && (
+                  <div className="text-red-500 text-sm mb-4">
+                    {errorMessage}
+                  </div>
+                )}
 
-            <div className="flex items-center justify-between mb-4">
-              <div className="flex items-center">
-                <input
-                  id="remember"
-                  type="checkbox"
-                  className="w-4 h-4 border border-gray-300 rounded bg-gray-50 focus:ring-3 focus:ring-primary-300 dark:bg-gray-700 dark:border-gray-600 dark:focus:ring-primary-600 dark:ring-offset-gray-800"
-                  required=""
-                />
-                <label htmlFor="remember" className="ml-2 text-sm">
-                  Remember me
-                </label>
+                <div className="flex items-center justify-between mb-4">
+                  <div className="flex items-center">
+                    <input
+                      id="remember"
+                      type="checkbox"
+                      className="w-4 h-4 border border-gray-300 rounded bg-gray-50 focus:ring-3 focus:ring-primary-300 dark:bg-gray-700 dark:border-gray-600 dark:focus:ring-primary-600 dark:ring-offset-gray-800"
+                      required=""
+                    />
+                    <label htmlFor="remember" className="ml-2 text-sm">
+                      Remember me
+                    </label>
+                  </div>
+                  <Link
+                    to="#"
+                    className="text-sm font-medium text-primary-600 hover:underline"
+                  >
+                    Forgot password?
+                  </Link>
+                </div>
+
+                <PrimaryButton disabled={!isFormReady()} className="w-full">
+                  Log in
+                </PrimaryButton>
+              </form>
+
+              <hr className="my-12 border-dotted border-t-1 bg-gray-500" />
+
+              <div className="flex items-center justify-between">
+                <p className="text-sm font-light mt-6">
+                  Don’t have an account yet?
+                </p>
+
+                <Link
+                  to="/customer/register"
+                  className="text-sm text-green-500 hover:underline mt-6"
+                >
+                  Sign up
+                </Link>
               </div>
-              <Link
-                to="#"
-                className="text-sm font-medium text-primary-600 hover:underline"
-              >
-                Forgot password?
-              </Link>
-            </div>
+            </section>
+          </main>
+        </GrayBox>
+      </PageTemplate>
 
-            <PrimaryButton disabled={!isFormReady()} className="w-full">
-              Log in
-            </PrimaryButton>
-          </form>
-
-          <hr className="my-12 border-dotted border-t-1 bg-gray-500" />
-
-          <div className="flex items-center justify-between">
-            <p className="text-sm font-light mt-6">
-              Don’t have an account yet?
-            </p>
-
-            <Link
-              to="/customer/register"
-              className="text-sm text-green-500 hover:underline mt-6"
-            >
-              Sign up
-            </Link>
-          </div>
-        </section>
-      </main>
       <Footer />
     </div>
   );
