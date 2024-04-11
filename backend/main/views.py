@@ -1,6 +1,9 @@
 from rest_framework import generics, permissions, pagination, viewsets
 from . import serializers
 from . import models
+from django.views.decorators.csrf import csrf_exempt
+from django.http import JsonResponse
+from django.contrib.auth import authenticate
 # Create your views here.
 
 class AdminList(generics.ListCreateAPIView):
@@ -49,6 +52,28 @@ class CustomerList(generics.ListCreateAPIView):
 class CustomerDetail(generics.RetrieveUpdateDestroyAPIView):
     queryset = models.Customer.objects.all()
     serializer_class = serializers.CustomerDetailSerializer
+
+@csrf_exempt
+def customer_login(request):
+    if request.method == 'POST':
+        username = request.POST.get('username')
+        password = request.POST.get('password')
+        user = authenticate(username=username, password=password)
+        if user:
+            message = {
+                'success': True,
+                'username': user.username
+            }
+        else:
+            message = {
+                'success': False,
+                'message': 'Invalid username or password. Please try again!'
+            }
+        return JsonResponse(message)
+    else:
+        # Handle other request methods if needed
+        return JsonResponse({'success': False, 'message': 'Invalid request method'})
+
 
 class OrderList(generics.ListCreateAPIView):
     queryset = models.Order.objects.all()

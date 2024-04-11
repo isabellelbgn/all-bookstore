@@ -8,139 +8,146 @@ import { Link } from "react-router-dom";
 import { PageTemplate } from "../../components/Main Components/PageTemplate";
 import { GrayBox } from "../../components/Main Components/GrayBox";
 import GreenNav from "../../components/Main Components/GreenNav";
+import axios from "axios";
+import { PageTemplate } from "../../components/Main Components/PageTemplate";
+import { GrayBox } from "../../components/Main Components/GrayBox";
+import GreenNav from "../../components/Main Components/GreenNav";
 
 const Login = () => {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [error, setError] = useState("");
+  const [error, setError] = useState(false);
+  const [errorMessage, setErrorMessage] = useState("");
+  const baseUrl = "http://127.0.0.1:8000/api/";
 
-  const submit = async (e) => {
-    e.preventDefault();
+  const [loginFormData, setLoginFormData] = useState({
+    username: "",
+    password: "",
+  });
 
-    if (!email || !password) {
-      setError("Please fill in all fields.");
-      return;
-    }
+  const handleInputChange = (event) => {
+    setLoginFormData({
+      ...loginFormData,
+      [event.target.name]: event.target.value,
+    });
+  };
+
+  const handleSubmit = async (event) => {
+    event.preventDefault();
+
+    const formData = new FormData();
+    formData.append("username", loginFormData.username);
+    formData.append("password", loginFormData.password);
 
     try {
-      const response = await fetch("http://localhost:8000/api/login", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        credentials: "include",
-        body: JSON.stringify({
-          email,
-          password,
-        }),
-      });
+      const response = await axios.post(baseUrl + "customer/login/", formData);
 
-      if (response.ok) {
-        setError("");
-        toast.success("Login Successful!");
+      if (response.data.success) {
+        setError(false);
+        setErrorMessage("");
+        localStorage.setItem("customer_username", loginFormData.username);
+        window.location.href = "/customer/dashboard/";
       } else {
-        const errorMessage = await response.text();
-        setError(
-          errorMessage || "Invalid email or password. Please try again."
-        );
-        toast.error(
-          errorMessage || "Invalid email or password. Please try again."
-        );
+        setError(true);
+        setErrorMessage(response.data.message || "Invalid credentials.");
       }
     } catch (error) {
-      setError("An error occurred. Please try again later.");
+      setError(true);
+      setErrorMessage("An error occurred. Please try again later.");
       console.error("Login error:", error);
     }
   };
+
+  const isFormReady = () =>
+    loginFormData.username.trim() !== "" &&
+    loginFormData.password.trim() !== "";
 
   return (
     <div>
       <Navigation />
       <PageTemplate>
         <GrayBox>
-          <h1 className="text-xl text-center leading-tight tracking-tight text-gray-900 md:text-2xl dark:text-black">
-            Log In
-          </h1>
-          <form
-            className="font-normal space-y-4 md:space-y-6"
-            action="#"
-            onSubmit={submit}
-          >
-            <div>
-              <label htmlFor="email" className="block mb-2 text-sm text-black">
-                Email
-              </label>
-              <InputBox
-                type="email"
-                name="email"
-                id="email"
-                placeholder="name@email.com"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-              />
-            </div>
-            <div>
-              <label
-                htmlFor="password"
-                className="block mb-2 text-sm text-black"
-              >
-                Password
-              </label>
-              <InputBox
-                type="password"
-                name="password"
-                id="password"
-                placeholder="••••••••"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-              />
-            </div>
-
-            {error && <div className="text-red-500 text-sm">{error}</div>}
-
-            <div className="flex items-center justify-between">
-              <div className="flex items-start">
-                <div className="flex items-center h-5">
-                  <input
-                    id="remember"
-                    aria-describedby="remember"
-                    type="checkbox"
-                    className="w-4 h-4 border border-gray-300 rounded bg-gray-50 focus:ring-3 focus:ring-primary-300 dark:bg-gray-700 dark:border-gray-600 dark:focus:ring-primary-600 dark:ring-offset-gray-800"
-                    required=""
+          <main>
+            <section className="container mx-auto py-8">
+              <h1 className="text-3xl font-semibold text-center mb-8">
+                Log In
+              </h1>
+              <form onSubmit={handleSubmit}>
+                <div className="mb-4">
+                  <label htmlFor="username" className="block mb-2 text-sm">
+                    Username
+                  </label>
+                  <InputBox
+                    type="text"
+                    name="username"
+                    id="username"
+                    placeholder="Enter username"
+                    value={loginFormData.username}
+                    onChange={handleInputChange}
                   />
                 </div>
-                <div className="ml-3 text-sm">
-                  <label htmlFor="remember" className="text-gray-400">
-                    Remember me
+                <div className="mb-4">
+                  <label htmlFor="password" className="block mb-2 text-sm">
+                    Password
                   </label>
+                  <InputBox
+                    type="password"
+                    name="password"
+                    id="password"
+                    placeholder="••••••••"
+                    value={loginFormData.password}
+                    onChange={handleInputChange}
+                  />
                 </div>
+
+                {error && (
+                  <div className="text-red-500 text-sm mb-4">
+                    {errorMessage}
+                  </div>
+                )}
+
+                <div className="flex items-center justify-between mb-4">
+                  <div className="flex items-center">
+                    <input
+                      id="remember"
+                      type="checkbox"
+                      className="w-4 h-4 border border-gray-300 rounded bg-gray-50 focus:ring-3 focus:ring-primary-300 dark:bg-gray-700 dark:border-gray-600 dark:focus:ring-primary-600 dark:ring-offset-gray-800"
+                      required=""
+                    />
+                    <label htmlFor="remember" className="ml-2 text-sm">
+                      Remember me
+                    </label>
+                  </div>
+                  <Link
+                    to="#"
+                    className="text-sm font-medium text-primary-600 hover:underline"
+                  >
+                    Forgot password?
+                  </Link>
+                </div>
+
+                <PrimaryButton disabled={!isFormReady()} className="w-full">
+                  Log in
+                </PrimaryButton>
+              </form>
+
+              <hr className="my-12 border-dotted border-t-1 bg-gray-500" />
+
+              <div className="flex items-center justify-between">
+                <p className="text-sm font-light mt-6">
+                  Don’t have an account yet?
+                </p>
+
+                <Link
+                  to="/customer/register"
+                  className="text-sm text-green-500 hover:underline mt-6"
+                >
+                  Sign up
+                </Link>
               </div>
-              <a
-                href="#"
-                className="text-sm font-medium text-primary-600 hover:underline"
-              >
-                Forgot password?
-              </a>
-            </div>
-
-            <PrimaryButton className="w-full font-medium text-sm">
-              Log in
-            </PrimaryButton>
-
-            <hr className="my-12 border-dotted border-t-1 bg-gray-500" />
-            <div className="flex items-center justify-between">
-              <p className="text-sm font-light text-gray-400 mt-6">
-                Don’t have an account yet?
-              </p>
-
-              <Link
-                to="/customer/register"
-                className="text-sm text-green-50 hover:underline mt-6"
-              >
-                Sign up
-              </Link>
-            </div>
-          </form>
+            </section>
+          </main>
         </GrayBox>
       </PageTemplate>
+
       <Footer />
     </div>
   );
