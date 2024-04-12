@@ -20,6 +20,7 @@ import OrderSuccess from "./pages/OrderSuccess";
 //Customer Panel
 import Register from "./pages/Customer/Register";
 import Login from "./pages/Customer/Login";
+import Logout from "./pages/Customer/Logout";
 import Dashboard from "./pages/Customer/Dashboard";
 import Orders from "./pages/Customer/Orders";
 
@@ -32,6 +33,11 @@ const router = createBrowserRouter([
   {
     path: "/customer/login",
     element: <Login />,
+    errorElement: <NotFound />,
+  },
+  {
+    path: "/customer/logout",
+    element: <Logout />,
     errorElement: <NotFound />,
   },
   {
