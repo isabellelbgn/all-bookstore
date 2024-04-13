@@ -7,56 +7,74 @@ import { PrimaryButton } from "../../components/Buttons/PrimaryButton";
 import { Link } from "react-router-dom";
 import { PageTemplate } from "../../components/Main Components/PageTemplate";
 import { GrayBox } from "../../components/Main Components/GrayBox";
+import axios from "axios";
 
 const Register = () => {
-  const [firstname, setFirstName] = useState("");
-  const [lastname, setLastName] = useState("");
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [errors, setErrors] = useState({});
+  const [error, setError] = useState(false);
+  const [errorMessage, setErrorMessage] = useState("");
+  const [successMessage, setSuccessMessage] = useState("");
 
-  const validateForm = () => {
-    const errors = {};
+  const baseUrl = "http://127.0.0.1:8000/api/";
 
-    if (!firstname.trim()) {
-      errors.firstname = "Please enter your first name.";
-    }
+  const [registerFormData, setRegisterFormData] = useState({
+    first_name: "",
+    last_name: "",
+    username: "",
+    email: "",
+    password: "",
+  });
 
-    if (!lastname.trim()) {
-      errors.lastname = "Please enter your last name.";
-    }
-
-    if (!email.trim()) {
-      errors.email = "Please enter your email address.";
-    } else if (!/\S+@\S+\.\S+/.test(email)) {
-      errors.email = "Please enter a valid email address.";
-    }
-
-    if (!password.trim()) {
-      errors.password = "Please enter your password.";
-    } else if (password.length < 8) {
-      errors.password = "Password must be at least 8 characters long.";
-    }
-
-    setErrors(errors);
-    // Check if there are any errors
-    const isValid = Object.keys(errors).length === 0;
-
-    return isValid;
+  const handleInputChange = (event) => {
+    setRegisterFormData({
+      ...registerFormData,
+      [event.target.name]: event.target.value,
+    });
   };
 
-  const submit = async (e) => {
-    e.preventDefault();
+  const handleSubmit = async (event) => {
+    event.preventDefault();
 
-    const isValid = validateForm();
+    const formData = new FormData();
+    formData.append("first_name", registerFormData.first_name);
+    formData.append("last_name", registerFormData.last_name);
+    formData.append("email", registerFormData.email);
+    formData.append("username", registerFormData.username);
+    formData.append("password", registerFormData.password);
 
-    if (isValid) {
-      // Your fetch code for registration
-      console.log("Form submitted successfully.");
-    } else {
-      console.log("Form has errors. Please correct them.");
+    try {
+      const response = await axios.post(
+        baseUrl + "customer/register/",
+        formData
+      );
+
+      if (response.data.success) {
+        setRegisterFormData({
+          first_name: "",
+          last_name: "",
+          username: "",
+          email: "",
+          password: "",
+        });
+        setError(false);
+        setSuccessMessage(response.data.message);
+        setErrorMessage("");
+      } else {
+        setError(true);
+        setErrorMessage(response.data.message || "Invalid credentials.");
+      }
+    } catch (error) {
+      setError(true);
+      setErrorMessage("An error occurred. Please try again later.");
+      console.error("Register error:", error);
     }
   };
+
+  const isFormReady = () =>
+    registerFormData.first_name.trim() !== "" &&
+    registerFormData.last_name.trim() !== "" &&
+    registerFormData.username.trim() !== "" &&
+    registerFormData.password.trim() !== "" &&
+    registerFormData.email.trim() !== "";
 
   return (
     <div>
@@ -69,63 +87,85 @@ const Register = () => {
           <form
             className="font-normal space-y-4 md:space-y-6"
             action="#"
-            onSubmit={submit}
+            onSubmit={handleSubmit}
           >
             <div className="grid grid-cols-2 gap-6">
               <div className="relative z-0 w-full group">
                 <label
-                  htmlFor="firstname"
+                  htmlFor="first_name"
                   className="block mb-2 text-sm text-black"
                 >
                   First Name
                 </label>
                 <InputBox
                   type="name"
-                  name="firstname"
-                  id="firstname"
+                  name="first_name"
+                  id="first_name"
                   placeholder="First Name"
-                  value={firstname}
-                  onChange={(e) => setFirstName(e.target.value)}
+                  value={registerFormData.first_name}
+                  onChange={handleInputChange}
                 />
-                {errors.firstname && (
-                  <div className="text-red-500 text-xs">{errors.firstname}</div>
+                {error.first_name && (
+                  <div className="text-red-500 text-xs">{errorMessage}</div>
                 )}
               </div>
               <div className="relative z-0 w-full group">
                 <label
-                  htmlFor="lastname"
+                  htmlFor="last_name"
                   className="block mb-2 text-sm text-black "
                 >
                   Last Name
                 </label>
                 <InputBox
                   type="name"
-                  name="lastname"
-                  id="lastname"
+                  name="last_name"
+                  id="last_name"
                   placeholder="Last Name"
-                  value={lastname}
-                  onChange={(e) => setLastName(e.target.value)}
+                  value={registerFormData.last_name}
+                  onChange={handleInputChange}
                 />
-                {errors.lastname && (
-                  <div className="text-red-500 text-xs">{errors.lastname}</div>
+                {error.last_name && (
+                  <div className="text-red-500 text-xs">{errorMessage}</div>
                 )}
               </div>
-            </div>
-            <div>
-              <label htmlFor="email" className="block mb-2 text-sm text-black ">
-                Email
-              </label>
-              <InputBox
-                type="email"
-                name="email"
-                id="email"
-                placeholder="name@email.com"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-              />
-              {errors.email && (
-                <div className="text-red-500 text-xs">{errors.email}</div>
-              )}
+              <div className="relative z-0 w-full group">
+                <label
+                  htmlFor="username"
+                  className="block mb-2 text-sm text-black "
+                >
+                  Username
+                </label>
+                <InputBox
+                  type="name"
+                  name="username"
+                  id="username"
+                  placeholder="Username"
+                  value={registerFormData.username}
+                  onChange={handleInputChange}
+                />
+                {error.username && (
+                  <div className="text-red-500 text-xs">{errorMessage}</div>
+                )}
+              </div>
+              <div>
+                <label
+                  htmlFor="email"
+                  className="block mb-2 text-sm text-black "
+                >
+                  Email
+                </label>
+                <InputBox
+                  type="email"
+                  name="email"
+                  id="email"
+                  placeholder="name@email.com"
+                  value={registerFormData.email}
+                  onChange={handleInputChange}
+                />
+                {error.email && (
+                  <div className="text-red-500 text-xs">{errorMessage}</div>
+                )}
+              </div>
             </div>
             <div>
               <label
@@ -139,11 +179,11 @@ const Register = () => {
                 name="password"
                 id="password"
                 placeholder="••••••••"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
+                value={registerFormData.password}
+                onChange={handleInputChange}
               />
-              {errors.password && (
-                <div className="text-red-500 text-xs">{errors.password}</div>
+              {error.password && (
+                <div className="text-red-500 text-xs">{errorMessage}</div>
               )}
               <Typography className="mt-2 flex items-center mb-2 text-gray-400 text-xs gap-1 font-normal">
                 <svg
@@ -163,7 +203,22 @@ const Register = () => {
               </Typography>
             </div>
 
-            <PrimaryButton className="w-full font-medium text-sm">
+            {error && (
+              <div className="text-red-500 text-sm mb-4">
+                Note: All fields are required.
+              </div>
+            )}
+
+            {successMessage && (
+              <div className="text-green-500 text-sm mb-4">
+                {successMessage}
+              </div>
+            )}
+
+            <PrimaryButton
+              disabled={!isFormReady()}
+              className="w-full font-medium text-sm"
+            >
               Sign Up
             </PrimaryButton>
             <hr className="my-12 border-dotted border-t-1 bg-gray-500" />
