@@ -9,6 +9,7 @@ function Books() {
   const baseUrl = "http://127.0.0.1:8000/api";
   const [books, setBooks] = useState([]);
   const [totalResult, setTotalResult] = useState(0);
+  const [totalPages, setTotalPages] = useState(1);
 
   useEffect(() => {
     fetchBooks(baseUrl + "/books");
@@ -20,6 +21,7 @@ function Books() {
       .then((data) => {
         setBooks(data.results);
         setTotalResult(data.count);
+        setTotalPages(Math.ceil(data.count / 15)); // PAGE_SIZE is 15
       });
   }
   function changeUrl(baseUrl) {
@@ -27,7 +29,7 @@ function Books() {
   }
 
   var links = [];
-  for (let i = 1; i <= totalResult; i++) {
+  for (let i = 1; i <= totalPages; i++) {
     links.push(
       <li key={i}>
         <Link
@@ -55,6 +57,13 @@ function Books() {
                   </div>
                 ))}
             </div>
+            {totalPages > 1 && (
+              <nav>
+                <ul className="inline-flex -space-x-px text-sm mt-3">
+                  {links}
+                </ul>
+              </nav>
+            )}
           </main>
         </div>
       </PageTemplate>

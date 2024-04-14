@@ -204,9 +204,7 @@ const Register = () => {
             </div>
 
             {error && (
-              <div className="text-red-500 text-sm mb-4">
-                Note: All fields are required.
-              </div>
+              <div className="text-red-500 text-sm mb-4">{errorMessage}</div>
             )}
 
             {successMessage && (

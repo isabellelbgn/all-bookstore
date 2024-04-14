@@ -1,6 +1,6 @@
 import React from "react";
 import Container from "./Containers/Container";
-import logo from "./Images/PrideandPrejudice.jpeg";
+import logo from "./images/PrideandPrejudice.jpeg";
 import { SecondaryButton } from "./Buttons/SecondaryButton";
 import { HiOutlineArrowLongRight } from "react-icons/hi2";
 

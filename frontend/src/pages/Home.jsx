@@ -12,16 +12,29 @@ function Home() {
   const [books, setBooks] = useState([]);
   const [categories, setCategories] = useState([]);
   const [loading, setLoading] = useState(true);
+  const baseUrl = "http://127.0.0.1:8000/api";
 
   useEffect(() => {
     fetchBooksAndCategories();
   }, []);
 
+  useEffect(() => {
+    fetchBooks(baseUrl + "/books/?fetch_limit=4");
+  }, []);
+
+  function fetchBooks(baseUrl) {
+    fetch(baseUrl)
+      .then((response) => response.json())
+      .then((data) => {
+        setBooks(data.results);
+      });
+  }
+
   async function fetchBooksAndCategories() {
     try {
       const [booksResponse, categoriesResponse] = await Promise.all([
-        fetch("http://127.0.0.1:8000/api/books/"),
-        fetch("http://127.0.0.1:8000/api/categories/"),
+        fetch(baseUrl + "/books/?fetch_limit=4"),
+        fetch(baseUrl + "/categories/?fetch_limit=4"),
       ]);
 
       const booksData = await booksResponse.json();
@@ -77,7 +90,7 @@ function Home() {
               {loading ? (
                 <p>Loading books...</p>
               ) : (
-                <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3">
+                <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4">
                   {books.map((book) => (
                     <div key={book.id} className="col-span-1">
                       <BookContainer book={book} />

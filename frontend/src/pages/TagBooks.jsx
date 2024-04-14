@@ -2,6 +2,8 @@ import { Link, useParams } from "react-router-dom";
 import { BookContainer } from "../components/Containers/BookContainer";
 import { useState, useEffect } from "react";
 import Navigation from "../components/Main Components/Navigation";
+import Footer from "../components/Main Components/Footer";
+import { PageTemplate } from "../components/Main Components/PageTemplate";
 
 function TagBooks() {
   const baseUrl = "http://127.0.0.1:8000/api";
@@ -9,6 +11,7 @@ function TagBooks() {
   const [tagTitle, setTagTitle] = useState("");
   const { tag } = useParams();
   const [totalResult, setTotalResult] = useState(0);
+  const [totalPages, setTotalPages] = useState(1);
 
   useEffect(() => {
     fetchBooks(baseUrl + `/books/` + tag);
@@ -21,6 +24,7 @@ function TagBooks() {
       .then((data) => {
         setBooks(data.results);
         setTotalResult(data.count);
+        setTotalPages(Math.ceil(data.count / 15)); // PAGE_SIZE is 15
       });
   }
 
@@ -29,7 +33,7 @@ function TagBooks() {
   }
 
   var links = [];
-  for (let i = 1; i <= totalResult; i++) {
+  for (let i = 1; i <= totalPages; i++) {
     links.push(
       <li key={i}>
         <Link
@@ -46,26 +50,33 @@ function TagBooks() {
   return (
     <div>
       <Navigation />
-      <div className="container mx-auto px-1">
-        <main className="mt-4">
-          <h1 className="text-xl font-medium flex justify-between items-center">
-            {tagTitle ? tagTitle : "Tag Title"}
-          </h1>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-3">
-            {books &&
-              books.map((book) => (
-                <div key={book.id} className="col-span-1">
-                  {" "}
-                  <BookContainer book={book} />{" "}
-                </div>
-              ))}
-          </div>
+      <PageTemplate>
+        <div className="container mx-auto px-1">
+          <main className="mt-4">
+            <h1 className="text-xl font-medium flex justify-between items-center">
+              {tagTitle ? tagTitle : "Tag Title"}
+            </h1>
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-3">
+              {books &&
+                books.map((book) => (
+                  <div key={book.id} className="col-span-1">
+                    {" "}
+                    <BookContainer book={book} />{" "}
+                  </div>
+                ))}
+            </div>
 
-          <nav>
-            <ul className="inline-flex -space-x-px text-sm mt-3">{links}</ul>
-          </nav>
-        </main>
-      </div>
+            {totalPages > 1 && (
+              <nav>
+                <ul className="inline-flex -space-x-px text-sm mt-3">
+                  {links}
+                </ul>
+              </nav>
+            )}
+          </main>
+        </div>
+      </PageTemplate>
+      <Footer />
     </div>
   );
 }
