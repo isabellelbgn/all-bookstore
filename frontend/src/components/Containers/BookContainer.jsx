@@ -61,14 +61,12 @@ const BookContainer = ({ book }) => {
                 alt={`Book Image ${index + 1}`}
               />
             ))}
-            <h5 className="text-s font-normal">{book.title}</h5>
+            <h5 className="text-s mt-6 font-normal">{book.title}</h5>
           </Link>
-          <p className="text-gray-500 text-xs mb-1 mt-1 text-base">
+          <p className="text-gray-500 text-xs mb-6 mt-1 text-base">
             {book.author}
           </p>
-          <p className="text-gray-700 text-xs font-semibold">
-            Price: {book.price}
-          </p>
+          <p className="text-gray-700 text-s font-semibold">P{book.price}</p>
           <AddToCartButton />
         </div>
       </div>
