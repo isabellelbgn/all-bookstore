@@ -11,10 +11,16 @@ const BookContainer = ({ book }) => {
     textAlign: "center",
     maxWidth: "calc(250px - 8px)",
   };
+  const imageContainerStyle = {
+    display: "flex",
+    justifyContent: "center",
+    alignItems: "center",
+    height: "200px", // Set a fixed height to ensure consistent alignment
+  };
   const imageStyle = {
-    maxHeight: "100%",
     maxWidth: "100%",
-    marginBottom: "10px",
+    maxHeight: "100%",
+    objectFit: "cover",
   };
 
   const [bookImages, setBookImages] = useState([]);
@@ -45,22 +51,27 @@ const BookContainer = ({ book }) => {
   return (
     <div className="relative my-2 flex">
       <div
-        className="flex bg-gray-100 rounded-lg justify-center overflow-hidden"
+        className="flex bg-gray-100 rounded-lg justify-center overflow-hidden group transition duration-300 ease-in-out transform hover:scale-105"
         style={containerStyle}
       >
         <div className="flex flex-col justify-center items-center px-6 py-4">
-          <Link to={`/book/${book.title}/${book.id}`}>
-            {bookImages.map((image, index) => (
-              <img
-                key={index}
-                src={image.image}
-                className="object-cover"
-                style={imageStyle}
-                loading="eager"
-                placeholder="blur"
-                alt={`Book Image ${index + 1}`}
-              />
-            ))}
+          <Link
+            to={`/book/${book.title}/${book.id}`}
+            className="group-hover:underline"
+          >
+            <div style={imageContainerStyle}>
+              {bookImages.map((image, index) => (
+                <img
+                  key={index}
+                  src={image.image}
+                  className="object-cover group-hover:opacity-50 transition-opacity"
+                  style={imageStyle}
+                  loading="eager"
+                  placeholder="blur"
+                  alt={`Book Image ${index + 1}`}
+                />
+              ))}
+            </div>
             <h5 className="text-s mt-6 font-normal">{book.title}</h5>
           </Link>
           <p className="text-gray-500 text-xs mb-6 mt-1 text-base">

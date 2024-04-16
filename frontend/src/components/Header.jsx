@@ -1,51 +1,113 @@
-import React from "react";
-import Container from "./Containers/Container";
-import logo from "./images/PrideandPrejudice.jpeg";
-import { SecondaryButton } from "./Buttons/SecondaryButton";
-import { HiOutlineArrowLongRight } from "react-icons/hi2";
+import React, { useState } from "react";
+import Chae from "./Images/Chae.jpg";
+import Logo from "./Images/PrideandPrejudice.jpeg";
 
 export const Header = () => {
+  const [currentImageIndex, setCurrentImageIndex] = useState(0);
+
+  const images = [Chae, Logo, Chae, Chae, Chae];
+
+  const handleImageChange = (index) => {
+    setCurrentImageIndex(index);
+  };
+
   return (
     <div>
-      <Container className="flex flex-wrap items-center -mt-5">
-        <div className="flex-1 ml-16 lg:w-1/2">
-          <div className="font-montserrat max-w-2xl mb-8">
-            <h1 className="text-4xl font-bold leading-snug tracking-tight text-gray-800 lg:text-4xl lg:leading-tight xl:text-6xl xl:leading-tight">
-              Book of the Year
-            </h1>
-            <p className="py-5 text-2xl leading-normal text-white">
-              Pride and Prejudice
-            </p>
-            <p className="text-sm leading-normal text-white">by Jane Austen</p>
-            <p className="py-5 text-xs leading-normal text-white">
-              Pride and Prejudice follows the turbulent relationship between
-              Elizabeth Bennet, the daughter of a country gentleman, and
-              Fitzwilliam Darcy, a rich aristocratic landowner. They must
-              overcome the titular sins of pride and prejudice in order to fall
-              in love and marry.
-            </p>
-            <SecondaryButton className="flex">
-              View More{" "}
-              <HiOutlineArrowLongRight className="ml-1 flex" size={25} />{" "}
-            </SecondaryButton>
-          </div>
-        </div>
-        <div className="flex-1 mr-16 lg:w-1/2 hidden lg:block">
-          <div className="flex justify-center">
-            <div className="relative flex h-[400px] w-[400px] items-center justify-center bg-white rounded-full">
+      <div
+        id="default-carousel"
+        className="relative w-full"
+        data-carousel="slide"
+      >
+        <div className="relative overflow-hidden -mt-5 mb-10 rounded-lg h-[calc(85vh-74px)] w-full">
+          {images.map((imageSrc, index) => (
+            <div
+              key={index}
+              className={`absolute inset-0 transition-opacity ${
+                index === currentImageIndex ? "opacity-100" : "opacity-0"
+              }`}
+              data-carousel-item
+            >
               <img
-                src={logo}
-                width="200"
-                height="400"
-                className={"object-cover z-10 "}
-                loading="eager"
-                placeholder="blur"
-                alt={"logo"}
+                src={imageSrc}
+                className="w-full h-full object-cover"
+                alt={`Slide ${index + 1}`}
               />
             </div>
-          </div>
+          ))}
         </div>
-      </Container>
+
+        <button
+          type="button"
+          className="absolute top-0 start-0 z-30 flex items-center justify-center h-full px-4 cursor-pointer group focus:outline-none"
+          data-carousel-prev
+          onClick={() =>
+            handleImageChange(
+              (currentImageIndex - 1 + images.length) % images.length
+            )
+          }
+        >
+          <span className="inline-flex items-center justify-center w-10 h-10 rounded-full bg-white/30 dark:bg-gray-800/30 group-hover:bg-white/50 dark:group-hover:bg-gray-800/60 group-focus:ring-4 group-focus:ring-white dark:group-focus:ring-gray-800/70 group-focus:outline-none">
+            <svg
+              className="w-4 h-4 text-white dark:text-gray-800 rtl:rotate-180"
+              aria-hidden="true"
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 6 10"
+            >
+              <path
+                stroke="currentColor"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth="2"
+                d="M5 1 1 5l4 4"
+              />
+            </svg>
+            <span className="sr-only">Previous</span>
+          </span>
+        </button>
+        <button
+          type="button"
+          className="absolute top-0 end-0 z-30 flex items-center justify-center h-full px-4 cursor-pointer group focus:outline-none"
+          data-carousel-next
+          onClick={() =>
+            handleImageChange((currentImageIndex + 1) % images.length)
+          }
+        >
+          <span className="inline-flex items-center justify-center w-10 h-10 rounded-full bg-white/30 dark:bg-gray-800/30 group-hover:bg-white/50 dark:group-hover:bg-gray-800/60 group-focus:ring-4 group-focus:ring-white dark:group-focus:ring-gray-800/70 group-focus:outline-none">
+            <svg
+              className="w-4 h-4 text-white dark:text-gray-800 rtl:rotate-180"
+              aria-hidden="true"
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 6 10"
+            >
+              <path
+                stroke="currentColor"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth="2"
+                d="m1 9 4-4-4-4"
+              />
+            </svg>
+            <span className="sr-only">Next</span>
+          </span>
+        </button>
+      </div>
+      <div className="absolute z-30 flex -translate-x-1/2 bottom-20 left-1/2 space-x-3 rtl:space-x-reverse">
+        {images.map((_, index) => (
+          <button
+            key={index}
+            type="button"
+            className={`w-3 h-3 rounded-full ${
+              index === currentImageIndex ? "bg-gray-800" : "bg-gray-300"
+            }`}
+            aria-current={index === currentImageIndex}
+            aria-label={`Slide ${index + 1}`}
+            data-carousel-slide-to={index}
+            onClick={() => handleImageChange(index)}
+          ></button>
+        ))}
+      </div>
     </div>
   );
 };
