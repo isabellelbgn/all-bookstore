@@ -1,9 +1,18 @@
 from rest_framework import generics, permissions, pagination, viewsets
 from . import serializers
 from . import models
+
 from django.views.decorators.csrf import csrf_exempt
 from django.http import JsonResponse
 from django.contrib.auth import authenticate
+from django.contrib.auth.models import User
+from django.db import IntegrityError
+from rest_framework.views import APIView
+from rest_framework.response import Response
+from rest_framework import status
+from .models import BookRating
+from .serializers import BookRatingSerializer
+
 # Create your views here.
 
 class AdminList(generics.ListCreateAPIView):
@@ -28,6 +37,9 @@ class BookList(generics.ListCreateAPIView):
                 qs = qs.filter(category=category)
             except models.BookCategory.DoesNotExist:
                 qs = qs.none()
+        if 'fetch_limit' in self.request.GET:
+            limit = int(self.request.GET['fetch_limit'])
+            qs = qs[:limit]
         return qs
 
 class TagBookList(generics.ListCreateAPIView):
@@ -71,8 +83,65 @@ def customer_login(request):
             }
         return JsonResponse(message)
     else:
-        # Handle other request methods if needed
         return JsonResponse({'success': False, 'message': 'Invalid request method'})
+    
+# @csrf_exempt
+# def customer_login(request):
+#     if request.method == 'POST':
+#         return JsonResponse({'message': 'JWT authentication is required.'}, status=403)
+#     else:
+#         return JsonResponse({'success': False, 'message': 'Invalid request method'})
+
+@csrf_exempt
+def customer_register(request):
+    if request.method == 'POST':
+        first_name = request.POST.get('first_name')
+        last_name = request.POST.get('last_name')
+        username = request.POST.get('username')
+        password = request.POST.get('password')
+        email = request.POST.get('email')
+        try: 
+            if User.objects.filter(username=username).exists():
+                message = {
+                    'success': False,
+                    'message': 'Username already exists.'
+                }
+                return JsonResponse(message)
+
+            user = User.objects.create_user(
+                username=username,
+                password=password,
+                email=email,
+                first_name=first_name,
+                last_name=last_name
+            )
+
+            if user:
+                customer = models.Customer.objects.create(user=user)
+                message = {
+                    'success': True,
+                    'user': user.id,
+                    'customer': customer.id,
+                    'message': "You are now registered. You can now log in."
+                }
+            else:
+                message = {
+                    'success': False,
+                    'message': 'Something went wrong!'
+                }
+            return JsonResponse(message)
+        except IntegrityError:
+            message = {
+                'success': False,
+                'message': 'Username already exists!'
+            }
+            return JsonResponse(message)
+    else:
+        message = {
+            'success': False,
+            'message': 'Invalid request method. Only POST method is allowed.'
+        }
+        return JsonResponse(message)
 
 
 class OrderList(generics.ListCreateAPIView):
@@ -97,10 +166,28 @@ class BookRatingViewSet(viewsets.ModelViewSet):
     serializer_class = serializers.BookRatingSerializer
     queryset = models.BookRating.objects.all()
 
+class BookRatingsList(APIView):
+    def get(self, request, book_id, format=None):
+        try:
+            ratings = BookRating.objects.filter(book_id=book_id)
+            serializer = BookRatingSerializer(ratings, many=True)
+            return Response(serializer.data)
+        except BookRating.DoesNotExist:
+            return Response(status=status.HTTP_404_NOT_FOUND)
+
+
 class CategoryList(generics.ListCreateAPIView):
     queryset = models.BookCategory.objects.all()
     serializer_class = serializers.CategorySerializer
     pagination_class = pagination.PageNumberPagination
+
+    def get_queryset(self):
+        qs = super().get_queryset()
+        if 'fetch_limit' in self.request.GET:
+            limit = int(self.request.GET['fetch_limit'])
+            qs = qs[:limit]
+        return qs
+
 
 class CategoryDetail(generics.RetrieveUpdateDestroyAPIView):
     queryset = models.BookCategory.objects.all()

@@ -6,7 +6,6 @@ import Footer from "../../components/Main Components/Footer";
 import { PrimaryButton } from "../../components/Buttons/PrimaryButton";
 import { PageTemplate } from "../../components/Main Components/PageTemplate";
 import { GrayBox } from "../../components/Main Components/GrayBox";
-import { toast } from "react-toastify";
 import axios from "axios";
 
 const Login = () => {
@@ -39,6 +38,7 @@ const Login = () => {
       if (response.data.success) {
         setError(false);
         setErrorMessage("");
+        localStorage.setItem("customer_login", true);
         localStorage.setItem("customer_username", loginFormData.username);
         window.location.href = "/";
       } else {

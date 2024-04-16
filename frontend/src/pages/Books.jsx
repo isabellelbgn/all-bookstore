@@ -9,6 +9,7 @@ function Books() {
   const baseUrl = "http://127.0.0.1:8000/api";
   const [books, setBooks] = useState([]);
   const [totalResult, setTotalResult] = useState(0);
+  const [totalPages, setTotalPages] = useState(1);
 
   useEffect(() => {
     fetchBooks(baseUrl + "/books");
@@ -20,15 +21,15 @@ function Books() {
       .then((data) => {
         setBooks(data.results);
         setTotalResult(data.count);
+        setTotalPages(Math.ceil(data.count / 15)); // PAGE_SIZE is 15
       });
   }
-
   function changeUrl(baseUrl) {
     fetchBooks(baseUrl);
   }
 
   var links = [];
-  for (let i = 1; i <= totalResult; i++) {
+  for (let i = 1; i <= totalPages; i++) {
     links.push(
       <li key={i}>
         <Link
@@ -48,21 +49,21 @@ function Books() {
       <PageTemplate>
         <div className="container mx-auto px-1">
           <main className="mt-4">
-            <h1 className="text-xl font-medium flex justify-between items-center">
-              All Books
-            </h1>
-            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3">
+            <div className="grid font-montserrat grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3">
               {books &&
                 books.map((book) => (
-                  <div key={book.id} className="col-span-1">
+                  <div key={book.id} className="">
                     <BookContainer book={book} />
                   </div>
                 ))}
             </div>
-
-            <nav>
-              <ul className="inline-flex -space-x-px text-sm mt-3">{links}</ul>
-            </nav>
+            {totalPages > 1 && (
+              <nav>
+                <ul className="inline-flex -space-x-px text-sm mt-3">
+                  {links}
+                </ul>
+              </nav>
+            )}
           </main>
         </div>
       </PageTemplate>

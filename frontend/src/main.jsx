@@ -23,6 +23,7 @@ import Login from "./pages/Customer/Login";
 import Logout from "./pages/Customer/Logout";
 import Dashboard from "./pages/Customer/Dashboard";
 import Orders from "./pages/Customer/Orders";
+import Cart from "./pages/Customer/Cart";
 
 const router = createBrowserRouter([
   {
@@ -88,6 +89,11 @@ const router = createBrowserRouter([
   {
     path: "/customer/orders",
     element: <Orders />,
+    errorElement: <NotFound />,
+  },
+  {
+    path: "/cart",
+    element: <Cart />,
     errorElement: <NotFound />,
   },
 ]);

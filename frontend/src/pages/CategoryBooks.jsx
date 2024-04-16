@@ -2,6 +2,8 @@ import { Link, useParams } from "react-router-dom";
 import { BookContainer } from "../components/Containers/BookContainer";
 import { useState, useEffect } from "react";
 import Navigation from "../components/Main Components/Navigation";
+import Footer from "../components/Main Components/Footer";
+import { PageTemplate } from "../components/Main Components/PageTemplate";
 
 function CategoryBooks() {
   const baseUrl = "http://127.0.0.1:8000/api";
@@ -9,6 +11,7 @@ function CategoryBooks() {
   const [books, setBooks] = useState([]);
   const { category_id } = useParams();
   const [totalResult, setTotalResult] = useState(0);
+  const [totalPages, setTotalPages] = useState(1);
 
   useEffect(() => {
     fetchCategory(baseUrl + `/category/${category_id}`);
@@ -21,6 +24,7 @@ function CategoryBooks() {
       .then((data) => {
         setCategoryTitle(data.title);
         setTotalResult(data.count);
+        setTotalPages(Math.ceil(data.count / 15)); // PAGE_SIZE is 15
       })
       .catch((error) => {
         console.error("Error fetching category:", error);
@@ -45,7 +49,7 @@ function CategoryBooks() {
   }
 
   var links = [];
-  for (let i = 1; i <= totalResult; i++) {
+  for (let i = 1; i <= totalPages; i++) {
     links.push(
       <li key={i}>
         <Link
@@ -62,25 +66,32 @@ function CategoryBooks() {
   return (
     <div>
       <Navigation />
-      <div className="container mx-auto px-1">
-        <main className="mt-4">
-          <h1 className="text-xl font-medium flex justify-between items-center">
-            {categoryTitle ? categoryTitle : "Category Title"}
-          </h1>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-3">
-            {books &&
-              books.map((book) => (
-                <div key={book.id} className="col-span-1">
-                  <BookContainer book={book} />
-                </div>
-              ))}
-          </div>
+      <PageTemplate>
+        <div className="container mx-auto px-1">
+          <main className="mt-4">
+            <h1 className="text-xl font-medium flex justify-between items-center">
+              {categoryTitle ? categoryTitle : "Category Title"}
+            </h1>
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-3">
+              {books &&
+                books.map((book) => (
+                  <div key={book.id} className="col-span-1">
+                    <BookContainer book={book} />
+                  </div>
+                ))}
+            </div>
 
-          <nav>
-            <ul className="inline-flex -space-x-px text-sm mt-3">{links}</ul>
-          </nav>
-        </main>
-      </div>
+            {totalPages > 1 && (
+              <nav>
+                <ul className="inline-flex -space-x-px text-sm mt-3">
+                  {links}
+                </ul>
+              </nav>
+            )}
+          </main>
+        </div>
+      </PageTemplate>
+      <Footer />
     </div>
   );
 }

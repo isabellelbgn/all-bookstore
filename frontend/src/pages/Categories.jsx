@@ -9,6 +9,7 @@ function Categories() {
   const baseUrl = "http://127.0.0.1:8000/api";
   const [categories, setCategories] = useState([]);
   const [totalResult, setTotalResult] = useState(0);
+  const [totalPages, setTotalPages] = useState(1);
 
   useEffect(() => {
     fetchCategories(baseUrl + "/categories");
@@ -20,6 +21,7 @@ function Categories() {
       .then((data) => {
         setCategories(data.results);
         setTotalResult(data.count);
+        setTotalPages(Math.ceil(data.count / 15)); // PAGE_SIZE is 15
       });
   }
 
@@ -28,7 +30,7 @@ function Categories() {
   }
 
   var links = [];
-  for (let i = 1; i <= totalResult; i++) {
+  for (let i = 1; i <= totalPages; i++) {
     links.push(
       <li key={i}>
         <Link
@@ -48,9 +50,9 @@ function Categories() {
       <PageTemplate>
         <div className="container mx-auto px-1">
           <main className="mt-4">
-            <h1 className="text-xl font-medium flex justify-between items-center">
+            <p className="text-xl mb-4 font-medium flex justify-between items-center">
               All Categories
-            </h1>
+            </p>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-3">
               {categories &&
                 categories.map((category) => (
@@ -60,9 +62,13 @@ function Categories() {
                 ))}
             </div>
 
-            <nav>
-              <ul className="inline-flex -space-x-px text-sm mt-3">{links}</ul>
-            </nav>
+            {totalPages > 1 && (
+              <nav>
+                <ul className="inline-flex -space-x-px text-sm mt-3">
+                  {links}
+                </ul>
+              </nav>
+            )}
           </main>
         </div>
       </PageTemplate>

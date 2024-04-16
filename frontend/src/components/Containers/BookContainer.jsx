@@ -1,26 +1,72 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { AddToCartButton } from "../Buttons/AddToCartButton";
 import { Link } from "react-router-dom";
 
-const BookContainer = (props) => {
+const BookContainer = ({ book }) => {
+  const containerStyle = {
+    width: "250px",
+    padding: "4px",
+    overflowWrap: "break-word",
+    wordBreak: "break-word",
+    textAlign: "center",
+    maxWidth: "calc(250px - 8px)",
+  };
+  const imageStyle = {
+    maxHeight: "100%",
+    maxWidth: "100%",
+    marginBottom: "10px",
+  };
+
+  const [bookImages, setBookImages] = useState([]);
+
+  useEffect(() => {
+    if (book && book.id) {
+      fetchData(`http://127.0.0.1:8000/api/book/${book.id}`);
+    }
+  }, [book]);
+
+  function fetchData(url) {
+    fetch(url)
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error("Failed to fetch book images");
+        }
+        return response.json();
+      })
+      .then((data) => {
+        setBookImages(data.book_images);
+      })
+      .catch((error) => {
+        console.error("Error fetching book images:", error);
+        setBookImages([]);
+      });
+  }
+
   return (
     <div className="relative my-2 flex">
-      <div className="flex bg-gray-100 rounded-lg overflow-hidden">
-        <div className="flex font-montserrat flex-col justify-center items-center px-6 py-4">
-          <Link to={`/book/${props.book.title}/${props.book.id}`}>
-            {/* <div className="col-span-4">
-          <img
-            src={props.book.image}
-            className="img-thumbnail"
-            alt={props.book.title}
-          />
-        </div> */}
-            <h5 className="text-s font-medium">{props.book.title}</h5>
+      <div
+        className="flex bg-gray-100 rounded-lg justify-center overflow-hidden"
+        style={containerStyle}
+      >
+        <div className="flex flex-col justify-center items-center px-6 py-4">
+          <Link to={`/book/${book.title}/${book.id}`}>
+            {bookImages.map((image, index) => (
+              <img
+                key={index}
+                src={image.image}
+                className="object-cover"
+                style={imageStyle}
+                loading="eager"
+                placeholder="blur"
+                alt={`Book Image ${index + 1}`}
+              />
+            ))}
+            <h5 className="text-s mt-6 font-normal">{book.title}</h5>
           </Link>
-          <p className="text-gray-700 text-xs text-base">{props.book.author}</p>
-          <p className="text-gray-700 text-xs font-semibold">
-            Price: {props.book.price}
+          <p className="text-gray-500 text-xs mb-6 mt-1 text-base">
+            {book.author}
           </p>
+          <p className="text-gray-700 text-s font-semibold">P{book.price}</p>
           <AddToCartButton />
         </div>
       </div>
