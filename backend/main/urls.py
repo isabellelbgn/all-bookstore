@@ -16,6 +16,8 @@ urlpatterns = [
     path('books/', views.BookList.as_view()),
     path('books/<str:tag>', views.TagBookList.as_view()),
     path('book/<int:pk>', views.BookDetail.as_view()),
+    path('book/<int:book_id>/ratings/', views.BookRatingsList.as_view(), name='book-ratings-list'),
+
 
     #Book Categories
     path('categories/', views.CategoryList.as_view()),

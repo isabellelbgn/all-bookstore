@@ -7,6 +7,12 @@ from django.http import JsonResponse
 from django.contrib.auth import authenticate
 from django.contrib.auth.models import User
 from django.db import IntegrityError
+from rest_framework.views import APIView
+from rest_framework.response import Response
+from rest_framework import status
+from .models import BookRating
+from .serializers import BookRatingSerializer
+
 # Create your views here.
 
 class AdminList(generics.ListCreateAPIView):
@@ -159,6 +165,16 @@ class CustomerAddressViewSet(viewsets.ModelViewSet):
 class BookRatingViewSet(viewsets.ModelViewSet):
     serializer_class = serializers.BookRatingSerializer
     queryset = models.BookRating.objects.all()
+
+class BookRatingsList(APIView):
+    def get(self, request, book_id, format=None):
+        try:
+            ratings = BookRating.objects.filter(book_id=book_id)
+            serializer = BookRatingSerializer(ratings, many=True)
+            return Response(serializer.data)
+        except BookRating.DoesNotExist:
+            return Response(status=status.HTTP_404_NOT_FOUND)
+
 
 class CategoryList(generics.ListCreateAPIView):
     queryset = models.BookCategory.objects.all()

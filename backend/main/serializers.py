@@ -94,9 +94,10 @@ class CustomerAddressSerializer(serializers.ModelSerializer):
             self.Meta.depth = 1
 
 class BookRatingSerializer(serializers.ModelSerializer):
+    created_by = serializers.ReadOnlyField(source='customer.user.username')
     class Meta:
         model = models.BookRating
-        fields = ['id', 'customer', 'book', 'rating', 'reviews', 'review_date']
+        fields = ['id', 'customer', 'book', 'rating', 'reviews', 'created_by', 'review_date']
 
         def __init__(self, *args, **kwargs):
             super(BookRatingSerializer, self).__init__(*args, **kwargs)
