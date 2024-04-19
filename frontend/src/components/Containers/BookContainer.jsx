@@ -3,6 +3,10 @@ import { AddToCartButton } from "../Buttons/AddToCartButton";
 import { Link } from "react-router-dom";
 
 const BookContainer = ({ book }) => {
+  if (!book || !book.title) {
+    // Handle case where book is undefined or does not have a title property
+    return null;
+  }
   const containerStyle = {
     width: "250px",
     padding: "4px",
