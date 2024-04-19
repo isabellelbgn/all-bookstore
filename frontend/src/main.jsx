@@ -24,6 +24,7 @@ import Logout from "./pages/Customer/Logout";
 import Dashboard from "./pages/Customer/Dashboard";
 import Orders from "./pages/Customer/Orders";
 import Cart from "./pages/Customer/Cart";
+import Accounts from "./pages/Customer/Accounts";
 
 const router = createBrowserRouter([
   {
@@ -96,10 +97,17 @@ const router = createBrowserRouter([
     element: <Cart />,
     errorElement: <NotFound />,
   },
+  {
+    path: "/customer/dashboard",
+    element: <Accounts />,
+    errorElement: <NotFound />,
+  },
 ]);
 
 ReactDOM.createRoot(document.getElementById("root")).render(
   <React.StrictMode>
     <RouterProvider router={router} />
+  
+    
   </React.StrictMode>
 );

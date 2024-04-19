@@ -1,6 +1,6 @@
 import React, { useState } from "react";
-import Chae from "./Images/Chae.jpg";
-import Logo from "./Images/PrideandPrejudice.jpeg";
+import Chae from "./images/Chae.jpg";
+import Logo from "./images/PrideandPrejudice.jpeg";
 
 export const Header = () => {
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
