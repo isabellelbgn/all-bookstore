@@ -82,11 +82,11 @@ const router = createBrowserRouter([
     element: <OrderSuccess />,
     errorElement: <NotFound />,
   },
-  {
-    path: "/customer/dashboard",
-    element: <Dashboard />,
-    errorElement: <NotFound />,
-  },
+  // {
+  //   path: "/customer/dashboard",
+  //   element: <Dashboard />,
+  //   errorElement: <NotFound />,
+  // },
   {
     path: "/customer/orders",
     element: <Orders />,
