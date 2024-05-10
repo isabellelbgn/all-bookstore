@@ -1,7 +1,7 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import { SecondaryButton } from "../Buttons/SecondaryButton";
-import logo from "../Images/PrideandPrejudice.jpeg";
+import logo from "../images/PrideandPrejudice.jpeg";
 
 const CategoryContainer = (props) => {
   return (

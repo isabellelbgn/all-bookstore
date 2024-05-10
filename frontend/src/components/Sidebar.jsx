@@ -2,7 +2,7 @@ import React from 'react'
 
 const Sidebar = () => {
   return (
-    <div class="bg-gray-100 text-white w-64 fixed top-4 left-4 h-3/4 flex flex-col justify-between rounded p-2.5">
+    <div class="bg-gray-100 text-white w-64 top-4 fixed h-3/4 flex flex-col justify-between rounded p-2.5 mt-20">
       
         <div class="flex flex-col bg-gray-100 font-montserrat border-spacing-4 p-2.5">
             <a href="#" class="px-4 py-6 text-gray-400 border-b-2">Dashboard</a>
