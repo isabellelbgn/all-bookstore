@@ -2,10 +2,9 @@ import React from "react";
 import ReactDOM from "react-dom/client";
 import "./index.css";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
-
+import PrivateRoute from "./utils/PrivateRoute";
+import { AuthProvider } from "./context/AuthContext";
 import { NotFound } from "./pages/NotFound";
-import Navigation from "./components/Main Components/Navigation";
-import Footer from "./components/Main Components/Footer";
 
 //Website
 import Home from "./pages/Home";
@@ -25,6 +24,11 @@ import Orders from "./pages/Customer/Orders";
 
 const router = createBrowserRouter([
   {
+    path: "/",
+    element: <Home />,
+    errorElement: <NotFound />,
+  },
+  {
     path: "/customer/register",
     element: <Register />,
     errorElement: <NotFound />,
@@ -32,11 +36,6 @@ const router = createBrowserRouter([
   {
     path: "/customer/login",
     element: <Login />,
-    errorElement: <NotFound />,
-  },
-  {
-    path: "/",
-    element: <Home />,
     errorElement: <NotFound />,
   },
   {
@@ -71,12 +70,20 @@ const router = createBrowserRouter([
   },
   {
     path: "/order/success",
-    element: <OrderSuccess />,
+    element: (
+      <PrivateRoute>
+        <OrderSuccess />
+      </PrivateRoute>
+    ),
     errorElement: <NotFound />,
   },
   {
     path: "/customer/dashboard",
-    element: <Dashboard />,
+    element: (
+      <PrivateRoute>
+        <Dashboard />
+      </PrivateRoute>
+    ),
     errorElement: <NotFound />,
   },
   {
@@ -84,10 +91,17 @@ const router = createBrowserRouter([
     element: <Orders />,
     errorElement: <NotFound />,
   },
+  {
+    path: "/cart",
+    element: <Cart />,
+    errorElement: <NotFound />,
+  },
 ]);
 
 ReactDOM.createRoot(document.getElementById("root")).render(
   <React.StrictMode>
-    <RouterProvider router={router} />
+    <AuthProvider>
+      <RouterProvider router={router} />
+    </AuthProvider>
   </React.StrictMode>
 );

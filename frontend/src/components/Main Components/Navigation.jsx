@@ -1,9 +1,12 @@
-import React, { useState, useRef, useEffect } from "react";
+import React, { useState, useRef, useEffect, useContext } from "react";
 import { Link } from "react-router-dom";
 import { VscAccount, VscBook } from "react-icons/vsc";
 import { IoSearchSharp } from "react-icons/io5";
+import AuthContext from "../../context/AuthContext";
 
 export default function Navigation() {
+  const { customer, logoutCustomer } = useContext(AuthContext);
+
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const dropdownRef = useRef(null);
 
@@ -25,7 +28,7 @@ export default function Navigation() {
   }, []);
 
   return (
-    <header className="top-0 z-10 bg-gray-100 rounded-b-2xl py-5 px-10 mb-24 ounded-md">
+    <header className="top-0 z-10 bg-gray-100 rounded-b-2xl py-5 mb-5 px-10 rounded-md">
       <nav className="flex flex-col lg:flex-row justify-between items-center">
         <div className="font-montserrat flex items-center mb-4 lg:mb-0">
           <Link to="/">
@@ -62,30 +65,39 @@ export default function Navigation() {
               <div className="absolute right-0 mt-2 w-44 bg-white divide-y divide-gray-100 rounded-lg shadow-lg">
                 <ul className="py-2 text-sm text-gray-700">
                   <li>
-                    <Link
-                      to="/customer/login"
-                      className="block px-4 py-2 hover:bg-gray-100"
-                    >
-                      Login
-                    </Link>
-                  </li>
-                  <li>
-                    <Link
-                      to="/customer/register"
-                      className="block px-4 py-2 hover:bg-gray-100"
-                    >
-                      Register
-                    </Link>
+                    {customer ? (
+                      <>
+                        <Link
+                          to="/customer/dashboard"
+                          className="block px-4 py-2 hover:bg-gray-100"
+                        >
+                          Dashboard
+                        </Link>
+                        <p
+                          onClick={logoutCustomer}
+                          className="block px-4 py-2 hover:bg-gray-100 cursor-pointer"
+                        >
+                          Logout
+                        </p>
+                      </>
+                    ) : (
+                      <>
+                        <Link
+                          to="/customer/register"
+                          className="block px-4 py-2 hover:bg-gray-100"
+                        >
+                          Register
+                        </Link>
+                        <Link
+                          to="/customer/login"
+                          className="block px-4 py-2 hover:bg-gray-100"
+                        >
+                          Login
+                        </Link>
+                      </>
+                    )}
                   </li>
                 </ul>
-                <div className="py-2">
-                  <Link
-                    to="/customer/dashboard"
-                    className="block px-4 py-2 hover:bg-gray-100"
-                  >
-                    Dashboard
-                  </Link>
-                </div>
               </div>
             )}
           </div>
