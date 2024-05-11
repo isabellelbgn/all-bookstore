@@ -62,7 +62,7 @@ export default function Navigation() {
               <VscAccount className="icon" />
             </h1>
             {isDropdownOpen && (
-              <div className="absolute right-0 mt-2 w-44 bg-white divide-y divide-gray-100 rounded-lg shadow-lg">
+              <div className="absolute right-0 mt-2 w-44 bg-white divide-y divide-gray-100 rounded-lg shadow-lg z-50">
                 <ul className="py-2 text-sm text-gray-700">
                   <li>
                     {customer ? (

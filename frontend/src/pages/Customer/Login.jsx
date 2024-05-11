@@ -4,8 +4,6 @@ import InputBox from "../../components/Main Components/InputBox";
 import Navigation from "../../components/Main Components/Navigation";
 import Footer from "../../components/Main Components/Footer";
 import { PrimaryButton } from "../../components/Buttons/PrimaryButton";
-import { toast } from "react-toastify";
-import { Link } from "react-router-dom";
 import { PageTemplate } from "../../components/Main Components/PageTemplate";
 import { GrayBox } from "../../components/Main Components/GrayBox";
 import AuthContext from "../../context/AuthContext";
@@ -45,7 +43,7 @@ const Login = () => {
         <GrayBox>
           <main>
             <section className="container mx-auto py-8">
-              <h1 className="text-3xl font-semibold text-center mb-8">
+              <h1 className="text-xl text-center leading-tight tracking-tight text-gray-900 md:text-2xl dark:text-black">
                 Log In
               </h1>
               <form onSubmit={handleSubmit}>
@@ -94,7 +92,7 @@ const Login = () => {
 
                 <Link
                   to="/customer/register"
-                  className="text-sm text-green-500 hover:underline mt-6"
+                  className="text-sm text-green-50 hover:underline mt-6"
                 >
                   Sign up
                 </Link>

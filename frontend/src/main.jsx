@@ -19,8 +19,10 @@ import OrderSuccess from "./pages/OrderSuccess";
 //Customer Panel
 import Register from "./pages/Customer/Register";
 import Login from "./pages/Customer/Login";
+import Logout from "./pages/Customer/Logout";
 import Dashboard from "./pages/Customer/Dashboard";
 import Orders from "./pages/Customer/Orders";
+import Cart from "./pages/Customer/Cart";
 
 const router = createBrowserRouter([
   {

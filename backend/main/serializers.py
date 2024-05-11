@@ -1,5 +1,15 @@
 from rest_framework import serializers
 from . import models
+from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
+
+class MyTokenObtainPairSerializer(TokenObtainPairSerializer):
+    @classmethod
+    def get_token(cls, user):
+        token = super().get_token(user)
+
+        token['username'] = user.username
+
+        return token
 
 class AdminSerializer(serializers.ModelSerializer):
     class Meta:
@@ -51,7 +61,7 @@ class BookDetailSerializer(serializers.ModelSerializer):
 class CustomerSerializer(serializers.ModelSerializer):
     class Meta:
         model = models.Customer
-        fields = ['id', 'user', 'contact_number']
+        fields = ['id', 'user']
 
     def __init__(self, *args, **kwargs):
         super(CustomerSerializer, self).__init__(*args, **kwargs)
@@ -60,7 +70,7 @@ class CustomerSerializer(serializers.ModelSerializer):
 class CustomerDetailSerializer(serializers.ModelSerializer):
     class Meta:
         model = models.Customer
-        fields = ['id', 'user', 'contact_number']
+        fields = ['id', 'user']
 
     def __init__(self, *args, **kwargs):
         super(CustomerDetailSerializer, self).__init__(*args, **kwargs)
@@ -94,9 +104,10 @@ class CustomerAddressSerializer(serializers.ModelSerializer):
             self.Meta.depth = 1
 
 class BookRatingSerializer(serializers.ModelSerializer):
+    created_by = serializers.ReadOnlyField(source='customer.user.username')
     class Meta:
         model = models.BookRating
-        fields = ['id', 'customer', 'book', 'rating', 'reviews', 'review_date']
+        fields = ['id', 'customer', 'book', 'rating', 'reviews', 'created_by', 'review_date']
 
         def __init__(self, *args, **kwargs):
             super(BookRatingSerializer, self).__init__(*args, **kwargs)
