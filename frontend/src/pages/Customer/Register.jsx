@@ -4,7 +4,7 @@ import Navigation from "../../components/Main Components/Navigation";
 import Footer from "../../components/Main Components/Footer";
 import { Typography } from "@material-tailwind/react";
 import { PrimaryButton } from "../../components/Buttons/PrimaryButton";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { PageTemplate } from "../../components/Main Components/PageTemplate";
 import { GrayBox } from "../../components/Main Components/GrayBox";
 import axios from "axios";
@@ -13,6 +13,7 @@ const Register = () => {
   const [error, setError] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
   const [successMessage, setSuccessMessage] = useState("");
+  const navigate = useNavigate();
 
   const baseUrl = "http://127.0.0.1:8000/api/";
 
@@ -58,6 +59,7 @@ const Register = () => {
         setError(false);
         setSuccessMessage(response.data.message);
         setErrorMessage("");
+        navigate("/customer/login");
       } else {
         setError(true);
         setErrorMessage(response.data.message || "Invalid credentials.");
