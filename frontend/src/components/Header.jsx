@@ -1,6 +1,10 @@
+import Container from "./Containers/Container";
+import logo from "./images/PrideandPrejudice.jpeg"; // relative path to image
+import { SecondaryButton } from "./Buttons/SecondaryButton";
+import { HiOutlineArrowLongRight } from "react-icons/hi2";
 import React, { useState } from "react";
-import Chae from "./Images/Chae.jpg";
-import Logo from "./Images/PrideandPrejudice.jpeg";
+import Chae from "./images/Chae.jpg";
+import Logo from "./images/PrideandPrejudice.jpeg";
 
 export const Header = () => {
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
