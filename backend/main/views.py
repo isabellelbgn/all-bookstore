@@ -1,7 +1,6 @@
 from rest_framework import generics, permissions, pagination, viewsets
 from . import serializers
 from . import models
-
 from django.views.decorators.csrf import csrf_exempt
 from django.http import JsonResponse
 from django.contrib.auth import authenticate
@@ -14,6 +13,7 @@ from .models import BookRating
 from .serializers import BookRatingSerializer, MyTokenObtainPairSerializer
 
 from rest_framework_simplejwt.views import TokenObtainPairView
+from rest_framework_simplejwt.tokens import RefreshToken
 
 class MyTokenObtainPairView(TokenObtainPairView):
     serializer_class = MyTokenObtainPairSerializer
@@ -83,6 +83,7 @@ class CustomerDetail(generics.RetrieveUpdateDestroyAPIView):
     queryset = models.Customer.objects.all()
     serializer_class = serializers.CustomerDetailSerializer
 
+@csrf_exempt
 def customer_login(request):
     if request.method == 'POST':
         token_view = MyTokenObtainPairView.as_view()
@@ -90,56 +91,57 @@ def customer_login(request):
     else:
         return JsonResponse({'success': False, 'message': 'Invalid request method'}, status=405)
 
-# @csrf_exempt
-# def customer_register(request):
-#     if request.method == 'POST':
-#         first_name = request.POST.get('first_name')
-#         last_name = request.POST.get('last_name')
-#         username = request.POST.get('username')
-#         password = request.POST.get('password')
-#         email = request.POST.get('email')
-#         try: 
-#             if User.objects.filter(username=username).exists():
-#                 message = {
-#                     'success': False,
-#                     'message': 'Username already exists.'
-#                 }
-#                 return JsonResponse(message)
+@csrf_exempt
+def customer_register(request):
+    if request.method == 'POST':
+        first_name = request.POST.get('first_name')
+        last_name = request.POST.get('last_name')
+        username = request.POST.get('username')
+        password = request.POST.get('password')
+        email = request.POST.get('email')
+        try: 
+            if User.objects.filter(username=username).exists():
+                message = {
+                    'success': False,
+                    'message': 'Username already exists.'
+                }
+                return JsonResponse(message)
 
-#             user = User.objects.create_user(
-#                 username=username,
-#                 password=password,
-#                 email=email,
-#                 first_name=first_name,
-#                 last_name=last_name
-#             )
+            user = User.objects.create_user(
+                username=username,
+                password=password,
+                email=email,
+                first_name=first_name,
+                last_name=last_name
+            )
 
-#             if user:
-#                 customer = models.Customer.objects.create(user=user)
-#                 message = {
-#                     'success': True,
-#                     'user': user.id,
-#                     'customer': customer.id,
-#                     'message': "You are now registered. You can now log in."
-#                 }
-#             else:
-#                 message = {
-#                     'success': False,
-#                     'message': 'Something went wrong!'
-#                 }
-#             return JsonResponse(message)
-#         except IntegrityError:
-#             message = {
-#                 'success': False,
-#                 'message': 'Username already exists!'
-#             }
-#             return JsonResponse(message)
-#     else:
-#         message = {
-#             'success': False,
-#             'message': 'Invalid request method. Only POST method is allowed.'
-#         }
-#         return JsonResponse(message)
+            if user:
+                customer = models.Customer.objects.create(user=user)
+                message = {
+                    'success': True,
+                    'user': user.id,
+                    'customer': customer.id,
+                    'message': "You are now registered! Log in."
+                }
+            else:
+                message = {
+                    'success': False,
+                    'message': 'Something went wrong!'
+                }
+            return JsonResponse(message)
+        except IntegrityError:
+            message = {
+                'success': False,
+                'message': 'Username already exists!'
+            }
+            return JsonResponse(message)
+    else:
+        message = {
+            'success': False,
+            'message': 'Invalid request method. Only POST method is allowed.'
+        }
+        return JsonResponse(message)
+
 
 class OrderList(generics.ListCreateAPIView):
     queryset = models.Order.objects.all()
