@@ -41,8 +41,11 @@ class Book(models.Model):
         return self.title
     
     def tag_list(self):
-        tagList = self.tags.split(',')
-        return (tagList)
+        if self.tags:
+            tagList = self.tags.split(',')
+            return tagList
+        else:
+            return []
 
 # Customer Model
 class Customer(models.Model):

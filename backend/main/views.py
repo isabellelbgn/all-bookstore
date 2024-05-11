@@ -11,9 +11,27 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
 from .models import BookRating
-from .serializers import BookRatingSerializer
+from .serializers import BookRatingSerializer, MyTokenObtainPairSerializer
 
-# Create your views here.
+from rest_framework_simplejwt.views import TokenObtainPairView
+
+class MyTokenObtainPairView(TokenObtainPairView):
+    serializer_class = MyTokenObtainPairSerializer
+
+    def post(self, request, *args, **kwargs):
+        response = super().post(request, *args, **kwargs)
+        if response.status_code == status.HTTP_200_OK:
+            data = {
+                'success': True,
+                'message': 'Login successful!'
+            }
+            return Response(data)
+        else:
+            data = {
+                'success': False,
+                'message': 'Invalid username or password. Please try again!'
+            }
+            return Response(data, status=response.status_code)
 
 class AdminList(generics.ListCreateAPIView):
     queryset = models.Admin.objects.all()
@@ -65,84 +83,63 @@ class CustomerDetail(generics.RetrieveUpdateDestroyAPIView):
     queryset = models.Customer.objects.all()
     serializer_class = serializers.CustomerDetailSerializer
 
-@csrf_exempt
 def customer_login(request):
     if request.method == 'POST':
-        username = request.POST.get('username')
-        password = request.POST.get('password')
-        user = authenticate(username=username, password=password)
-        if user:
-            message = {
-                'success': True,
-                'username': user.username
-            }
-        else:
-            message = {
-                'success': False,
-                'message': 'Invalid username or password. Please try again!'
-            }
-        return JsonResponse(message)
+        token_view = MyTokenObtainPairView.as_view()
+        return token_view(request)
     else:
-        return JsonResponse({'success': False, 'message': 'Invalid request method'})
-    
+        return JsonResponse({'success': False, 'message': 'Invalid request method'}, status=405)
+
 # @csrf_exempt
-# def customer_login(request):
+# def customer_register(request):
 #     if request.method == 'POST':
-#         return JsonResponse({'message': 'JWT authentication is required.'}, status=403)
+#         first_name = request.POST.get('first_name')
+#         last_name = request.POST.get('last_name')
+#         username = request.POST.get('username')
+#         password = request.POST.get('password')
+#         email = request.POST.get('email')
+#         try: 
+#             if User.objects.filter(username=username).exists():
+#                 message = {
+#                     'success': False,
+#                     'message': 'Username already exists.'
+#                 }
+#                 return JsonResponse(message)
+
+#             user = User.objects.create_user(
+#                 username=username,
+#                 password=password,
+#                 email=email,
+#                 first_name=first_name,
+#                 last_name=last_name
+#             )
+
+#             if user:
+#                 customer = models.Customer.objects.create(user=user)
+#                 message = {
+#                     'success': True,
+#                     'user': user.id,
+#                     'customer': customer.id,
+#                     'message': "You are now registered. You can now log in."
+#                 }
+#             else:
+#                 message = {
+#                     'success': False,
+#                     'message': 'Something went wrong!'
+#                 }
+#             return JsonResponse(message)
+#         except IntegrityError:
+#             message = {
+#                 'success': False,
+#                 'message': 'Username already exists!'
+#             }
+#             return JsonResponse(message)
 #     else:
-#         return JsonResponse({'success': False, 'message': 'Invalid request method'})
-
-@csrf_exempt
-def customer_register(request):
-    if request.method == 'POST':
-        first_name = request.POST.get('first_name')
-        last_name = request.POST.get('last_name')
-        username = request.POST.get('username')
-        password = request.POST.get('password')
-        email = request.POST.get('email')
-        try: 
-            if User.objects.filter(username=username).exists():
-                message = {
-                    'success': False,
-                    'message': 'Username already exists.'
-                }
-                return JsonResponse(message)
-
-            user = User.objects.create_user(
-                username=username,
-                password=password,
-                email=email,
-                first_name=first_name,
-                last_name=last_name
-            )
-
-            if user:
-                customer = models.Customer.objects.create(user=user)
-                message = {
-                    'success': True,
-                    'user': user.id,
-                    'customer': customer.id,
-                    'message': "You are now registered. You can now log in."
-                }
-            else:
-                message = {
-                    'success': False,
-                    'message': 'Something went wrong!'
-                }
-            return JsonResponse(message)
-        except IntegrityError:
-            message = {
-                'success': False,
-                'message': 'Username already exists!'
-            }
-            return JsonResponse(message)
-    else:
-        message = {
-            'success': False,
-            'message': 'Invalid request method. Only POST method is allowed.'
-        }
-        return JsonResponse(message)
-
+#         message = {
+#             'success': False,
+#             'message': 'Invalid request method. Only POST method is allowed.'
+#         }
+#         return JsonResponse(message)
 
 class OrderList(generics.ListCreateAPIView):
     queryset = models.Order.objects.all()
@@ -175,7 +172,6 @@ class BookRatingsList(APIView):
         except BookRating.DoesNotExist:
             return Response(status=status.HTTP_404_NOT_FOUND)
 
-
 class CategoryList(generics.ListCreateAPIView):
     queryset = models.BookCategory.objects.all()
     serializer_class = serializers.CategorySerializer
@@ -187,7 +183,6 @@ class CategoryList(generics.ListCreateAPIView):
             limit = int(self.request.GET['fetch_limit'])
             qs = qs[:limit]
         return qs
-
 
 class CategoryDetail(generics.RetrieveUpdateDestroyAPIView):
     queryset = models.BookCategory.objects.all()
