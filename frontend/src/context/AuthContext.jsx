@@ -1,5 +1,4 @@
-import { createContext, useEffect, useState } from "react";
-import { jwtDecode } from "jwt-decode";
+import React, { createContext, useEffect, useState } from "react";
 
 const AuthContext = createContext();
 
@@ -10,17 +9,15 @@ export const AuthProvider = ({ children }) => {
   const [errorMessage, setErrorMessage] = useState("");
   const [authTokens, setAuthTokens] = useState(() =>
     localStorage.getItem("authTokens")
-      ? jwtDecode(localStorage.getItem("authTokens"))
+      ? JSON.parse(localStorage.getItem("authTokens"))
       : null
   );
 
   const [customer, setCustomer] = useState(() =>
     localStorage.getItem("authTokens")
-      ? jwtDecode(localStorage.getItem("authTokens"))
+      ? JSON.parse(localStorage.getItem("authTokens"))
       : null
   );
-
-  const [loading, setLoading] = useState(true);
 
   const loginCustomer = async (e) => {
     e.preventDefault();
@@ -41,7 +38,7 @@ export const AuthProvider = ({ children }) => {
         setError(false);
         setErrorMessage("");
         setAuthTokens(data);
-        setCustomer(jwtDecode(data.access));
+        setCustomer(data.access);
         localStorage.setItem("authTokens", JSON.stringify(data));
         window.location.href = "/";
       } else {
@@ -65,28 +62,27 @@ export const AuthProvider = ({ children }) => {
   };
 
   const updateToken = async () => {
-    console.log("Update token called.");
-    const response = await fetch("http://127.0.0.1:8000/api/token/refresh/", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        refresh: authTokens?.refresh,
-      }),
-    });
-    const data = await response.json();
+    try {
+      const response = await fetch("http://127.0.0.1:8000/api/token/refresh/", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          refresh: authTokens?.refresh,
+        }),
+      });
 
-    if (response.status === 200) {
-      setAuthTokens(data);
-      setCustomer(jwtDecode(data.access));
-      localStorage.setItem("authTokens", JSON.stringify(data));
-    } else {
-      logoutCustomer();
-    }
-
-    if (loading) {
-      setLoading(false);
+      if (response.ok) {
+        const data = await response.json();
+        setAuthTokens(data);
+        setCustomer(data.access);
+        localStorage.setItem("authTokens", JSON.stringify(data));
+      } else {
+        logoutCustomer();
+      }
+    } catch (error) {
+      console.error("Error updating token:", error);
     }
   };
 
@@ -97,10 +93,11 @@ export const AuthProvider = ({ children }) => {
       }
     }, 30 * 60 * 1000);
     return () => clearInterval(interval);
-  }, [authTokens, loading]);
+  }, [authTokens]);
 
   const contextData = {
     customer: customer,
+    authTokens: authTokens,
     loginCustomer: loginCustomer,
     logoutCustomer: logoutCustomer,
     error: error,
