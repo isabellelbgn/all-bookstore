@@ -1,19 +1,17 @@
-from rest_framework import generics, permissions, pagination, viewsets
-from . import serializers
-from . import models
-from django.views.decorators.csrf import csrf_exempt
-from django.http import JsonResponse
-from django.contrib.auth import authenticate
-from django.contrib.auth.models import User
-from django.db import IntegrityError
+from rest_framework import generics, pagination, viewsets, status
 from rest_framework.views import APIView
 from rest_framework.response import Response
-from rest_framework import status
-from .models import BookRating
-from .serializers import BookRatingSerializer, MyTokenObtainPairSerializer
-
+from rest_framework.decorators import permission_classes
+from rest_framework.permissions import IsAuthenticated
+from django.utils.decorators import method_decorator
+from django.views.decorators.csrf import csrf_exempt
+from django.contrib.auth.models import User
+from django.http import JsonResponse
+from django.db import IntegrityError
+from . import serializers, models
+from .models import Customer, Book, Order, OrderItems, BookRating
+from .serializers import BookRatingSerializer, MyTokenObtainPairSerializer, OrderItemSerializer
 from rest_framework_simplejwt.views import TokenObtainPairView
-from rest_framework_simplejwt.tokens import RefreshToken
 
 class MyTokenObtainPairView(TokenObtainPairView):
     serializer_class = MyTokenObtainPairSerializer
@@ -22,8 +20,8 @@ class MyTokenObtainPairView(TokenObtainPairView):
         response = super().post(request, *args, **kwargs)
         if response.status_code == status.HTTP_200_OK:
             data = {
-                'success': True,
-                'message': 'Login successful!'
+                'access': response.data['access'],
+                'refresh': response.data['refresh']
             }
             return Response(data)
         else:
@@ -82,6 +80,52 @@ class CustomerList(generics.ListCreateAPIView):
 class CustomerDetail(generics.RetrieveUpdateDestroyAPIView):
     queryset = models.Customer.objects.all()
     serializer_class = serializers.CustomerDetailSerializer
+
+class OrderList(generics.ListCreateAPIView):
+    queryset = models.Order.objects.all()
+    serializer_class = serializers.OrderSerializer
+
+class OrderDetail(generics.RetrieveAPIView):
+    queryset = models.Order.objects.all()
+    serializer_class = serializers.OrderSerializer
+
+class OrderItem(generics.ListAPIView):
+    queryset = models.OrderItems.objects.all()
+    serializer_class = serializers.OrderItemSerializer
+
+class CustomerAddressViewSet(viewsets.ModelViewSet):
+    serializer_class = serializers.CustomerAddressSerializer
+    queryset = models.CustomerAddress.objects.all().order_by('id')
+
+class BookRatingViewSet(viewsets.ModelViewSet):
+    serializer_class = serializers.BookRatingSerializer
+    queryset = models.BookRating.objects.all()
+
+class BookRatingsList(APIView):
+    def get(self, request, book_id, format=None):
+        try:
+            ratings = BookRating.objects.filter(book_id=book_id)
+            serializer = BookRatingSerializer(ratings, many=True)
+            return Response(serializer.data)
+        except BookRating.DoesNotExist:
+            return Response(status=status.HTTP_404_NOT_FOUND)
+
+class CategoryList(generics.ListCreateAPIView):
+    queryset = models.BookCategory.objects.all()
+    serializer_class = serializers.CategorySerializer
+    pagination_class = pagination.PageNumberPagination
+
+    def get_queryset(self):
+        qs = super().get_queryset()
+        if 'fetch_limit' in self.request.GET:
+            limit = int(self.request.GET['fetch_limit'])
+            qs = qs[:limit]
+        return qs
+
+class CategoryDetail(generics.RetrieveUpdateDestroyAPIView):
+    queryset = models.BookCategory.objects.all()
+    serializer_class = serializers.CategoryDetailSerializer
+    pagination_class = pagination.PageNumberPagination
 
 @csrf_exempt
 def customer_login(request):
@@ -142,51 +186,80 @@ def customer_register(request):
         }
         return JsonResponse(message)
 
+@method_decorator(csrf_exempt, name='dispatch')
+class DeleteFromCart(APIView):
+    permission_classes = [IsAuthenticated]
 
-class OrderList(generics.ListCreateAPIView):
-    queryset = models.Order.objects.all()
-    serializer_class = serializers.OrderSerializer
-
-class OrderDetail(generics.ListAPIView):
-    # queryset = models.OrderItems.objects.all()
-    serializer_class = serializers.OrderDetailSerializer
-
-    def get_queryset(self):
-        order_id = self.kwargs.get('pk')
-        order = models.Order.objects.get(id = order_id)
-        order_items = models.OrderItems.objects.filter(order = order)
-        return order_items
-    
-class CustomerAddressViewSet(viewsets.ModelViewSet):
-    serializer_class = serializers.CustomerAddressSerializer
-    queryset = models.CustomerAddress.objects.all().order_by('id')
-
-class BookRatingViewSet(viewsets.ModelViewSet):
-    serializer_class = serializers.BookRatingSerializer
-    queryset = models.BookRating.objects.all()
-
-class BookRatingsList(APIView):
-    def get(self, request, book_id, format=None):
+    def post(self, request, order_item_id): 
         try:
-            ratings = BookRating.objects.filter(book_id=book_id)
-            serializer = BookRatingSerializer(ratings, many=True)
-            return Response(serializer.data)
-        except BookRating.DoesNotExist:
-            return Response(status=status.HTTP_404_NOT_FOUND)
+            order_item = OrderItems.objects.get(id=order_item_id) 
+            order_item.delete()
+            return JsonResponse({'success': True, 'message': 'Item deleted from cart successfully'})
+        except OrderItems.DoesNotExist:
+            return JsonResponse({'success': False, 'message': 'Item does not exist in the cart'}, status=404)
 
-class CategoryList(generics.ListCreateAPIView):
-    queryset = models.BookCategory.objects.all()
-    serializer_class = serializers.CategorySerializer
-    pagination_class = pagination.PageNumberPagination
+class RemoveFromCart(APIView):
+    permission_classes = [IsAuthenticated]
+    def post(self, request, order_item_id): 
+        try:
+            order_item = OrderItems.objects.get(id=order_item_id) 
+            if order_item.quantity > 1:
+                order_item.quantity -= 1
+                order_item.save()
+            else:
+                order_item.delete()
+            return JsonResponse({'success': True, 'message': 'Quantity removed from cart successfully'})
+        except OrderItems.DoesNotExist:
+            return JsonResponse({'success': False, 'message': 'Item does not exist in the cart'}, status=404)
 
-    def get_queryset(self):
-        qs = super().get_queryset()
-        if 'fetch_limit' in self.request.GET:
-            limit = int(self.request.GET['fetch_limit'])
-            qs = qs[:limit]
-        return qs
+class AddToCart(APIView):
+    permission_classes = [IsAuthenticated]
 
-class CategoryDetail(generics.RetrieveUpdateDestroyAPIView):
-    queryset = models.BookCategory.objects.all()
-    serializer_class = serializers.CategoryDetailSerializer
-    pagination_class = pagination.PageNumberPagination
+    def post(self, request, book_id):
+        try:
+            quantity = request.data.get('quantity', 1)
+            book = Book.objects.get(id=book_id)
+            customer = request.user
+
+            if request.user.is_authenticated:
+                customer, created = Customer.objects.get_or_create(user=customer)
+                order, created = Order.objects.get_or_create(customer=customer, is_ordered=False)
+
+                order_item, created = OrderItems.objects.get_or_create(order=order, book=book)
+                if not created:
+                    order_item.quantity += int(quantity)
+                    order_item.save()
+                else:
+                    order_item.quantity = int(quantity)
+                    order_item.save()
+
+                serializer = OrderItemSerializer(order_item)
+                return JsonResponse(serializer.data)
+            else:
+                return JsonResponse({'success': False, 'message': 'User is not authenticated'}, status=401)
+        except Book.DoesNotExist:
+            return JsonResponse({'success': False, 'message': 'Book does not exist'}, status=404)
+
+class ViewCart(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request, format=None):
+        if request.user.is_authenticated:
+            print("Request User:", request.user) 
+            customer = request.user.id
+            print("Customer ID:", customer)
+
+            orders = Order.objects.filter(customer__user=request.user)
+            order_items_list = []
+
+            for order in orders:
+                order_items = OrderItems.objects.filter(order=order)
+                order_items_list.extend(order_items)
+
+            print("Order Items:", order_items_list)
+
+            serializer = OrderItemSerializer(order_items_list, many=True)
+            return Response(serializer.data)  
+        else:
+            return Response({"detail": "User is not authenticated."}, status=401)
+
