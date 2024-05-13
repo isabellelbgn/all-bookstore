@@ -1,8 +1,6 @@
 from django.urls import path
 from . import views
 from rest_framework import routers
-from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
-
 router = routers.DefaultRouter()
 router.register('address', views.CustomerAddressViewSet)
 router.register('bookrating', views.BookRatingViewSet)
@@ -18,7 +16,6 @@ urlpatterns = [
     path('book/<int:pk>', views.BookDetail.as_view()),
     path('book/<int:book_id>/ratings/', views.BookRatingsList.as_view(), name='book-ratings-list'),
 
-
     #Book Categories
     path('categories/', views.CategoryList.as_view()),
     path('category/<int:pk>', views.CategoryDetail.as_view()),
@@ -26,16 +23,19 @@ urlpatterns = [
     # Customers
     path('customers/', views.CustomerList.as_view()),
     path('customer/<int:pk>', views.CustomerDetail.as_view()),
-    path('customer/login/', views.customer_login, name='customer_login'),
-    path('customer/register/', views.customer_register, name='customer_register'),
-
-    #Auth
-    path('api/token/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
-    path('api/token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
-
+    path('customer/login/', views.CustomerLogin.as_view(), name='customer_login'),
+    path('customer/register/', views.CustomerRegister.as_view(), name='customer_register'),
+    
     # Orders
     path('orders/', views.OrderList.as_view()),
     path('order/<int:pk>', views.OrderDetail.as_view()),
+    path('checkout/', views.Checkout.as_view(), name='checkout'),
+
+    # Cart
+    path('view_cart/', views.ViewCart.as_view(), name='view-cart'),
+    path('add_to_cart/<int:book_id>/', views.AddToCart.as_view(), name='add_to_cart'),
+    path('remove_from_cart/<int:order_item_id>/', views.RemoveFromCart.as_view(), name='remove_from_cart'),
+    path('delete_from_cart/<int:order_item_id>/', views.DeleteFromCart.as_view(), name='delete_from_cart'),
 
 
 ]

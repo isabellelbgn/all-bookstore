@@ -1,5 +1,14 @@
 from rest_framework import serializers
 from . import models
+from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
+
+class MyTokenObtainPairSerializer(TokenObtainPairSerializer):
+    @classmethod
+    def get_token(cls, user):
+        token = super().get_token(user)
+        token['id'] = user.id 
+        token['username'] = user.username
+        return token
 
 class AdminSerializer(serializers.ModelSerializer):
     class Meta:
@@ -66,23 +75,26 @@ class CustomerDetailSerializer(serializers.ModelSerializer):
         super(CustomerDetailSerializer, self).__init__(*args, **kwargs)
         self.Meta.depth = 1
 
-class OrderSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = models.Order
-        fields = ['id', 'customer']
+class OrderItemSerializer(serializers.ModelSerializer):
+    book = BookDetailSerializer(read_only=True) 
 
-    def __init__(self, *args, **kwargs):
-        super(OrderSerializer, self).__init__(*args, **kwargs)
-        self.Meta.depth = 1
-
-class OrderDetailSerializer(serializers.ModelSerializer):
     class Meta:
         model = models.OrderItems
-        fields=['id', 'order', 'book']
+        fields = ['id', 'book', 'quantity']  
 
-    def __init__(self, *args, **kwargs):
-        super(OrderDetailSerializer, self).__init__(*args, **kwargs)
-        self.Meta.depth = 1
+class OrderSerializer(serializers.ModelSerializer):
+    order_items = OrderItemSerializer(many=True, read_only=True)
+
+    class Meta:
+        model = models.Order
+        fields = ['id', 'customer', 'order_items']  
+
+class OrderDetailSerializer(serializers.ModelSerializer):
+    order_items = OrderItemSerializer(many=True, read_only=True)  
+
+    class Meta:
+        model = models.Order
+        fields = ['id', 'customer', 'order_items']
 
 class CustomerAddressSerializer(serializers.ModelSerializer):
     class Meta:

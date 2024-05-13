@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import { Link } from "react-router-dom";
 import InputBox from "../../components/Main Components/InputBox";
 import Navigation from "../../components/Main Components/Navigation";
@@ -6,17 +6,15 @@ import Footer from "../../components/Main Components/Footer";
 import { PrimaryButton } from "../../components/Buttons/PrimaryButton";
 import { PageTemplate } from "../../components/Main Components/PageTemplate";
 import { GrayBox } from "../../components/Main Components/GrayBox";
-import axios from "axios";
+import AuthContext from "../../context/AuthContext";
 
 const Login = () => {
-  const [error, setError] = useState(false);
-  const [errorMessage, setErrorMessage] = useState("");
-  const baseUrl = "http://127.0.0.1:8000/api/";
-
   const [loginFormData, setLoginFormData] = useState({
     username: "",
     password: "",
   });
+
+  const { loginCustomer, error, errorMessage } = useContext(AuthContext);
 
   const handleInputChange = (event) => {
     setLoginFormData({
@@ -25,36 +23,18 @@ const Login = () => {
     });
   };
 
-  const handleSubmit = async (event) => {
-    event.preventDefault();
-
-    const formData = new FormData();
-    formData.append("username", loginFormData.username);
-    formData.append("password", loginFormData.password);
-
-    try {
-      const response = await axios.post(baseUrl + "customer/login/", formData);
-
-      if (response.data.success) {
-        setError(false);
-        setErrorMessage("");
-        localStorage.setItem("customer_login", true);
-        localStorage.setItem("customer_username", loginFormData.username);
-        window.location.href = "/";
-      } else {
-        setError(true);
-        setErrorMessage(response.data.message || "Invalid credentials.");
-      }
-    } catch (error) {
-      setError(true);
-      setErrorMessage("An error occurred. Please try again later.");
-      console.error("Login error:", error);
-    }
-  };
-
   const isFormReady = () =>
     loginFormData.username.trim() !== "" &&
     loginFormData.password.trim() !== "";
+
+  const handleSubmit = async (event) => {
+    event.preventDefault();
+    try {
+      await loginCustomer(event);
+    } catch (error) {
+      console.error("Login error:", error);
+    }
+  };
 
   return (
     <div>
@@ -93,33 +73,11 @@ const Login = () => {
                     onChange={handleInputChange}
                   />
                 </div>
-
                 {error && (
                   <div className="text-red-500 text-sm mb-4">
                     {errorMessage}
                   </div>
                 )}
-
-                <div className="flex items-center justify-between mb-4">
-                  <div className="flex items-center">
-                    <input
-                      id="remember"
-                      type="checkbox"
-                      className="w-4 h-4 border border-gray-300 rounded bg-gray-50 focus:ring-3 focus:ring-primary-300 dark:bg-gray-700 dark:border-gray-600 dark:focus:ring-primary-600 dark:ring-offset-gray-800"
-                      required=""
-                    />
-                    <label htmlFor="remember" className="ml-2 text-sm">
-                      Remember me
-                    </label>
-                  </div>
-                  <Link
-                    to="#"
-                    className="text-sm font-medium text-primary-600 hover:underline"
-                  >
-                    Forgot password?
-                  </Link>
-                </div>
-
                 <PrimaryButton disabled={!isFormReady()} className="w-full">
                   Log in
                 </PrimaryButton>
