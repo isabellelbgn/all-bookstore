@@ -19,6 +19,8 @@ export const AuthProvider = ({ children }) => {
       : null
   );
 
+  const [loading, setLoading] = useState(true);
+
   const loginCustomer = async (e) => {
     e.preventDefault();
     const response = await fetch("http://127.0.0.1:8000/api/token/", {
@@ -62,12 +64,14 @@ export const AuthProvider = ({ children }) => {
   };
 
   const updateToken = async () => {
+    console.log("Update token!");
     try {
       const response = await fetch("http://127.0.0.1:8000/api/token/refresh/", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
+
         body: JSON.stringify({
           refresh: authTokens?.refresh,
         }),
@@ -81,6 +85,9 @@ export const AuthProvider = ({ children }) => {
       } else {
         logoutCustomer();
       }
+      if (loading) {
+        setLoading(false);
+      }
     } catch (error) {
       console.error("Error updating token:", error);
     }
@@ -91,9 +98,9 @@ export const AuthProvider = ({ children }) => {
       if (authTokens) {
         updateToken();
       }
-    }, 30 * 60 * 1000);
+    }, 1000 * 60 * 3);
     return () => clearInterval(interval);
-  }, [authTokens]);
+  }, [authTokens, loading]);
 
   const contextData = {
     customer: customer,
