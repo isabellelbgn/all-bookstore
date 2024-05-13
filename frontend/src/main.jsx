@@ -22,6 +22,7 @@ import Login from "./pages/Customer/Login";
 import Dashboard from "./pages/Customer/Dashboard";
 import Orders from "./pages/Customer/Orders";
 import Cart from "./pages/Customer/Cart";
+import Accounts from "./pages/Customer/Accounts";
 
 const router = createBrowserRouter([
   {
@@ -78,7 +79,6 @@ const router = createBrowserRouter([
     ),
     errorElement: <NotFound />,
   },
-  {
     path: "/customer/dashboard",
     element: (
       <PrivateRoute>
@@ -95,6 +95,11 @@ const router = createBrowserRouter([
   {
     path: "/cart",
     element: <Cart />,
+    errorElement: <NotFound />,
+  },
+  {
+    path: "/customer/dashboard",
+    element: <Accounts />,
     errorElement: <NotFound />,
   },
 ]);
