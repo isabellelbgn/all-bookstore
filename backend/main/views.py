@@ -127,17 +127,21 @@ class CategoryDetail(generics.RetrieveUpdateDestroyAPIView):
     serializer_class = serializers.CategoryDetailSerializer
     pagination_class = pagination.PageNumberPagination
 
-@csrf_exempt
-def customer_login(request):
-    if request.method == 'POST':
+class CustomerLogin(APIView):
+    @csrf_exempt
+    def dispatch(self, *args, **kwargs):
+        return super().dispatch(*args, **kwargs)
+
+    def post(self, request):
         token_view = MyTokenObtainPairView.as_view()
         return token_view(request)
-    else:
-        return JsonResponse({'success': False, 'message': 'Invalid request method'}, status=405)
 
-@csrf_exempt
-def customer_register(request):
-    if request.method == 'POST':
+class CustomerRegister(APIView):
+    @csrf_exempt
+    def dispatch(self, *args, **kwargs):
+        return super().dispatch(*args, **kwargs)
+
+    def post(self, request):
         first_name = request.POST.get('first_name')
         last_name = request.POST.get('last_name')
         username = request.POST.get('username')
@@ -179,42 +183,24 @@ def customer_register(request):
                 'message': 'Username already exists!'
             }
             return JsonResponse(message)
-    else:
-        message = {
-            'success': False,
-            'message': 'Invalid request method. Only POST method is allowed.'
-        }
-        return JsonResponse(message)
-
-@method_decorator(csrf_exempt, name='dispatch')
-class DeleteFromCart(APIView):
+        
+class ViewCart(APIView):
     permission_classes = [IsAuthenticated]
+    def get(self, request, format=None):
+        if request.user.is_authenticated:
+            orders = Order.objects.filter(customer__user=request.user, is_ordered=False)
+            order_items_list = []
 
-    def post(self, request, order_item_id): 
-        try:
-            order_item = OrderItems.objects.get(id=order_item_id) 
-            order_item.delete()
-            return JsonResponse({'success': True, 'message': 'Item deleted from cart successfully'})
-        except OrderItems.DoesNotExist:
-            return JsonResponse({'success': False, 'message': 'Item does not exist in the cart'}, status=404)
-
-class RemoveFromCart(APIView):
-    permission_classes = [IsAuthenticated]
-    def post(self, request, order_item_id): 
-        try:
-            order_item = OrderItems.objects.get(id=order_item_id) 
-            if order_item.quantity > 1:
-                order_item.quantity -= 1
-                order_item.save()
-            else:
-                order_item.delete()
-            return JsonResponse({'success': True, 'message': 'Quantity removed from cart successfully'})
-        except OrderItems.DoesNotExist:
-            return JsonResponse({'success': False, 'message': 'Item does not exist in the cart'}, status=404)
+            for order in orders:
+                order_items = OrderItems.objects.filter(order=order)
+                order_items_list.extend(order_items)
+            serializer = OrderItemSerializer(order_items_list, many=True)
+            return Response(serializer.data)  
+        else:
+            return Response({"detail": "User is not authenticated."}, status=401)
 
 class AddToCart(APIView):
     permission_classes = [IsAuthenticated]
-
     def post(self, request, book_id):
         try:
             quantity = request.data.get('quantity', 1)
@@ -240,26 +226,44 @@ class AddToCart(APIView):
         except Book.DoesNotExist:
             return JsonResponse({'success': False, 'message': 'Book does not exist'}, status=404)
 
-class ViewCart(APIView):
+class DeleteFromCart(APIView):
     permission_classes = [IsAuthenticated]
 
-    def get(self, request, format=None):
-        if request.user.is_authenticated:
-            print("Request User:", request.user) 
-            customer = request.user.id
-            print("Customer ID:", customer)
+    def post(self, request, order_item_id): 
+        try:
+            order_item = OrderItems.objects.get(id=order_item_id) 
+            order_item.delete()
+            return JsonResponse({'success': True, 'message': 'Item deleted from cart successfully'})
+        except OrderItems.DoesNotExist:
+            return JsonResponse({'success': False, 'message': 'Item does not exist in the cart'}, status=404)
 
-            orders = Order.objects.filter(customer__user=request.user)
-            order_items_list = []
+class RemoveFromCart(APIView):
+    permission_classes = [IsAuthenticated]
+    def post(self, request, order_item_id): 
+        try:
+            order_item = OrderItems.objects.get(id=order_item_id) 
+            if order_item.quantity > 1:
+                order_item.quantity -= 1
+                order_item.save()
+            else:
+                order_item.delete()
+            return JsonResponse({'success': True, 'message': 'Quantity removed from cart successfully'})
+        except OrderItems.DoesNotExist:
+            return JsonResponse({'success': False, 'message': 'Item does not exist in the cart'}, status=404)
 
-            for order in orders:
-                order_items = OrderItems.objects.filter(order=order)
-                order_items_list.extend(order_items)
+class Checkout(APIView):
+    permission_classes = [IsAuthenticated]
 
-            print("Order Items:", order_items_list)
-
-            serializer = OrderItemSerializer(order_items_list, many=True)
-            return Response(serializer.data)  
-        else:
-            return Response({"detail": "User is not authenticated."}, status=401)
-
+    def post(self, request):
+        try:
+            customer = request.user
+            print("Customer: ", customer);
+            order = Order.objects.get(customer__user=customer, is_ordered=False)
+            # Mark the order as ordered
+            order.is_ordered = True
+            print("Status: ", order.is_ordered);
+            order.save()
+            # Create payment record.
+            return JsonResponse({'success': True, 'message': 'Checkout successful'})
+        except Order.DoesNotExist:
+            return JsonResponse({'success': False, 'message': 'No active order found for the user'}, status=404)

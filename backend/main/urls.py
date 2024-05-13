@@ -23,18 +23,20 @@ urlpatterns = [
     # Customers
     path('customers/', views.CustomerList.as_view()),
     path('customer/<int:pk>', views.CustomerDetail.as_view()),
-    path('customer/login/', views.customer_login, name='customer_login'),
-    path('customer/register/', views.customer_register, name='customer_register'),
+    path('customer/login/', views.CustomerLogin.as_view(), name='customer_login'),
+    path('customer/register/', views.CustomerRegister.as_view(), name='customer_register'),
     
     # Orders
     path('orders/', views.OrderList.as_view()),
     path('order/<int:pk>', views.OrderDetail.as_view()),
+    path('checkout/', views.Checkout.as_view(), name='checkout'),
 
     # Cart
     path('view_cart/', views.ViewCart.as_view(), name='view-cart'),
     path('add_to_cart/<int:book_id>/', views.AddToCart.as_view(), name='add_to_cart'),
     path('remove_from_cart/<int:order_item_id>/', views.RemoveFromCart.as_view(), name='remove_from_cart'),
     path('delete_from_cart/<int:order_item_id>/', views.DeleteFromCart.as_view(), name='delete_from_cart'),
+
 
 ]
 
