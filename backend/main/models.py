@@ -50,9 +50,22 @@ class Book(models.Model):
 # Customer Model
 class Customer(models.Model):
     user = models.ForeignKey(User, on_delete = models.CASCADE)
-
+    
     def __str__(self):
         return self.user.username
+
+# Customer Address Model
+class CustomerAddress(models.Model):
+    customer = models.ForeignKey(Customer, on_delete=models.CASCADE, related_name='customer_addresses')
+    street = models.CharField(max_length=255, null=True)
+    barangay = models.CharField(max_length=255, null=True)
+    city = models.CharField(max_length=255, null=True)
+    region = models.CharField(max_length=255, null=True)
+    zip_code = models.CharField(max_length=10, null=True)
+    default_address = models.BooleanField(default=False)
+
+    def __str__(self):
+        return f"{self.street}, {self.barangay}, {self.city}, {self.region}, {self.zip_code}"
 
 # Order Model
 class Order(models.Model):
@@ -72,15 +85,7 @@ class OrderItems(models.Model):
     def __str__(self):
         return f"{self.book.title} - Quantity: {self.quantity}"
 
-# Customer Address Model
-class CustomerAddress(models.Model):
-    customer = models.ForeignKey(Customer, on_delete=models.CASCADE, related_name = 'customer_addresses')
-    address = models.TextField()
-    default_address = models.BooleanField(default = False)
 
-    def __str__(self):
-        return self.address
-    
 # Book Rating and Reviews
 class BookRating(models.Model):
     customer = models.ForeignKey(Customer, on_delete = models.CASCADE, related_name = 'rating_customers')

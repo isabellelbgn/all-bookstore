@@ -60,7 +60,7 @@ class BookDetailSerializer(serializers.ModelSerializer):
 class CustomerSerializer(serializers.ModelSerializer):
     class Meta:
         model = models.Customer
-        fields = ['id', 'user']
+        fields = ['id', 'user', 'customer_addresses']
 
     def __init__(self, *args, **kwargs):
         super(CustomerSerializer, self).__init__(*args, **kwargs)
@@ -69,12 +69,22 @@ class CustomerSerializer(serializers.ModelSerializer):
 class CustomerDetailSerializer(serializers.ModelSerializer):
     class Meta:
         model = models.Customer
-        fields = ['id', 'user']
+        fields = ['id', 'user', 'customer_addresses']
 
     def __init__(self, *args, **kwargs):
         super(CustomerDetailSerializer, self).__init__(*args, **kwargs)
         self.Meta.depth = 1
 
+class CustomerAddressSerializer(serializers.ModelSerializer):
+    address = serializers.SerializerMethodField()
+
+    class Meta:
+        model = models.CustomerAddress
+        fields = ['id', 'customer', 'address', 'default_address']
+
+    def get_address(self, obj):
+        return f"{obj.street}, {obj.barangay}, {obj.city}, {obj.region}, {obj.zip_code}"
+    
 class OrderItemSerializer(serializers.ModelSerializer):
     book = BookDetailSerializer(read_only=True) 
 
@@ -95,15 +105,6 @@ class OrderDetailSerializer(serializers.ModelSerializer):
     class Meta:
         model = models.Order
         fields = ['id', 'customer', 'order_items']
-
-class CustomerAddressSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = models.CustomerAddress
-        fields = ['id', 'customer', 'address', 'default_address']
-
-        def __init__(self, *args, **kwargs):
-            super(CustomerAddressSerializer, self).__init__(*args, **kwargs)
-            self.Meta.depth = 1
 
 class BookRatingSerializer(serializers.ModelSerializer):
     created_by = serializers.ReadOnlyField(source='customer.user.username')
