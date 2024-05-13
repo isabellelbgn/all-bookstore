@@ -199,6 +199,8 @@ function Checkout() {
                       </div>
                     </div>
                   </div>
+                </form>
+                <form class="mt-16 max-w-2xl">
                   <div>
                     <h2 className="font-bold">Payment Method</h2>
                     <div class="flex flex-col p-2 rounded bg-gray-50 sm:rounded-lg mt-6">
