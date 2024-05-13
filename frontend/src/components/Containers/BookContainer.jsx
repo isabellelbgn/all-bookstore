@@ -4,7 +4,6 @@ import { Link } from "react-router-dom";
 
 const BookContainer = ({ book }) => {
   if (!book || !book.title) {
-    // Handle case where book is undefined or does not have a title property
     return null;
   }
   const containerStyle = {
@@ -19,7 +18,7 @@ const BookContainer = ({ book }) => {
     display: "flex",
     justifyContent: "center",
     alignItems: "center",
-    height: "200px", // Set a fixed height to ensure consistent alignment
+    height: "200px",
   };
   const imageStyle = {
     maxWidth: "100%",
@@ -82,7 +81,7 @@ const BookContainer = ({ book }) => {
             {book.author}
           </p>
           <p className="text-gray-700 text-s font-semibold">P{book.price}</p>
-          <AddToCartButton />
+          <AddToCartButton bookId={book.id} />
         </div>
       </div>
     </div>

@@ -1,19 +1,35 @@
-from rest_framework import generics, permissions, pagination, viewsets
-from . import serializers
-from . import models
-
-from django.views.decorators.csrf import csrf_exempt
-from django.http import JsonResponse
-from django.contrib.auth import authenticate
-from django.contrib.auth.models import User
-from django.db import IntegrityError
+from rest_framework import generics, pagination, viewsets, status
 from rest_framework.views import APIView
 from rest_framework.response import Response
-from rest_framework import status
-from .models import BookRating
-from .serializers import BookRatingSerializer
+from rest_framework.decorators import permission_classes
+from rest_framework.permissions import IsAuthenticated
+from django.utils.decorators import method_decorator
+from django.views.decorators.csrf import csrf_exempt
+from django.contrib.auth.models import User
+from django.http import JsonResponse
+from django.db import IntegrityError
+from . import serializers, models
+from .models import Customer, Book, Order, OrderItems, BookRating
+from .serializers import BookRatingSerializer, MyTokenObtainPairSerializer, OrderItemSerializer
+from rest_framework_simplejwt.views import TokenObtainPairView
 
-# Create your views here.
+class MyTokenObtainPairView(TokenObtainPairView):
+    serializer_class = MyTokenObtainPairSerializer
+
+    def post(self, request, *args, **kwargs):
+        response = super().post(request, *args, **kwargs)
+        if response.status_code == status.HTTP_200_OK:
+            data = {
+                'access': response.data['access'],
+                'refresh': response.data['refresh']
+            }
+            return Response(data)
+        else:
+            data = {
+                'success': False,
+                'message': 'Invalid username or password. Please try again!'
+            }
+            return Response(data, status=response.status_code)
 
 class AdminList(generics.ListCreateAPIView):
     queryset = models.Admin.objects.all()
@@ -65,36 +81,67 @@ class CustomerDetail(generics.RetrieveUpdateDestroyAPIView):
     queryset = models.Customer.objects.all()
     serializer_class = serializers.CustomerDetailSerializer
 
-@csrf_exempt
-def customer_login(request):
-    if request.method == 'POST':
-        username = request.POST.get('username')
-        password = request.POST.get('password')
-        user = authenticate(username=username, password=password)
-        if user:
-            message = {
-                'success': True,
-                'username': user.username
-            }
-        else:
-            message = {
-                'success': False,
-                'message': 'Invalid username or password. Please try again!'
-            }
-        return JsonResponse(message)
-    else:
-        return JsonResponse({'success': False, 'message': 'Invalid request method'})
-    
-# @csrf_exempt
-# def customer_login(request):
-#     if request.method == 'POST':
-#         return JsonResponse({'message': 'JWT authentication is required.'}, status=403)
-#     else:
-#         return JsonResponse({'success': False, 'message': 'Invalid request method'})
+class OrderList(generics.ListCreateAPIView):
+    queryset = models.Order.objects.all()
+    serializer_class = serializers.OrderSerializer
 
-@csrf_exempt
-def customer_register(request):
-    if request.method == 'POST':
+class OrderDetail(generics.RetrieveAPIView):
+    queryset = models.Order.objects.all()
+    serializer_class = serializers.OrderSerializer
+
+class OrderItem(generics.ListAPIView):
+    queryset = models.OrderItems.objects.all()
+    serializer_class = serializers.OrderItemSerializer
+
+class CustomerAddressViewSet(viewsets.ModelViewSet):
+    serializer_class = serializers.CustomerAddressSerializer
+    queryset = models.CustomerAddress.objects.all().order_by('id')
+
+class BookRatingViewSet(viewsets.ModelViewSet):
+    serializer_class = serializers.BookRatingSerializer
+    queryset = models.BookRating.objects.all()
+
+class BookRatingsList(APIView):
+    def get(self, request, book_id, format=None):
+        try:
+            ratings = BookRating.objects.filter(book_id=book_id)
+            serializer = BookRatingSerializer(ratings, many=True)
+            return Response(serializer.data)
+        except BookRating.DoesNotExist:
+            return Response(status=status.HTTP_404_NOT_FOUND)
+
+class CategoryList(generics.ListCreateAPIView):
+    queryset = models.BookCategory.objects.all()
+    serializer_class = serializers.CategorySerializer
+    pagination_class = pagination.PageNumberPagination
+
+    def get_queryset(self):
+        qs = super().get_queryset()
+        if 'fetch_limit' in self.request.GET:
+            limit = int(self.request.GET['fetch_limit'])
+            qs = qs[:limit]
+        return qs
+
+class CategoryDetail(generics.RetrieveUpdateDestroyAPIView):
+    queryset = models.BookCategory.objects.all()
+    serializer_class = serializers.CategoryDetailSerializer
+    pagination_class = pagination.PageNumberPagination
+
+class CustomerLogin(APIView):
+    @csrf_exempt
+    def dispatch(self, *args, **kwargs):
+        return super().dispatch(*args, **kwargs)
+
+    def post(self, request):
+        token_view = MyTokenObtainPairView.as_view()
+        return token_view(request)
+
+class CustomerRegister(APIView):
+    @csrf_exempt
+    def dispatch(self, *args, **kwargs):
+        return super().dispatch(*args, **kwargs)
+
+    def post(self, request):
         first_name = request.POST.get('first_name')
         last_name = request.POST.get('last_name')
         username = request.POST.get('username')
@@ -122,7 +169,7 @@ def customer_register(request):
                     'success': True,
                     'user': user.id,
                     'customer': customer.id,
-                    'message': "You are now registered. You can now log in."
+                    'message': "You are now registered! Log in."
                 }
             else:
                 message = {
@@ -136,60 +183,87 @@ def customer_register(request):
                 'message': 'Username already exists!'
             }
             return JsonResponse(message)
-    else:
-        message = {
-            'success': False,
-            'message': 'Invalid request method. Only POST method is allowed.'
-        }
-        return JsonResponse(message)
+        
+class ViewCart(APIView):
+    permission_classes = [IsAuthenticated]
+    def get(self, request, format=None):
+        if request.user.is_authenticated:
+            orders = Order.objects.filter(customer__user=request.user, is_ordered=False)
+            order_items_list = []
 
+            for order in orders:
+                order_items = OrderItems.objects.filter(order=order)
+                order_items_list.extend(order_items)
+            serializer = OrderItemSerializer(order_items_list, many=True)
+            return Response(serializer.data)  
+        else:
+            return Response({"detail": "User is not authenticated."}, status=401)
 
-class OrderList(generics.ListCreateAPIView):
-    queryset = models.Order.objects.all()
-    serializer_class = serializers.OrderSerializer
-
-class OrderDetail(generics.ListAPIView):
-    # queryset = models.OrderItems.objects.all()
-    serializer_class = serializers.OrderDetailSerializer
-
-    def get_queryset(self):
-        order_id = self.kwargs.get('pk')
-        order = models.Order.objects.get(id = order_id)
-        order_items = models.OrderItems.objects.filter(order = order)
-        return order_items
-    
-class CustomerAddressViewSet(viewsets.ModelViewSet):
-    serializer_class = serializers.CustomerAddressSerializer
-    queryset = models.CustomerAddress.objects.all().order_by('id')
-
-class BookRatingViewSet(viewsets.ModelViewSet):
-    serializer_class = serializers.BookRatingSerializer
-    queryset = models.BookRating.objects.all()
-
-class BookRatingsList(APIView):
-    def get(self, request, book_id, format=None):
+class AddToCart(APIView):
+    permission_classes = [IsAuthenticated]
+    def post(self, request, book_id):
         try:
-            ratings = BookRating.objects.filter(book_id=book_id)
-            serializer = BookRatingSerializer(ratings, many=True)
-            return Response(serializer.data)
-        except BookRating.DoesNotExist:
-            return Response(status=status.HTTP_404_NOT_FOUND)
+            quantity = request.data.get('quantity', 1)
+            book = Book.objects.get(id=book_id)
+            customer = request.user
 
+            if request.user.is_authenticated:
+                customer, created = Customer.objects.get_or_create(user=customer)
+                order, created = Order.objects.get_or_create(customer=customer, is_ordered=False)
 
-class CategoryList(generics.ListCreateAPIView):
-    queryset = models.BookCategory.objects.all()
-    serializer_class = serializers.CategorySerializer
-    pagination_class = pagination.PageNumberPagination
+                order_item, created = OrderItems.objects.get_or_create(order=order, book=book)
+                if not created:
+                    order_item.quantity += int(quantity)
+                    order_item.save()
+                else:
+                    order_item.quantity = int(quantity)
+                    order_item.save()
 
-    def get_queryset(self):
-        qs = super().get_queryset()
-        if 'fetch_limit' in self.request.GET:
-            limit = int(self.request.GET['fetch_limit'])
-            qs = qs[:limit]
-        return qs
+                serializer = OrderItemSerializer(order_item)
+                return JsonResponse(serializer.data)
+            else:
+                return JsonResponse({'success': False, 'message': 'User is not authenticated'}, status=401)
+        except Book.DoesNotExist:
+            return JsonResponse({'success': False, 'message': 'Book does not exist'}, status=404)
 
+class DeleteFromCart(APIView):
+    permission_classes = [IsAuthenticated]
 
-class CategoryDetail(generics.RetrieveUpdateDestroyAPIView):
-    queryset = models.BookCategory.objects.all()
-    serializer_class = serializers.CategoryDetailSerializer
-    pagination_class = pagination.PageNumberPagination
+    def post(self, request, order_item_id): 
+        try:
+            order_item = OrderItems.objects.get(id=order_item_id) 
+            order_item.delete()
+            return JsonResponse({'success': True, 'message': 'Item deleted from cart successfully'})
+        except OrderItems.DoesNotExist:
+            return JsonResponse({'success': False, 'message': 'Item does not exist in the cart'}, status=404)
+
+class RemoveFromCart(APIView):
+    permission_classes = [IsAuthenticated]
+    def post(self, request, order_item_id): 
+        try:
+            order_item = OrderItems.objects.get(id=order_item_id) 
+            if order_item.quantity > 1:
+                order_item.quantity -= 1
+                order_item.save()
+            else:
+                order_item.delete()
+            return JsonResponse({'success': True, 'message': 'Quantity removed from cart successfully'})
+        except OrderItems.DoesNotExist:
+            return JsonResponse({'success': False, 'message': 'Item does not exist in the cart'}, status=404)
+
+class Checkout(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def post(self, request):
+        try:
+            customer = request.user
+            print("Customer: ", customer);
+            order = Order.objects.get(customer__user=customer, is_ordered=False)
+            # Mark the order as ordered
+            order.is_ordered = True
+            print("Status: ", order.is_ordered);
+            order.save()
+            # Create payment record.
+            return JsonResponse({'success': True, 'message': 'Checkout successful'})
+        except Order.DoesNotExist:
+            return JsonResponse({'success': False, 'message': 'No active order found for the user'}, status=404)

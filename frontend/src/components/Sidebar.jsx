@@ -1,4 +1,5 @@
 import React from 'react'
+import { PrimaryButton } from './Buttons/PrimaryButton';
 
 const Sidebar = () => {
   return (
@@ -12,10 +13,10 @@ const Sidebar = () => {
         </div>
        
         <div class="mt-auto px-4 py-2">
-            <button class="w-full bg-green-50 text-white px-4 py-2 rounded hover:bg-red-700 font-montserrat">Log Out</button>
+            <PrimaryButton className = "w-full"> Log Out </PrimaryButton>
         </div>
     </div>
   )
 }
 
-export default Sidebar
+export default Sidebar;

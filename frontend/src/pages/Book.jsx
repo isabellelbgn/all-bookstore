@@ -73,7 +73,7 @@ function Book() {
                   <p className="text-zinc-800 text-base font-semibold mb-3">
                     Price: ₱{bookData.price}
                   </p>
-                  <AddToCartButton />
+                  <AddToCartButton bookId={bookData.id} />
                 </div>
                 <div className="mt-3 mb-3">
                   <h5 className="text-zinc-800 text-sm font-semibold">Tags</h5>

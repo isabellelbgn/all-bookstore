@@ -1,11 +1,15 @@
+import Container from "./Containers/Container";
+import { SecondaryButton } from "./Buttons/SecondaryButton";
+import { HiOutlineArrowLongRight } from "react-icons/hi2";
 import React, { useState } from "react";
-import Chae from "./images/Chae.jpg";
-import Logo from "./images/PrideandPrejudice.jpeg";
+import Chae from "./Images/Chae.jpg";
+import Best from "./Images/Best.jpg";
+import Sale from "./Images/Sale.jpg";
 
 export const Header = () => {
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
 
-  const images = [Chae, Logo, Chae, Chae, Chae];
+  const images = [Sale, Chae, Best, Sale, Chae];
 
   const handleImageChange = (index) => {
     setCurrentImageIndex(index);

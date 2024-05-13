@@ -12,7 +12,7 @@ class Admin(models.Model):
 
 # Product Category Model
 class BookCategory(models.Model):
-    id = models.AutoField(primary_key=True)  # Explicitly define id field
+    id = models.AutoField(primary_key=True) 
 
     title = models.CharField(max_length=100)
     description = models.TextField()
@@ -22,7 +22,7 @@ class BookCategory(models.Model):
     
 # Product Model
 class Book(models.Model):
-    id = models.AutoField(primary_key=True)  # Explicitly define id field
+    id = models.AutoField(primary_key=True)
 
     category = models.ForeignKey(BookCategory, on_delete = models.SET_NULL, null=True, related_name = 'category_book')
     admin = models.ForeignKey(Admin, on_delete = models.SET_NULL, null=True)
@@ -41,8 +41,11 @@ class Book(models.Model):
         return self.title
     
     def tag_list(self):
-        tagList = self.tags.split(',')
-        return (tagList)
+        if self.tags:
+            tagList = self.tags.split(',')
+            return tagList
+        else:
+            return []
 
 # Customer Model
 class Customer(models.Model):
@@ -55,6 +58,7 @@ class Customer(models.Model):
 class Order(models.Model):
     customer = models.ForeignKey(Customer, on_delete=models.CASCADE, related_name='customer_orders')
     order_date = models.DateTimeField(auto_now_add=True)
+    is_ordered = models.BooleanField(default=False) 
 
     def __unicode__(self):
         return '%s' % (self.orderDate)
@@ -63,9 +67,10 @@ class Order(models.Model):
 class OrderItems(models.Model):
     order = models.ForeignKey(Order, on_delete=models.CASCADE, related_name = 'order_items')
     book = models.ForeignKey(Book, on_delete=models.CASCADE)
+    quantity = models.IntegerField(default=1)
 
     def __str__(self):
-        return self.book.title
+        return f"{self.book.title} - Quantity: {self.quantity}"
 
 # Customer Address Model
 class CustomerAddress(models.Model):

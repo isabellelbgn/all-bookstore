@@ -1,9 +1,12 @@
-import React, { useState, useRef, useEffect } from "react";
+import React, { useState, useRef, useEffect, useContext } from "react";
 import { Link } from "react-router-dom";
 import { VscAccount, VscBook } from "react-icons/vsc";
 import { IoSearchSharp } from "react-icons/io5";
+import AuthContext from "../../context/AuthContext";
 
 export default function Navigation() {
+  const { customer, logoutCustomer } = useContext(AuthContext);
+
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const dropdownRef = useRef(null);
 
@@ -25,7 +28,7 @@ export default function Navigation() {
   }, []);
 
   return (
-    <header className="top-0 z-10 bg-gray-100 rounded-b-2xl py-5 mb-5 px-10  rounded-md">
+    <header className="top-0 z-10 bg-gray-100 rounded-b-2xl py-5 mb-5 px-10 rounded-md">
       <nav className="flex flex-col lg:flex-row justify-between items-center">
         <div className="font-montserrat flex items-center mb-4 lg:mb-0">
           <Link to="/">
@@ -62,7 +65,22 @@ export default function Navigation() {
               <div className="absolute right-0 mt-2 w-44 bg-white divide-y divide-gray-100 rounded-lg shadow-lg z-50">
                 <ul className="py-2 text-sm text-gray-700">
                   <li>
-                    {!localStorage.getItem("customer_username") && (
+                    {customer ? (
+                      <>
+                        <Link
+                          to="/customer/dashboard"
+                          className="block px-4 py-2 hover:bg-gray-100"
+                        >
+                          Dashboard
+                        </Link>
+                        <p
+                          onClick={logoutCustomer}
+                          className="block px-4 py-2 hover:bg-gray-100 cursor-pointer"
+                        >
+                          Logout
+                        </p>
+                      </>
+                    ) : (
                       <>
                         <Link
                           to="/customer/register"
@@ -79,27 +97,7 @@ export default function Navigation() {
                       </>
                     )}
                   </li>
-                  <li>
-                    {localStorage.getItem("customer_username") && (
-                      <Link
-                        to="/customer/logout"
-                        className="block px-4 py-2 hover:bg-gray-100"
-                      >
-                        Logout
-                      </Link>
-                    )}
-                  </li>
                 </ul>
-                <div className="py-2">
-                  {localStorage.getItem("customer_username") && (
-                    <Link
-                      to="/customer/dashboard"
-                      className="block px-4 py-2 hover:bg-gray-100"
-                    >
-                      Dashboard
-                    </Link>
-                  )}
-                </div>
               </div>
             )}
           </div>
