@@ -10,10 +10,15 @@ function Checkout() {
   const [cartItems, setCartItems] = useState([]);
   const [totalPrice, setTotalPrice] = useState(0);
   const [checkoutSuccess, setCheckoutSuccess] = useState(false);
+  const [shippingTotal, setShippingTotal] = useState(0);
 
   useEffect(() => {
     fetchCartItems();
   }, []);
+
+  const handleShippingMethodChange = (shippingCost) => {
+    setShippingTotal(shippingCost);
+  };
 
   const fetchCartItems = async () => {
     try {
@@ -114,6 +119,7 @@ function Checkout() {
                             type="radio"
                             value=""
                             class="w-4 h-4 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-700 dark:focus:ring-offset-gray-700 focus:ring-2 dark:bg-gray-600 dark:border-gray-500"
+                            onChange={() => handleShippingMethodChange(0)}
                           />
                         </div>
                         <div class="ms-2 text-sm">
@@ -137,6 +143,7 @@ function Checkout() {
                             type="radio"
                             value=""
                             class="w-4 h-4 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-700 dark:focus:ring-offset-gray-700 focus:ring-2 dark:bg-gray-600 dark:border-gray-500"
+                            onChange={() => handleShippingMethodChange(90)}
                           />
                         </div>
                         <div class="ms-2 text-sm">
@@ -160,6 +167,7 @@ function Checkout() {
                             type="radio"
                             value=""
                             class="w-4 h-4 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-700 dark:focus:ring-offset-gray-700 focus:ring-2 dark:bg-gray-600 dark:border-gray-500"
+                            onChange={() => handleShippingMethodChange(150)}
                           />
                         </div>
                         <div class="ms-2 text-sm">
@@ -281,7 +289,7 @@ function Checkout() {
                     Subtotal <span class="ml-auto">P{totalPrice}.00</span>
                   </li>
                   <li class="flex flex-wrap gap-4 text-gray-400 text-xs text-base  p-6 -mt-6">
-                    Shipping <span class="ml-auto">P90.00</span>
+                    Shipping <span class="ml-auto">P{shippingTotal}.00</span>
                   </li>
                   <li class="flex flex-wrap gap-4 text-base font-bold border-t-2 pt-4 p-6">
                     Total <span class="ml-auto">P{totalPrice}</span>
