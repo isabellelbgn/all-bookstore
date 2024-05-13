@@ -22,6 +22,7 @@ import Login from "./pages/Customer/Login";
 import Dashboard from "./pages/Customer/Dashboard";
 import Orders from "./pages/Customer/Orders";
 import Cart from "./pages/Customer/Cart";
+import AddressBook from "./pages/Customer/AddressBook";
 import Accounts from "./pages/Customer/Accounts";
 
 const router = createBrowserRouter([
@@ -79,6 +80,7 @@ const router = createBrowserRouter([
     ),
     errorElement: <NotFound />,
   },
+  {
     path: "/customer/dashboard",
     element: (
       <PrivateRoute>
@@ -99,9 +101,9 @@ const router = createBrowserRouter([
   },
   {
     path: "/customer/dashboard",
-    element: <Accounts />,
-    errorElement: <NotFound />,
-  },
+    element: <AddressBook />,
+    errorElement: <NotFound />
+  }
 ]);
 
 ReactDOM.createRoot(document.getElementById("root")).render(
