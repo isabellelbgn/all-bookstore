@@ -122,7 +122,59 @@ function Checkout() {
           <div class="lg:max-w-7xl max-w-xl mx-auto">
             <div class="grid lg:grid-cols-5 gap-16 font-montserrat">
               <div class="lg:col-span-3 sm:rounded-lg">
-                <form class="mt-16 max-w-2xl">
+                <div class="flex flex-col p-2 rounded border sm:rounded-lg mt-16 mb-6">
+                  <div>
+                    <div className="text-xs p-6">
+                      <div className="flex justify-between mb-6">
+                        <div class="font-bold flex">Contact:</div>
+                        <div>
+                          0912 282 2929
+                          <button class="ml-4 rounded-xl hover:rounded-3xl hover:bg-gray-50 transition-all duration-300 text-gray-400">
+                            <svg
+                              xmlns="http://www.w3.org/2000/svg"
+                              class="h-4 w-4"
+                              fill="none"
+                              viewBox="0 0 24 24"
+                              stroke="currentColor"
+                              stroke-width="2"
+                            >
+                              <path
+                                stroke-linecap="round"
+                                stroke-linejoin="round"
+                                d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"
+                              />
+                            </svg>
+                          </button>
+                        </div>
+                      </div>
+                      <div className="flex justify-between mt-6">
+                        <div class="font-bold">Ship to:</div>
+                        <div>
+                          #8 SUNRISE STREET MONTERITZ MAA DAVAO DAVAO DEL SUR,
+                          8000
+                          <button class="ml-4 rounded-xl hover:rounded-3xl hover:bg-gray-50 transition-all duration-300 text-gray-400">
+                            <svg
+                              xmlns="http://www.w3.org/2000/svg"
+                              class="h-4 w-4"
+                              fill="none"
+                              viewBox="0 0 24 24"
+                              stroke="currentColor"
+                              stroke-width="2"
+                            >
+                              <path
+                                stroke-linecap="round"
+                                stroke-linejoin="round"
+                                d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"
+                              />
+                            </svg>
+                          </button>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <form class="max-w-2xl">
                   <div>
                     <h2 className="font-bold">Shipping Method</h2>
                     <div class="flex flex-col p-2 rounded bg-gray-50 sm:rounded-lg mt-6 mb-6">
