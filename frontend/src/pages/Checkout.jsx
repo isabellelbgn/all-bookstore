@@ -8,9 +8,10 @@ import { PageTemplate } from "../components/Main Components/PageTemplate";
 function Checkout() {
   const { authTokens } = useContext(AuthContext);
   const [cartItems, setCartItems] = useState([]);
-  const [totalPrice, setTotalPrice] = useState(0);
+  const [subtotalPrice, setsubTotalPrice] = useState(0);
   const [checkoutSuccess, setCheckoutSuccess] = useState(false);
   const [shippingTotal, setShippingTotal] = useState(0);
+  const [totalPrice, settotalTotal] = useState(0);
 
   useEffect(() => {
     fetchCartItems();
@@ -19,6 +20,10 @@ function Checkout() {
   const handleShippingMethodChange = (shippingCost) => {
     setShippingTotal(shippingCost);
   };
+
+  useEffect(() => {
+    calculateTotalPrice(cartItems);
+  }, [cartItems, shippingTotal]);
 
   const fetchCartItems = async () => {
     try {
@@ -61,7 +66,7 @@ function Checkout() {
           })
         );
         setCartItems(cartItemsWithImages);
-        calculateTotalPrice(cartItemsWithImages);
+        calculatesubTotalPrice(cartItemsWithImages);
       } else {
         console.error("Failed to fetch cart items:", response.statusText);
       }
@@ -70,12 +75,22 @@ function Checkout() {
     }
   };
 
-  const calculateTotalPrice = (items) => {
+  const calculatesubTotalPrice = (items) => {
     const total = items.reduce(
       (acc, item) => acc + item.book.price * item.quantity,
       0
     );
-    setTotalPrice(total);
+    setsubTotalPrice(total);
+  };
+
+  const calculateTotalPrice = (items) => {
+    const subtotal = items.reduce(
+      (acc, item) => acc + item.book.price * item.quantity,
+      0
+    );
+    const total = subtotal + shippingTotal;
+    setsubTotalPrice(subtotal);
+    settotalTotal(total);
   };
 
   const handleCheckout = async () => {
@@ -286,7 +301,7 @@ function Checkout() {
                 </table>
                 <ul class="mt-5">
                   <li class="flex flex-wrap gap-4 text-base text-gray-400 text-xs border-t-2 pt-4 p-6">
-                    Subtotal <span class="ml-auto">P{totalPrice}.00</span>
+                    Subtotal <span class="ml-auto">P{subtotalPrice}.00</span>
                   </li>
                   <li class="flex flex-wrap gap-4 text-gray-400 text-xs text-base  p-6 -mt-6">
                     Shipping <span class="ml-auto">P{shippingTotal}.00</span>
