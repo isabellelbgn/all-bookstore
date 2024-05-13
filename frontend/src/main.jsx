@@ -19,11 +19,10 @@ import OrderSuccess from "./pages/OrderSuccess";
 //Customer Panel
 import Register from "./pages/Customer/Register";
 import Login from "./pages/Customer/Login";
-import Dashboard from "./pages/Customer/Dashboard";
-import Orders from "./pages/Customer/Orders";
 import Cart from "./pages/Customer/Cart";
 import AddressBook from "./pages/Customer/AddressBook";
 import Accounts from "./pages/Customer/Accounts";
+import AccountInformation from "./pages/Customer/AccountInformation";
 
 const router = createBrowserRouter([
   {
@@ -84,14 +83,24 @@ const router = createBrowserRouter([
     path: "/customer/dashboard",
     element: (
       <PrivateRoute>
-        <Dashboard />
+        <Accounts />
       </PrivateRoute>
     ),
     errorElement: <NotFound />,
   },
   {
-    path: "/customer/orders",
-    element: <Orders />,
+    path: "/customer/dashboard/account",
+    element: <AccountInformation />,
+    errorElement: <NotFound />,
+  },
+  {
+    path: "/customer/dashboard/address",
+    element: <AddressBook />,
+    errorElement: <NotFound />,
+  },
+  {
+    path: "/customer/dashboard/orders",
+    element: <Accounts />,
     errorElement: <NotFound />,
   },
   {
@@ -99,11 +108,6 @@ const router = createBrowserRouter([
     element: <Cart />,
     errorElement: <NotFound />,
   },
-  {
-    path: "/customer/dashboard",
-    element: <AddressBook />,
-    errorElement: <NotFound />
-  }
 ]);
 
 ReactDOM.createRoot(document.getElementById("root")).render(

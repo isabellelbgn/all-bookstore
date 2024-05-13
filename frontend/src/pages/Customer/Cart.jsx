@@ -4,9 +4,10 @@ import Footer from "../../components/Main Components/Footer";
 import { PageTemplate } from "../../components/Main Components/PageTemplate.jsx";
 import AuthContext from "../../context/AuthContext";
 import { PrimaryButton } from "../../components/Buttons/PrimaryButton.jsx";
+import { Link } from "react-router-dom";
 
 function Cart() {
-  const { authTokens } = useContext(AuthContext);
+  const { authTokens, logoutCustomer } = useContext(AuthContext);
   const [cartItems, setCartItems] = useState([]);
   const [totalPrice, setTotalPrice] = useState(0);
 
@@ -51,6 +52,7 @@ function Cart() {
         setCartItems(cartItemsWithImages);
       } else {
         console.error("Failed to fetch cart items:", response.statusText);
+        logoutCustomer();
       }
     } catch (error) {
       console.error("Error fetching cart items:", error);
@@ -198,7 +200,6 @@ function Cart() {
                             {item.book.title}
                           </div>
                         </td>
-                        <td className="px-6 py-4">{item.book.title}</td>
                         <td className="px-6 py-4">
                           <div className="flex items-center">
                             <button
@@ -274,7 +275,9 @@ function Cart() {
               <div className="flex justify-end font-semibold text-gray-900  mt-5">
                 <span className="px-6 py-3 text-green-50 ">Subtotal</span>
                 <span className="px-6 py-3">P{totalPrice}</span>
-                <PrimaryButton>Checkout</PrimaryButton>
+                <Link to="/checkout">
+                  <PrimaryButton>Checkout</PrimaryButton>
+                </Link>
               </div>
             </div>
           ) : (
