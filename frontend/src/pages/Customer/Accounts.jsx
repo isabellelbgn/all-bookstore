@@ -6,6 +6,7 @@ import GrayTable from "../../components/Containers/GrayTable";
 import { PrimaryButton } from "../../components/Buttons/PrimaryButton";
 import { PageTemplate } from "../../components/Main Components/PageTemplate";
 import AuthContext from "../../context/AuthContext";
+import { SecondaryButton } from "../../components/Buttons/SecondaryButton";
 
 const Accounts = () => {
   const { authTokens } = useContext(AuthContext);
@@ -53,19 +54,37 @@ const Accounts = () => {
   return (
     <>
       <Navigation />
-      <PageTemplate>
-        <div className="grid grid-cols-2 gap-1">
-          <Sidebar />
-          <div>
-            <div className="flex justify-between items-center mb-4">
-              <div className="text-lg font-montserrat italic">
-                Account Information
+      <div className="lg:max-w-7xl max-w-xl mx-auto">
+        <div className="grid lg:grid-cols-4 gap-1">
+          <Sidebar className="lg:col-span-1" />
+          <div className="lg:col-span-3 p-6 mt-5">
+            <div className="flex justify-between">
+              <div className="flex items-center mb-6">
+                <div className="text-lg flex font-montserrat text-green-50">
+                  Dashboard
+                </div>
               </div>
               <div className="flex">
-                <PrimaryButton className="w-28 ml-4">Edit</PrimaryButton>
-                <PrimaryButton className="w-48 ml-4">
+                <SecondaryButton className="w-28 ml-4 mb-6">
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    className="h-4 w-4"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                    strokeWidth="2"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"
+                    />
+                  </svg>
+                  Edit
+                </SecondaryButton>
+                <SecondaryButton className="w-48 mb-6">
                   Change Password
-                </PrimaryButton>
+                </SecondaryButton>
               </div>
             </div>
             <GrayTable className="mb-8 " />
@@ -140,7 +159,8 @@ const Accounts = () => {
             </div>
           </div>
         </div>
-      </PageTemplate>
+      </div>
+
       <Footer />
     </>
   );

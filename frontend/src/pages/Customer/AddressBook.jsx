@@ -1,3 +1,4 @@
+// AddressBook.js
 import React, { useContext, useState, useEffect } from "react";
 import Navigation from "../../components/Main Components/Navigation";
 import Footer from "../../components/Main Components/Footer";
@@ -5,6 +6,7 @@ import Sidebar from "../../components/Sidebar";
 import { PrimaryButton } from "../../components/Buttons/PrimaryButton";
 import { PageTemplate } from "../../components/Main Components/PageTemplate";
 import AuthContext from "../../context/AuthContext";
+import { SecondaryButton } from "../../components/Buttons/SecondaryButton";
 
 const AddressBook = () => {
   const { authTokens } = useContext(AuthContext);
@@ -52,26 +54,21 @@ const AddressBook = () => {
   return (
     <>
       <Navigation />
-      <PageTemplate>
-        <div className="grid grid-cols-3 gap-1">
-          <div>
-            {" "}
-            <Sidebar />{" "}
-          </div>
-          <div className=" col-span-2 ml-8">
-            <div className="flex justify-between mt-4 mb-4">
+      <div className="lg:max-w-7xl max-w-xl mx-auto">
+        <div className="grid lg:grid-cols-4 gap-1 ">
+          <Sidebar className="lg:col-span-1" />
+          <div className="lg:col-span-3 mt-5">
+            <div className="p-6 flex justify-between">
               <div className="text-lg font-montserrat text-green-50 mb-6">
+                Account Book
+              </div>
+
+              <SecondaryButton className="mb-6">
                 {" "}
-                Address Book
-              </div>
-              <div className="flex flex-row">
-                <PrimaryButton className=" w-48 ml-40">
-                  {" "}
-                  Add New Address
-                </PrimaryButton>
-              </div>
+                + Add New Address
+              </SecondaryButton>
             </div>
-            <div className="flex justify-between items-center">
+            <div className="flex p-6 -mt-6 justify-between items-center">
               <div className="text-lg font-montserrat italic mr-56">
                 Default Shipping Address
               </div>
@@ -82,60 +79,10 @@ const AddressBook = () => {
                 </PrimaryButton>
               </div>
             </div>
-
-            <div className=" container mt-9 mb-12">
-              <table className=" table-auto w-full">
-                <tbody>
-                  {customer.customer_addresses.map((address, index) => (
-                    <div key={index}>
-                      <tr className={index % 2 === 0 ? "bg-gray-100" : ""}>
-                        <td className="px-4 py-6 text-left font-[montserrat] font-bold">
-                          Street
-                        </td>
-                        <td className="px-4 py-6 text-right font-[montserrat] w-2/3">
-                          {address.street}
-                        </td>
-                      </tr>
-                      <tr>
-                        <td className="px-4 py-6 text-left font-[montserrat] font-bold">
-                          Barangay
-                        </td>
-                        <td className="px-4 py-6 text-right font-[montserrat] w-2/3">
-                          {address.barangay}
-                        </td>
-                      </tr>
-                      <tr className={index % 2 === 0 ? "bg-gray-100" : ""}>
-                        <td className="px-4 py-6 text-left font-[montserrat] font-bold">
-                          City
-                        </td>
-                        <td className="px-4 py-6 text-right font-[montserrat] w-2/3">
-                          {address.city}
-                        </td>
-                      </tr>
-                      <tr>
-                        <td className="px-4 py-6 text-left font-[montserrat] font-bold">
-                          Region
-                        </td>
-                        <td className="px-4 py-6 text-right font-[montserrat] w-2/3">
-                          {address.region}
-                        </td>
-                      </tr>
-                      <tr className={index % 2 === 0 ? "bg-gray-100" : ""}>
-                        <td className="px-4 py-6 text-left font-[montserrat] font-bold">
-                          Zip Code
-                        </td>
-                        <td className="px-4 py-6 text-right font-[montserrat] w-2/3">
-                          {address.zip_code}
-                        </td>
-                      </tr>
-                    </div>
-                  ))}
-                </tbody>
-              </table>
-            </div>
+            <div className=" container mt-9 mb-12"></div>
           </div>
         </div>
-      </PageTemplate>
+      </div>
       <Footer />
     </>
   );
