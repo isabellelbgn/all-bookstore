@@ -55,10 +55,7 @@ const Accounts = () => {
       <Navigation />
       <PageTemplate>
         <div className="grid grid-cols-2 gap-1">
-          <div>
-            {" "}
-            <Sidebar />{" "}
-          </div>
+          <Sidebar />
           <div>
             <div className="flex justify-between items-center mb-4">
               <div className="text-lg font-montserrat italic">
@@ -78,7 +75,6 @@ const Accounts = () => {
               </div>
               <div className="flex flex-row">
                 <PrimaryButton className=" w-48 ml-40">
-                  {" "}
                   Add New Address
                 </PrimaryButton>
               </div>
@@ -87,8 +83,11 @@ const Accounts = () => {
               <table className=" table-auto w-full">
                 <tbody>
                   {customer.customer_addresses.map((address, index) => (
-                    <div key={index}>
-                      <tr className={index % 2 === 0 ? "bg-gray-100" : ""}>
+                    <React.Fragment key={index}>
+                      <tr
+                        key={`street-${index}`}
+                        className={index % 2 === 0 ? "bg-gray-100" : ""}
+                      >
                         <td className="px-4 py-6 text-left font-[montserrat] font-bold">
                           Street
                         </td>
@@ -96,7 +95,7 @@ const Accounts = () => {
                           {address.street}
                         </td>
                       </tr>
-                      <tr>
+                      <tr key={`barangay-${index}`}>
                         <td className="px-4 py-6 text-left font-[montserrat] font-bold">
                           Barangay
                         </td>
@@ -104,7 +103,10 @@ const Accounts = () => {
                           {address.barangay}
                         </td>
                       </tr>
-                      <tr className={index % 2 === 0 ? "bg-gray-100" : ""}>
+                      <tr
+                        key={`city-${index}`}
+                        className={index % 2 === 0 ? "bg-gray-100" : ""}
+                      >
                         <td className="px-4 py-6 text-left font-[montserrat] font-bold">
                           City
                         </td>
@@ -112,7 +114,7 @@ const Accounts = () => {
                           {address.city}
                         </td>
                       </tr>
-                      <tr>
+                      <tr key={`region-${index}`}>
                         <td className="px-4 py-6 text-left font-[montserrat] font-bold">
                           Region
                         </td>
@@ -120,7 +122,10 @@ const Accounts = () => {
                           {address.region}
                         </td>
                       </tr>
-                      <tr className={index % 2 === 0 ? "bg-gray-100" : ""}>
+                      <tr
+                        key={`zip-${index}`}
+                        className={index % 2 === 0 ? "bg-gray-100" : ""}
+                      >
                         <td className="px-4 py-6 text-left font-[montserrat] font-bold">
                           Zip Code
                         </td>
@@ -128,7 +133,7 @@ const Accounts = () => {
                           {address.zip_code}
                         </td>
                       </tr>
-                    </div>
+                    </React.Fragment>
                   ))}
                 </tbody>
               </table>

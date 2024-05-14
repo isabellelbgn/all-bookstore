@@ -23,6 +23,7 @@ import Cart from "./pages/Customer/Cart";
 import AddressBook from "./pages/Customer/AddressBook";
 import Accounts from "./pages/Customer/Accounts";
 import AccountInformation from "./pages/Customer/AccountInformation";
+import OrderHistory from "./pages/Customer/OrderHistory";
 
 const router = createBrowserRouter([
   {
@@ -100,7 +101,7 @@ const router = createBrowserRouter([
   },
   {
     path: "/customer/dashboard/orders",
-    element: <Accounts />,
+    element: <OrderHistory />,
     errorElement: <NotFound />,
   },
   {
