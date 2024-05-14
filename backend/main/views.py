@@ -9,8 +9,8 @@ from django.contrib.auth.models import User
 from django.http import JsonResponse
 from django.db import IntegrityError
 from . import serializers, models
-from .models import Customer, CustomerAddress, Book, Order, OrderItems, BookRating
-from .serializers import BookRatingSerializer, MyTokenObtainPairSerializer, OrderItemSerializer, CustomerDetailSerializer, CustomerAddressSerializer
+from .models import Customer, Book, Order, OrderItems, BookRating
+from .serializers import BookRatingSerializer, MyTokenObtainPairSerializer, OrderItemSerializer, CustomerDetailSerializer, OrderDetailSerializer
 from rest_framework_simplejwt.views import TokenObtainPairView
 
 class MyTokenObtainPairView(TokenObtainPairView):
@@ -277,4 +277,16 @@ class CustomerDetailView(APIView):
             return Response(serializer.data)
         except Customer.DoesNotExist:
             return Response({"detail": "Customer not found."}, status=404)
+
+class CustomerOrdersView(APIView):
+    permission_classes = [IsAuthenticated]
+    
+    def get(self, request, format=None):
+        try:
+            customer = Customer.objects.get(user=request.user)
+            serializer = OrderDetailSerializer(customer.customer_orders.all(), many=True)
+            return Response(serializer.data)
+        except Customer.DoesNotExist:
+            return Response({"message": "Orders not found."}, status=404)
+
 
