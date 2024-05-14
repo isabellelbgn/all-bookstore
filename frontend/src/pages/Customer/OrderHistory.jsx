@@ -49,10 +49,6 @@ const OrderHistory = () => {
     return new Date(dateString).toLocaleDateString(undefined, options);
   };
 
-  if (loading) {
-    return <div>Loading...</div>;
-  }
-
   return (
     <>
       <Navigation />
@@ -67,36 +63,44 @@ const OrderHistory = () => {
                 </div>
               </div>
               <div className="container mt-9 mb-40">
-                {orders.length === 0 ? (
-                  <div className="text-center font-[montserrat] text-lg">
-                    No orders found.
-                  </div>
-                ) : (
-                  <table className="table-auto w-full">
-                    <thead>
-                      <tr className="bg-gray-100">
-                        <th className="px-4 py-6 text-center font-[montserrat]">
-                          Status
-                        </th>
-                        <th className="px-40 py-6 text-center font-[montserrat]">
-                          Item Name
-                        </th>
-                        <th className="px-4 py-6 text-center font-[montserrat]">
-                          Quantity
-                        </th>
-                        <th className="px-10 py-6 text-center font-[montserrat]">
-                          Date
-                        </th>
-                        <th className="px-4 py-6 text-center font-[montserrat]">
-                          Order ID
-                        </th>
-                        <th className="px-4 py-6 text-center font-[montserrat]">
-                          Total
-                        </th>
+                <table className="table-auto w-full">
+                  <thead>
+                    <tr className="bg-gray-100">
+                      <th className="px-4 py-6 text-center font-[montserrat]">
+                        Status
+                      </th>
+                      <th className="px-40 py-6 text-center font-[montserrat]">
+                        Item Name
+                      </th>
+                      <th className="px-4 py-6 text-center font-[montserrat]">
+                        Quantity
+                      </th>
+                      <th className="px-10 py-6 text-center font-[montserrat]">
+                        Date
+                      </th>
+                      <th className="px-4 py-6 text-center font-[montserrat]">
+                        Order ID
+                      </th>
+                      <th className="px-4 py-6 text-center font-[montserrat]">
+                        Total
+                      </th>
+                    </tr>
+                  </thead>
+                  <tbody className="text-sm font-montserrat">
+                    {loading ? (
+                      <tr>
+                        <td colSpan="6" className="text-center ">
+                          Loading...
+                        </td>
                       </tr>
-                    </thead>
-                    <tbody className="text-xs">
-                      {orders.map((order) => (
+                    ) : orders.length === 0 ? (
+                      <tr>
+                        <td colSpan="6" className="text-center p-6">
+                          No orders found.
+                        </td>
+                      </tr>
+                    ) : (
+                      orders.map((order) => (
                         <tr key={order.id}>
                           <td className="px-4 py-6 text-center font-[montserrat]">
                             {order.status}
@@ -123,10 +127,10 @@ const OrderHistory = () => {
                             ₱{order.total_price}
                           </td>
                         </tr>
-                      ))}
-                    </tbody>
-                  </table>
-                )}
+                      ))
+                    )}
+                  </tbody>
+                </table>
               </div>
             </div>
           </div>

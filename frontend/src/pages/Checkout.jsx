@@ -4,6 +4,8 @@ import Footer from "../components/Main Components/Footer";
 import AuthContext from "../context/AuthContext";
 import { PrimaryButton } from "../components/Buttons/PrimaryButton";
 import { PageTemplate } from "../components/Main Components/PageTemplate";
+import { useNavigate } from "react-router-dom";
+import Successful from "../components/Modals/Successful";
 import axios from "axios";
 
 const Checkout = () => {
@@ -12,13 +14,18 @@ const Checkout = () => {
   const [shippingMethod, setShippingMethod] = useState("");
   const [paymentMethod, setPaymentMethod] = useState("");
   const [phoneNumber, setPhoneNumber] = useState("");
-  const [customerAddressId, setCustomerAddressId] = useState("");
   const [subtotalPrice, setSubTotalPrice] = useState(0);
   const [shippingTotal, setShippingTotal] = useState(0);
   const [totalPrice, setTotalPrice] = useState(0);
   const [checkoutSuccess, setCheckoutSuccess] = useState(false);
   const [error, setError] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
+  const [showModal, setShowModal] = useState(false);
+  const navigate = useNavigate();
+
+  const handleCheckoutSuccess = () => {
+    setShowModal(true);
+  };
 
   useEffect(() => {
     fetchCartItems();
@@ -73,7 +80,6 @@ const Checkout = () => {
           shipping_method: shippingMethod,
           payment_method: paymentMethod,
           phone_number: phoneNumber,
-          // customer_address_id: customerAddressId,
           total_price: totalPrice,
         },
         {
@@ -88,7 +94,7 @@ const Checkout = () => {
         setCheckoutSuccess(true);
         setError(false);
         setErrorMessage("");
-        window.location.href = "/customer/dashboard/orders";
+        setShowModal(true); // Show the modal upon successful checkout
       } else {
         setError(true);
         setErrorMessage(response.data.message || "Checkout failed.");
@@ -103,6 +109,11 @@ const Checkout = () => {
   const handleShippingMethodChange = (shippingCost, shippingMethod) => {
     setShippingTotal(shippingCost);
     setShippingMethod(shippingMethod);
+  };
+
+  const handleCloseModal = () => {
+    setShowModal(false);
+    navigate("/customer/dashboard/orders"); // Redirect to dashboard orders link
   };
 
   return (
@@ -332,48 +343,17 @@ const Checkout = () => {
                     </div>
                   </div>
 
-                  {/* <div className="flex flex-col p-2 rounded bg-gray-50 sm:rounded-lg mt-6 mb-6">
-                    <div className="flex items-center p-6">
-                      <div className="w-full">
-                        <label htmlFor="phone-number" className="text-sm">
-                          Phone Number
-                        </label>
-                        <input
-                          type="text"
-                          id="phone-number"
-                          value={phoneNumber}
-                          onChange={(e) => setPhoneNumber(e.target.value)}
-                          className="w-full p-2 rounded border border-gray-300"
-                        />
-                      </div>
-                    </div>
-                  </div>
-
-                  <div className="flex flex-col p-2 rounded bg-gray-50 sm:rounded-lg mt-6 mb-6">
-                    <div className="flex items-center p-6">
-                      <div className="w-full">
-                        <label htmlFor="customer-address" className="text-sm">
-                          Customer Address ID
-                        </label>
-                        <input
-                          type="text"
-                          id="customer-address"
-                          value={customerAddressId}
-                          onChange={(e) => setCustomerAddressId(e.target.value)}
-                          className="w-full p-2 rounded border border-gray-300"
-                        />
-                      </div>
-                    </div>
-                  </div> */}
-
                   {error && (
                     <div className="text-red-500 text-sm mb-4">
                       {errorMessage}
                     </div>
                   )}
 
-                  <div className="mb-6">
-                    <PrimaryButton type="submit">Checkout</PrimaryButton>
+                  <div className="mb-6 mt-6">
+                    <PrimaryButton className="w-full" onClick={handleCheckout}>
+                      Checkout
+                    </PrimaryButton>
+                    {showModal && <Successful closeModal={handleCloseModal} />}
                   </div>
                 </form>
               </div>
