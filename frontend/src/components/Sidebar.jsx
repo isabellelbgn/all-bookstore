@@ -14,8 +14,8 @@ const Sidebar = () => {
   };
 
   return (
-    <div className="bg-gray-100 text-white w-64 top-4 fixed h-3/4 flex flex-col justify-between rounded p-2.5 mt-20">
-      <div className="flex flex-col bg-gray-100 font-montserrat border-spacing-4 p-2.5">
+    <div className="bg-gray-100 text-white w-64 top-4 flex flex-col mt-10 rounded-lg p-6 min-h-[500px]  max-h-[500px]">
+      <div className="flex flex-col bg-gray-100 font-montserrat border-spacing-4 p-2.5 overflow-y-auto">
         <Link
           to="/customer/dashboard"
           className="px-4 py-6 text-gray-400 border-b-2"
@@ -42,10 +42,12 @@ const Sidebar = () => {
         </Link>
       </div>
 
-      <div className="mt-auto px-4 py-2">
-        <button className="text-black" onClick={handleLogout}>
+      <div className="flex-grow" />
+
+      <div className="px-4 py-2">
+        <PrimaryButton className="w-full text-black" onClick={handleLogout}>
           Log Out
-        </button>
+        </PrimaryButton>
       </div>
     </div>
   );

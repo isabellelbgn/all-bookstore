@@ -57,75 +57,77 @@ const OrderHistory = () => {
     <>
       <Navigation />
       <PageTemplate>
-        <div className="grid grid-cols-3 gap-1">
-          <Sidebar />
-          <div>
-            <div className="flex justify-between items-center mb-4">
-              <div className="text-lg font-montserrat text-green-50">
-                Order History
-              </div>
-            </div>
-            <div className="container mt-9 mb-40">
-              {orders.length === 0 ? (
-                <div className="text-center font-[montserrat] text-lg">
-                  No orders found.
+        <div className="lg:max-w-7xl max-w-xl mx-auto">
+          <div className="grid lg:grid-cols-4 gap-1">
+            <Sidebar className="lg:col-span-1" />
+            <div className="lg:col-span-3 p-6 mt-5">
+              <div className="flex justify-between items-center mb-4">
+                <div className="text-lg font-montserrat text-green-50">
+                  Order History
                 </div>
-              ) : (
-                <table className="table-auto w-full">
-                  <thead>
-                    <tr className="bg-gray-100">
-                      <th className="px-4 py-6 text-center font-[montserrat]">
-                        Status
-                      </th>
-                      <th className="px-40 py-6 text-center font-[montserrat]">
-                        Item Name
-                      </th>
-                      <th className="px-4 py-6 text-center font-[montserrat]">
-                        Quantity
-                      </th>
-                      <th className="px-10 py-6 text-center font-[montserrat]">
-                        Date
-                      </th>
-                      <th className="px-4 py-6 text-center font-[montserrat]">
-                        Order ID
-                      </th>
-                      <th className="px-4 py-6 text-center font-[montserrat]">
-                        Total
-                      </th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {orders.map((order) => (
-                      <tr key={order.id}>
-                        <td className="px-4 py-6 text-center font-[montserrat]">
-                          {order.status}
-                        </td>
-                        <td className="px-20 py-6 text-center font-[montserrat]">
-                          <div className="overflow-x-visible">
-                            {order.order_items.map((item) => (
-                              <div key={item.id}>{item.book.title}</div>
-                            ))}
-                          </div>
-                        </td>
-                        <td className="px-4 py-6 text-center font-[montserrat]">
-                          {order.order_items.map((item) => (
-                            <div key={item.id}>{item.quantity}</div>
-                          ))}
-                        </td>
-                        <td className="px-10 py-6 text-center font-[montserrat]">
-                          {formatDate(order.order_date)}
-                        </td>
-                        <td className="px-4 py-6 text-center font-[montserrat]">
-                          {order.id}
-                        </td>
-                        <td className="px-4 py-6 text-center font-[montserrat]">
-                          ₱{order.total_price}
-                        </td>
+              </div>
+              <div className="container mt-9 mb-40">
+                {orders.length === 0 ? (
+                  <div className="text-center font-[montserrat] text-lg">
+                    No orders found.
+                  </div>
+                ) : (
+                  <table className="table-auto w-full">
+                    <thead>
+                      <tr className="bg-gray-100">
+                        <th className="px-4 py-6 text-center font-[montserrat]">
+                          Status
+                        </th>
+                        <th className="px-40 py-6 text-center font-[montserrat]">
+                          Item Name
+                        </th>
+                        <th className="px-4 py-6 text-center font-[montserrat]">
+                          Quantity
+                        </th>
+                        <th className="px-10 py-6 text-center font-[montserrat]">
+                          Date
+                        </th>
+                        <th className="px-4 py-6 text-center font-[montserrat]">
+                          Order ID
+                        </th>
+                        <th className="px-4 py-6 text-center font-[montserrat]">
+                          Total
+                        </th>
                       </tr>
-                    ))}
-                  </tbody>
-                </table>
-              )}
+                    </thead>
+                    <tbody className="text-xs">
+                      {orders.map((order) => (
+                        <tr key={order.id}>
+                          <td className="px-4 py-6 text-center font-[montserrat]">
+                            {order.status}
+                          </td>
+                          <td className="px-20 py-6 text-center font-[montserrat]">
+                            <div className="overflow-x-visible">
+                              {order.order_items.map((item) => (
+                                <div key={item.id}>{item.book.title}</div>
+                              ))}
+                            </div>
+                          </td>
+                          <td className="px-4 py-6 text-center font-[montserrat]">
+                            {order.order_items.map((item) => (
+                              <div key={item.id}>{item.quantity}</div>
+                            ))}
+                          </td>
+                          <td className="px-10 py-6 text-center font-[montserrat]">
+                            {formatDate(order.order_date)}
+                          </td>
+                          <td className="px-4 py-6 text-center font-[montserrat]">
+                            {order.id}
+                          </td>
+                          <td className="px-4 py-6 text-center font-[montserrat]">
+                            ₱{order.total_price}
+                          </td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                )}
+              </div>
             </div>
           </div>
         </div>
