@@ -25,7 +25,6 @@ const OrderHistory = () => {
         );
         if (response.ok) {
           const data = await response.json();
-          // Ensure data is an array
           setOrders(Array.isArray(data) ? data : []);
         } else {
           console.error(
@@ -44,6 +43,11 @@ const OrderHistory = () => {
       fetchCustomerOrders();
     }
   }, [authTokens]);
+
+  const formatDate = (dateString) => {
+    const options = { year: "numeric", month: "long", day: "numeric" };
+    return new Date(dateString).toLocaleDateString(undefined, options);
+  };
 
   if (loading) {
     return <div>Loading...</div>;
@@ -86,7 +90,7 @@ const OrderHistory = () => {
                         Order ID
                       </th>
                       <th className="px-4 py-6 text-center font-[montserrat]">
-                        Price
+                        Total
                       </th>
                     </tr>
                   </thead>
@@ -94,7 +98,7 @@ const OrderHistory = () => {
                     {orders.map((order) => (
                       <tr key={order.id}>
                         <td className="px-4 py-6 text-center font-[montserrat]">
-                          {/* Display status here */}
+                          {order.status}
                         </td>
                         <td className="px-20 py-6 text-center font-[montserrat]">
                           <div className="overflow-x-visible">
@@ -109,13 +113,13 @@ const OrderHistory = () => {
                           ))}
                         </td>
                         <td className="px-10 py-6 text-center font-[montserrat]">
-                          {/* Display date here */}
+                          {formatDate(order.order_date)}
                         </td>
                         <td className="px-4 py-6 text-center font-[montserrat]">
                           {order.id}
                         </td>
                         <td className="px-4 py-6 text-center font-[montserrat]">
-                          {/* Calculate and display total price here */}
+                          ₱{order.total_price}
                         </td>
                       </tr>
                     ))}
