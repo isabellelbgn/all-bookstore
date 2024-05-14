@@ -97,14 +97,15 @@ class OrderSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = models.Order
-        fields = ['id', 'customer', 'order_items']  
+        fields = ['id', 'customer', 'order_items']
 
 class OrderDetailSerializer(serializers.ModelSerializer):
-    order_items = OrderItemSerializer(many=True, read_only=True)  
+    order_items = OrderItemSerializer(many=True, read_only=True)
+    customer_address = CustomerAddressSerializer(read_only=True)
 
     class Meta:
         model = models.Order
-        fields = ['id', 'customer', 'order_items']
+        fields = ['id', 'order_date', 'is_ordered', 'shipping_method', 'payment_method', 'phone_number', 'total_price', 'status', 'customer_address', 'order_items']
 
 class BookRatingSerializer(serializers.ModelSerializer):
     created_by = serializers.ReadOnlyField(source='customer.user.username')

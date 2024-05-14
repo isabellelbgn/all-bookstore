@@ -28,7 +28,6 @@ urlpatterns = [
     path('customer/detail/', views.CustomerDetailView.as_view(), name='customer_detail'),
     path('customer/orders/', views.CustomerOrdersView.as_view(), name='customer_orders'),
 
-
     # Orders
     path('orders/', views.OrderList.as_view()),
     path('order/<int:pk>', views.OrderDetail.as_view()),

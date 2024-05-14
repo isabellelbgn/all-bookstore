@@ -257,16 +257,35 @@ class Checkout(APIView):
     def post(self, request):
         try:
             customer = request.user
-            print("Customer: ", customer);
             order = Order.objects.get(customer__user=customer, is_ordered=False)
-            # Mark the order as ordered
+            data = request.data
+
+            order.shipping_method = data.get('shipping_method')
+            order.payment_method = data.get('payment_method')
+            order.total_price = data.get('total_price')
+            order.phone_number = data.get('phone_number')
+            # order.customer_address_id = data.get('customer_address_id')
             order.is_ordered = True
-            print("Status: ", order.is_ordered);
             order.save()
-            # Create payment record.
-            return JsonResponse({'success': True, 'message': 'Checkout successful'})
+
+            message = {
+                'success': True,
+                'message': 'Checkout successful',
+                'order_id': order.id
+            }
+            return JsonResponse(message)
         except Order.DoesNotExist:
-            return JsonResponse({'success': False, 'message': 'No active order found for the user'}, status=404)
+            message = {
+                'success': False,
+                'message': 'No active order found for the user'
+            }
+            return JsonResponse(message, status=404)
+        except Exception as e:
+            message = {
+                'success': False,
+                'message': str(e)
+            }
+            return JsonResponse(message, status=500)
 
 class CustomerDetailView(APIView):
     permission_classes = [IsAuthenticated]
@@ -280,13 +299,13 @@ class CustomerDetailView(APIView):
 
 class CustomerOrdersView(APIView):
     permission_classes = [IsAuthenticated]
-    
+
     def get(self, request, format=None):
         try:
             customer = Customer.objects.get(user=request.user)
-            serializer = OrderDetailSerializer(customer.customer_orders.all(), many=True)
+            orders = customer.customer_orders.filter(is_ordered=True)
+            serializer = OrderDetailSerializer(orders, many=True)
             return Response(serializer.data)
         except Customer.DoesNotExist:
             return Response({"message": "Orders not found."}, status=404)
-
 

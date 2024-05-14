@@ -49,7 +49,7 @@ class Book(models.Model):
 
 # Customer Model
 class Customer(models.Model):
-    user = models.ForeignKey(User, on_delete = models.CASCADE)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
     
     def __str__(self):
         return self.user.username
@@ -69,22 +69,45 @@ class CustomerAddress(models.Model):
 
 # Order Model
 class Order(models.Model):
+    SHIPPING_METHOD_CHOICES = [
+        ('pickup', 'Pickup'),
+        ('deliver', 'Deliver'),
+        ('shipping', 'Shipping'),
+    ]
+
+    PAYMENT_METHOD_CHOICES = [
+        ('gcash', 'GCash'),
+        ('bpi', 'BPI'),
+        ('cod', 'Cash on Delivery'),
+    ]    
+    
+    STATUS_CHOICES = [
+        ('in irogress', 'In Progress'),
+        ('paid', 'Paid'),
+        ('completed', 'Completed'),
+    ]
+
     customer = models.ForeignKey(Customer, on_delete=models.CASCADE, related_name='customer_orders')
     order_date = models.DateTimeField(auto_now_add=True)
-    is_ordered = models.BooleanField(default=False) 
+    is_ordered = models.BooleanField(default=False)
+    shipping_method = models.CharField(max_length=20, choices=SHIPPING_METHOD_CHOICES, null = True)
+    payment_method = models.CharField(max_length=20, choices=PAYMENT_METHOD_CHOICES, null = True)
+    phone_number = models.CharField(max_length=15, null = True)
+    total_price = models.DecimalField(max_digits=10, decimal_places=2, default=0) 
+    customer_address = models.ForeignKey(CustomerAddress, on_delete=models.SET_NULL, null=True, related_name='orders')
+    status = models.CharField(max_length=15, choices=STATUS_CHOICES, default='In Progress')
 
     def __unicode__(self):
-        return '%s' % (self.orderDate)
+        return '%s' % (self.order_date)
 
 # Order Item Model
 class OrderItems(models.Model):
-    order = models.ForeignKey(Order, on_delete=models.CASCADE, related_name = 'order_items')
+    order = models.ForeignKey(Order, on_delete=models.CASCADE, related_name='order_items')
     book = models.ForeignKey(Book, on_delete=models.CASCADE)
     quantity = models.IntegerField(default=1)
 
     def __str__(self):
         return f"{self.book.title} - Quantity: {self.quantity}"
-
 
 # Book Rating and Reviews
 class BookRating(models.Model):
