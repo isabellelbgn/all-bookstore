@@ -266,6 +266,7 @@ class Checkout(APIView):
             order.phone_number = data.get('phone_number')
 
             address_data = data.get('customer_address')
+            print(address_data)
             if 'address_id' in address_data:
                 order.customer_address_id = address_data['address_id']
             else:
@@ -311,6 +312,19 @@ class CustomerDetailView(APIView):
             return Response(serializer.data)
         except Customer.DoesNotExist:
             return Response({"detail": "Customer not found."}, status=404)
+        
+    def put(self, request, format=None):
+        try:
+            customer = Customer.objects.get(user=request.user)
+            print("Received data:", request.data) 
+            serializer = CustomerDetailSerializer(customer, data=request.data)
+            if serializer.is_valid():
+                serializer.save()
+                return Response(serializer.data)
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        except Customer.DoesNotExist:
+            return Response({"detail": "Customer not found."}, status=status.HTTP_404_NOT_FOUND)
+
 
 class CustomerOrdersView(APIView):
     permission_classes = [IsAuthenticated]

@@ -75,6 +75,15 @@ class CustomerDetailSerializer(serializers.ModelSerializer):
         super(CustomerDetailSerializer, self).__init__(*args, **kwargs)
         self.Meta.depth = 1
 
+    def to_internal_value(self, data):
+        mapped_data = {
+            'first_name': data.get('user', {}).get('firstName'),
+            'last_name': data.get('user', {}).get('lastName'),
+            'email': data.get('user', {}).get('email'),
+            'username': data.get('user', {}).get('username'),
+        }
+        return super().to_internal_value({'user': mapped_data})
+
 class CustomerAddressSerializer(serializers.ModelSerializer):
     # address = serializers.SerializerMethodField()
 
