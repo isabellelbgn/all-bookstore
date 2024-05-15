@@ -12,7 +12,6 @@ function Book() {
   const baseUrl = "http://127.0.0.1:8000/api";
   const [bookData, setBookData] = useState({});
   const [bookTags, setBookTags] = useState([]);
-  const [bookImages, setBookImages] = useState([]);
   const [ratings, setRatings] = useState([]);
   const [quantity, setQuantity] = useState(1);
 
@@ -28,7 +27,6 @@ function Book() {
       .then((response) => response.json())
       .then((data) => {
         setBookData(data);
-        setBookImages(data.book_images);
         setBookTags(data.tag_list);
       });
   }
@@ -60,12 +58,6 @@ function Book() {
     }
   };
 
-  const handleAddToCart = () => {
-    // Implement logic to add book to cart with specified quantity
-    // For example:
-    // addToCart(bookData.id, quantity);
-  };
-
   return (
     <div>
       <Navigation />
@@ -75,14 +67,7 @@ function Book() {
             <main className="mt-10 font-montserrat">
               <div className="grid grid-cols-12 gap-4">
                 <div className="col-span-3">
-                  {bookImages.map((image, index) => (
-                    <img
-                      key={index}
-                      src={image.image}
-                      className="img-thumbnail fixed-image"
-                      alt={`Book Image ${index + 1}`}
-                    />
-                  ))}
+                  <img src={bookData.image} className="object-cover h-full" />
                 </div>
 
                 <div className="col-span-8 font-montserrat">
@@ -175,7 +160,9 @@ function Book() {
                 </div>
               </div>
 
-              <p className="text-md font-bold mb-6">Product Specifications</p>
+              <p className="text-md font-bold mb-6 mt-6">
+                Product Specifications
+              </p>
               <div class="relative overflow-x-auto w-3/4 shadow-md sm:rounded-2xl font-montserrat">
                 <table class=" w-full text-sm text-left rtl:text-right ">
                   <tbody>

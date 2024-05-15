@@ -3,9 +3,7 @@ import { AddToCartButton } from "../Buttons/AddToCartButton";
 import { Link } from "react-router-dom";
 
 const BookContainer = ({ book }) => {
-  if (!book || !book.title) {
-    return null;
-  }
+  const [bookData, setBookData] = useState(null);
   const containerStyle = {
     width: "250px",
     padding: "4px",
@@ -26,30 +24,32 @@ const BookContainer = ({ book }) => {
     objectFit: "cover",
   };
 
-  const [bookImages, setBookImages] = useState([]);
-
   useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await fetch(
+          `http://127.0.0.1:8000/api/book/${book.id}`
+        );
+        if (!response.ok) {
+          throw new Error("Failed to fetch book data");
+        }
+        const data = await response.json();
+        setBookData(data);
+      } catch (error) {
+        console.error("Error fetching book data:", error);
+      }
+    };
+
     if (book && book.id) {
-      fetchData(`http://127.0.0.1:8000/api/book/${book.id}`);
+      fetchData();
     }
   }, [book]);
 
-  function fetchData(url) {
-    fetch(url)
-      .then((response) => {
-        if (!response.ok) {
-          throw new Error("Failed to fetch book images");
-        }
-        return response.json();
-      })
-      .then((data) => {
-        setBookImages(data.book_images);
-      })
-      .catch((error) => {
-        console.error("Error fetching book images:", error);
-        setBookImages([]);
-      });
+  if (!bookData) {
+    return null;
   }
+
+  const { title, author, image } = bookData;
 
   return (
     <div className="relative my-2 flex">
@@ -59,28 +59,22 @@ const BookContainer = ({ book }) => {
       >
         <div className="flex flex-col justify-center items-center px-6 py-4">
           <Link
-            to={`/book/${book.title}/${book.id}`}
+            to={`/book/${title}/${book.id}`}
             className="group-hover:underline"
           >
             <div style={imageContainerStyle}>
-              {bookImages.map((image, index) => (
-                <img
-                  key={index}
-                  src={image.image}
-                  className="object-cover group-hover:opacity-50 transition-opacity"
-                  style={imageStyle}
-                  loading="eager"
-                  placeholder="blur"
-                  alt={`Book Image ${index + 1}`}
-                />
-              ))}
+              <img
+                src={image}
+                alt={`Book cover for ${title}`}
+                className="object-cover group-hover:opacity-50 transition-opacity"
+                style={imageStyle}
+                loading="eager"
+                placeholder="blur"
+              />
             </div>
-            <h5 className="text-s mt-6 font-normal">{book.title}</h5>
+            <h5 className="text-s mt-6 font-normal">{title}</h5>
           </Link>
-          <p className="text-gray-500 text-xs mb-6 mt-1 text-base">
-            {book.author}
-          </p>
-          <p className="text-gray-700 text-s font-semibold">P{book.price}</p>
+          <p className="text-gray-500 text-xs mb-6 mt-1 text-base">{author}</p>
           <AddToCartButton bookId={book.id} />
         </div>
       </div>
