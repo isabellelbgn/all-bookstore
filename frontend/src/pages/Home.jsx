@@ -60,7 +60,7 @@ function Home() {
               Most Popular Categories
               <Link
                 to="/categories"
-                className="text-xs text-gray-500 font-normal flex items-center"
+                className="text-sm text-gray-500 hover:text-primary-500 hover:underline font-normal flex items-center"
               >
                 View All <HiOutlineArrowLongRight className="ml-1" />
               </Link>
@@ -82,7 +82,7 @@ function Home() {
                 New Books
                 <Link
                   to="/books"
-                  className="text-xs text-gray-500 font-normal flex items-center"
+                  className="text-sm text-gray-500  hover:text-primary-500 hover:underline font-normal flex items-center"
                 >
                   View All <HiOutlineArrowLongRight className="ml-1" />
                 </Link>

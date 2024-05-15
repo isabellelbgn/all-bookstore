@@ -1,11 +1,12 @@
 import React, { useState, useRef, useEffect, useContext } from "react";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import { VscAccount, VscBook } from "react-icons/vsc";
 import { IoSearchSharp } from "react-icons/io5";
 import AuthContext from "../../context/AuthContext";
 
 export default function Navigation() {
   const { customer, logoutCustomer } = useContext(AuthContext);
+  const location = useLocation();
 
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const dropdownRef = useRef(null);
@@ -45,15 +46,9 @@ export default function Navigation() {
         </div>
 
         <div className="font-montserrat text-sm flex items-center space-x-5 lg:space-x-12">
-          <Link to="/" className="text-black">
-            Home
-          </Link>
-          <Link to="/categories" className="text-black">
-            Shop
-          </Link>
-          <Link to="/cart" className="text-black">
-            Cart
-          </Link>
+          <NavLink to="/" text="Home" />
+          <NavLink to="/categories" text="Shop" />
+          <NavLink to="/cart" text="Cart" />
           <div className="relative" ref={dropdownRef}>
             <h1
               className="text-black flex items-center"
@@ -67,12 +62,9 @@ export default function Navigation() {
                   <li>
                     {customer ? (
                       <>
-                        <Link
-                          to="/customer/dashboard"
-                          className="block px-4 py-2 hover:bg-gray-100"
-                        >
-                          Dashboard
-                        </Link>
+                        <p className="block px-4 py-2 hover:bg-gray-100 cursor-pointer">
+                          <NavLink to="/customer/dashboard" text="Dashboard" />
+                        </p>
                         <p
                           onClick={logoutCustomer}
                           className="block px-4 py-2 hover:bg-gray-100 cursor-pointer"
@@ -82,18 +74,8 @@ export default function Navigation() {
                       </>
                     ) : (
                       <>
-                        <Link
-                          to="/customer/register"
-                          className="block px-4 py-2 hover:bg-gray-100"
-                        >
-                          Register
-                        </Link>
-                        <Link
-                          to="/customer/login"
-                          className="block px-4 py-2 hover:bg-gray-100"
-                        >
-                          Login
-                        </Link>
+                        <NavLink to="/customer/register" text="Register" />
+                        <NavLink to="/customer/login" text="Login" />
                       </>
                     )}
                   </li>
@@ -104,5 +86,19 @@ export default function Navigation() {
         </div>
       </nav>
     </header>
+  );
+}
+
+function NavLink({ to, text }) {
+  const location = useLocation();
+  return (
+    <Link
+      to={to}
+      className={`text-black ${
+        location.pathname === to ? "text-green-50" : ""
+      } hover:text-primary-500 hover:underline`}
+    >
+      {text}
+    </Link>
   );
 }

@@ -281,7 +281,9 @@ function Cart() {
               </div>
             </div>
           ) : (
-            <div>No items in your cart.</div>
+            <div className="font-montserrat text-center mt-80 mb-auto">
+              No items in your cart.
+            </div>
           )}
         </PageTemplate>
         <Footer />
