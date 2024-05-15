@@ -29,10 +29,6 @@ In summary, **ALL Bookstore** is not just a web application; it's a gateway to a
 
   
 
-**Database Diagram**
-
-  
-
 **Libraries Used**
 
   
