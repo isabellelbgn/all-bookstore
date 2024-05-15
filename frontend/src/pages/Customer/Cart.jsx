@@ -151,9 +151,6 @@ function Cart() {
                 <table className="w-full font-montserrat text-sm text-left rtl:text-right">
                   <thead className="text-xs bg-gray-100">
                     <tr>
-                      <th scope="col" className="px-16 py-3">
-                        <span className="sr-only"></span>
-                      </th>
                       <th scope="col" className="px-6 py-3">
                         Item Name
                       </th>
@@ -172,21 +169,6 @@ function Cart() {
                         key={item.id}
                         className="bg-white dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-100"
                       >
-                        <td className="w-4 p-4">
-                          <div className="flex items-center">
-                            <input
-                              id={`checkbox-table-${item.id}`}
-                              type="checkbox"
-                              className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 dark:focus:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
-                            />
-                            <label
-                              htmlFor={`checkbox-table-${item.id}`}
-                              className="sr-only"
-                            >
-                              checkbox
-                            </label>
-                          </div>
-                        </td>
                         <td className="px-6 py-4">
                           <div className="flex items-center">
                             {item.images.map((image, index) => (

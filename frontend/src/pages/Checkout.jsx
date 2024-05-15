@@ -21,14 +21,18 @@ const Checkout = () => {
   const [error, setError] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
   const [showModal, setShowModal] = useState(false);
+  const [useExistingAddress, setUseExistingAddress] = useState(false);
+  const [existingAddress, setExistingAddress] = useState({});
+
   const navigate = useNavigate();
 
-  const handleCheckoutSuccess = () => {
-    setShowModal(true);
+  const handleUseExistingAddress = () => {
+    setUseExistingAddress(!useExistingAddress);
   };
 
   useEffect(() => {
     fetchCartItems();
+    fetchExistingAddress();
   }, []);
 
   useEffect(() => {
@@ -54,6 +58,27 @@ const Checkout = () => {
     }
   };
 
+  const fetchExistingAddress = async () => {
+    try {
+      const response = await axios.get(
+        "http://127.0.0.1:8000/api/customer/detail",
+        {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${authTokens.access}`,
+          },
+        }
+      );
+      if (response.status === 200) {
+        setExistingAddress(response.data);
+      } else {
+        console.error("Failed to fetch existing address:", response.statusText);
+      }
+    } catch (error) {
+      console.error("Error fetching existing address:", error);
+    }
+  };
+
   const calculateSubTotalPrice = (items) => {
     const total = items.reduce(
       (acc, item) => acc + item.book.price * item.quantity,
@@ -74,6 +99,28 @@ const Checkout = () => {
   const handleCheckout = async (event) => {
     event.preventDefault();
     try {
+      if (!shippingMethod || !paymentMethod || !phoneNumber) {
+        setError(true);
+        setErrorMessage("Please fill in all required fields.");
+        return;
+      }
+
+      if (useExistingAddress && !existingAddress.id) {
+        setError(true);
+        setErrorMessage("No existing address available.");
+        return;
+      }
+
+      const addressData = useExistingAddress
+        ? { address_id: existingAddress.id }
+        : {
+            street: document.getElementById("street").value,
+            barangay: document.getElementById("barangay").value,
+            city: document.getElementById("city").value,
+            region: document.getElementById("region").value,
+            zip_code: document.getElementById("zip_code").value,
+          };
+
       const response = await axios.post(
         "http://127.0.0.1:8000/api/checkout/",
         {
@@ -81,6 +128,7 @@ const Checkout = () => {
           payment_method: paymentMethod,
           phone_number: phoneNumber,
           total_price: totalPrice,
+          customer_address: addressData,
         },
         {
           headers: {
@@ -94,7 +142,7 @@ const Checkout = () => {
         setCheckoutSuccess(true);
         setError(false);
         setErrorMessage("");
-        setShowModal(true); // Show the modal upon successful checkout
+        setShowModal(true);
       } else {
         setError(true);
         setErrorMessage(response.data.message || "Checkout failed.");
@@ -111,9 +159,14 @@ const Checkout = () => {
     setShippingMethod(shippingMethod);
   };
 
+  const handlePhoneNumberChange = (e) => {
+    const inputPhoneNumber = e.target.value.slice(0, 11);
+    setPhoneNumber(inputPhoneNumber);
+  };
+
   const handleCloseModal = () => {
     setShowModal(false);
-    navigate("/customer/dashboard/orders"); // Redirect to dashboard orders link
+    navigate("/customer/dashboard/orders");
   };
 
   return (
@@ -133,7 +186,7 @@ const Checkout = () => {
                           <input
                             type="text"
                             value={phoneNumber}
-                            onChange={(e) => setPhoneNumber(e.target.value)}
+                            onChange={handlePhoneNumberChange}
                             placeholder="Enter phone number"
                           />
                           <button className="ml-4 rounded-xl hover:rounded-3xl hover:bg-gray-50 transition-all duration-300 text-gray-400">
@@ -156,28 +209,117 @@ const Checkout = () => {
                       </div>
                       <div className="flex justify-between mt-6">
                         <div className="font-bold">Ship to:</div>
-                        <div>
-                          #8 SUNRISE STREET MONTERITZ MAA DAVAO DAVAO DEL SUR,
-                          8000
-                          <button className="ml-4 rounded-xl hover:rounded-3xl hover:bg-gray-50 transition-all duration-300 text-gray-400">
-                            <svg
-                              xmlns="http://www.w3.org/2000/svg"
-                              className="h-4 w-4"
-                              fill="none"
-                              viewBox="0 0 24 24"
-                              stroke="currentColor"
-                              strokeWidth="2"
+                        <form className="mt-4">
+                          <div className="flex items-center mb-4">
+                            <input
+                              type="checkbox"
+                              id="useExistingAddress"
+                              className="h-4 w-4 text-indigo-600 focus:ring-indigo-500 border-gray-300 rounded"
+                              checked={useExistingAddress}
+                              onChange={handleUseExistingAddress}
+                            />
+                            <label
+                              htmlFor="useExistingAddress"
+                              className="ml-2 block text-sm text-gray-900"
                             >
-                              <path
-                                strokeLinecap="round"
-                                strokeLinejoin="round"
-                                d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"
-                              />
-                            </svg>
-                          </button>
-                        </div>
+                              Use existing address
+                            </label>
+                          </div>
+                          {useExistingAddress ? (
+                            <div className="text-sm">
+                              <p>
+                                {existingAddress.customer_addresses[0].street}
+                              </p>
+                              <p>
+                                {existingAddress.customer_addresses[0].barangay}
+                              </p>
+                              <p>
+                                {existingAddress.customer_addresses[0].city}
+                              </p>
+                              <p>
+                                {existingAddress.customer_addresses[0].region}
+                              </p>
+                              <p>
+                                {existingAddress.customer_addresses[0].zip_code}
+                              </p>
+                            </div>
+                          ) : (
+                            <>
+                              <div className="mb-4">
+                                <label
+                                  htmlFor="street"
+                                  className="block text-sm font-medium text-gray-700"
+                                >
+                                  Street
+                                </label>
+                                <input
+                                  type="text"
+                                  id="street"
+                                  className="mt-1 p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm"
+                                  placeholder="Enter street"
+                                />
+                              </div>
+                              <div className="mb-4">
+                                <label
+                                  htmlFor="barangay"
+                                  className="block text-sm font-medium text-gray-700"
+                                >
+                                  Barangay
+                                </label>
+                                <input
+                                  type="text"
+                                  id="barangay"
+                                  className="mt-1 p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm"
+                                  placeholder="Enter barangay"
+                                />
+                              </div>
+                              <div className="mb-4">
+                                <label
+                                  htmlFor="city"
+                                  className="block text-sm font-medium text-gray-700"
+                                >
+                                  City
+                                </label>
+                                <input
+                                  type="text"
+                                  id="city"
+                                  className="mt-1 p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm"
+                                  placeholder="Enter city"
+                                />
+                              </div>
+                              <div className="mb-4">
+                                <label
+                                  htmlFor="region"
+                                  className="block text-sm font-medium text-gray-700"
+                                >
+                                  Region
+                                </label>
+                                <input
+                                  type="text"
+                                  id="region"
+                                  className="mt-1 p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm"
+                                  placeholder="Enter region"
+                                />
+                              </div>
+                              <div className="mb-4">
+                                <label
+                                  htmlFor="zip_code"
+                                  className="block text-sm font-medium text-gray-700"
+                                >
+                                  Zip Code
+                                </label>
+                                <input
+                                  type="text"
+                                  id="zip_code"
+                                  className="mt-1 p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm"
+                                  placeholder="Enter zip code"
+                                />
+                              </div>
+                            </>
+                          )}
+                        </form>
                       </div>
-                    </div>
+                    </div>{" "}
                   </div>
                 </div>
 
