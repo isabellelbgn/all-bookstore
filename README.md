@@ -1,5 +1,5 @@
 
-<h1>Name of system:** ALL Bookstore</h1>
+<h1>Name of system: ALL Bookstore</h1>
 
   
 
