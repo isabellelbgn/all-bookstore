@@ -1,8 +1,20 @@
+// BookContainer.js
 import React, { useState, useEffect } from "react";
 import { AddToCartButton } from "../Buttons/AddToCartButton";
 import { Link } from "react-router-dom";
+import AddedtoCart from "../Modals/AddedtoCart";
 
 const BookContainer = ({ book }) => {
+  const [showModal, setShowModal] = useState(false);
+
+  const toggleModal = () => {
+    setShowModal(!showModal);
+  };
+
+  if (!book || !book.title) {
+    return null;
+  }
+
   const [bookData, setBookData] = useState(null);
   const containerStyle = {
     width: "250px",
@@ -74,10 +86,20 @@ const BookContainer = ({ book }) => {
             </div>
             <h5 className="text-s mt-6 font-normal">{title}</h5>
           </Link>
+          <p className="text-gray-500 text-xs mb-6 mt-1 text-base">
+            {book.author}
+          </p>
+          <p className="text-gray-700 text-s font-semibold">P{book.price}</p>
+          <AddToCartButton bookId={book.id} toggleModal={toggleModal} />
           <p className="text-gray-500 text-xs mb-6 mt-1 text-base">{author}</p>
           <AddToCartButton bookId={book.id} />
         </div>
       </div>
+      {showModal && (
+        <AddedtoCart closeModal={toggleModal}>
+          <p>Added to cart</p>
+        </AddedtoCart>
+      )}
     </div>
   );
 };

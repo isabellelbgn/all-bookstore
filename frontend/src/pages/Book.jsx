@@ -7,6 +7,7 @@ import { AddToCartButton } from "../components/Buttons/AddToCartButton";
 import { TagButton } from "../components/Buttons/TagButton";
 import ReactStars from "react-rating-stars-component";
 import { parseISO, format } from "date-fns";
+import AddedtoCart from "../components/Modals/AddedtoCart";
 
 function Book() {
   const baseUrl = "http://127.0.0.1:8000/api";
@@ -14,6 +15,7 @@ function Book() {
   const [bookTags, setBookTags] = useState([]);
   const [ratings, setRatings] = useState([]);
   const [quantity, setQuantity] = useState(1);
+  const [showModal, setShowModal] = useState(false);
 
   const { book_id } = useParams();
 
@@ -57,6 +59,16 @@ function Book() {
       setQuantity(quantity - 1);
     }
   };
+  const toggleModal = () => {
+    setShowModal(!showModal);
+  };
+
+  const handleAddToCart = () => {
+    // Implement logic to add book to cart with specified quantity
+    // For example:
+    // addToCart(bookData.id, quantity);
+    setShowModal(true); // Show the modal when item is added to cart
+  };
 
   return (
     <div>
@@ -65,7 +77,7 @@ function Book() {
         <div>
           <div className="container mx-auto px-4">
             <main className="mt-10 font-montserrat">
-              <div className="grid grid-cols-12 gap-4">
+              <div className="grid grid-cols-12 gap-10">
                 <div className="col-span-3">
                   <img src={bookData.image} className="object-cover h-full" />
                 </div>
@@ -152,7 +164,10 @@ function Book() {
                           </svg>
                         </button>
                         <div className="ml-4">
-                          <AddToCartButton bookId={bookData.id} />
+                          <AddToCartButton
+                            bookId={bookData.id}
+                            toggleModal={toggleModal}
+                          />
                         </div>
                       </div>
                     </div>
@@ -160,7 +175,7 @@ function Book() {
                 </div>
               </div>
 
-              <p className="text-md font-bold mb-6 mt-6">
+              <p className="text-md font-bold mb-6 mt-10">
                 Product Specifications
               </p>
               <div class="relative overflow-x-auto w-3/4 shadow-md sm:rounded-2xl font-montserrat">
@@ -262,6 +277,7 @@ function Book() {
         </div>
       </PageTemplate>
       <Footer />
+      {showModal && <AddedtoCart closeModal={toggleModal} />}
     </div>
   );
 }
