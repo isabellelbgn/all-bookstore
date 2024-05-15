@@ -325,7 +325,6 @@ class CustomerDetailView(APIView):
         except Customer.DoesNotExist:
             return Response({"detail": "Customer not found."}, status=status.HTTP_404_NOT_FOUND)
 
-
 class CustomerOrdersView(APIView):
     permission_classes = [IsAuthenticated]
 
@@ -374,3 +373,14 @@ class CustomerAddAddressView(APIView):
                 'success': False,
                 'message': str(e)
             }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+class CustomerDeleteAddressView(APIView):
+    def delete(self, request, address_id):
+        try:
+            address = CustomerAddress.objects.get(id=address_id)
+            address.delete()
+            return Response({'success': True, 'message': 'Address deleted successfully'})
+        except CustomerAddress.DoesNotExist:
+            return Response({'success': False, 'message': 'Address not found'}, status=status.HTTP_404_NOT_FOUND)
+        except Exception as e:
+            return Response({'success': False, 'message': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
