@@ -82,7 +82,7 @@ class Order(models.Model):
     ]    
     
     STATUS_CHOICES = [
-        ('in irogress', 'In Progress'),
+        ('in progress', 'In Progress'),
         ('paid', 'Paid'),
         ('completed', 'Completed'),
     ]
@@ -97,8 +97,11 @@ class Order(models.Model):
     customer_address = models.ForeignKey(CustomerAddress, on_delete=models.SET_NULL, null=True, related_name='orders')
     status = models.CharField(max_length=15, choices=STATUS_CHOICES, default='In Progress')
 
-    def __unicode__(self):
-        return '%s' % (self.order_date)
+    def total_quantity(self):
+        return sum(item.quantity for item in self.order_items.all())
+
+    def __str__(self):
+        return f"Order ID: {self.id}"
 
 # Order Item Model
 class OrderItems(models.Model):

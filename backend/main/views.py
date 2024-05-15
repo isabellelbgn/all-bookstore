@@ -9,7 +9,7 @@ from django.contrib.auth.models import User
 from django.http import JsonResponse
 from django.db import IntegrityError
 from . import serializers, models
-from .models import Customer, Book, Order, OrderItems, BookRating
+from .models import Customer, Book, Order, OrderItems, BookRating, CustomerAddress
 from .serializers import BookRatingSerializer, MyTokenObtainPairSerializer, OrderItemSerializer, CustomerDetailSerializer, OrderDetailSerializer, CustomerAddressSerializer
 from rest_framework_simplejwt.views import TokenObtainPairView
 
@@ -256,15 +256,30 @@ class Checkout(APIView):
 
     def post(self, request):
         try:
-            customer = request.user
-            order = Order.objects.get(customer__user=customer, is_ordered=False)
+            customer = request.user.customer_set.first()  
+            order = Order.objects.get(customer=customer, is_ordered=False)
             data = request.data
 
             order.shipping_method = data.get('shipping_method')
             order.payment_method = data.get('payment_method')
             order.total_price = data.get('total_price')
             order.phone_number = data.get('phone_number')
-            # order.customer_address_id = data.get('customer_address_id')
+
+            address_data = data.get('customer_address')
+            if 'address_id' in address_data:
+                order.customer_address_id = address_data['address_id']
+            else:
+                customer_address = CustomerAddress.objects.create(
+                    customer_id=customer.id,
+                    street=address_data['street'],
+                    barangay=address_data['barangay'],
+                    city=address_data['city'],
+                    region=address_data['region'],
+                    zip_code=address_data['zip_code']
+                )
+                order.customer_address = customer_address
+
+            print(order.customer_address)
             order.is_ordered = True
             order.save()
 
@@ -273,19 +288,19 @@ class Checkout(APIView):
                 'message': 'Checkout successful',
                 'order_id': order.id
             }
-            return JsonResponse(message)
+            return Response(message)
         except Order.DoesNotExist:
             message = {
                 'success': False,
                 'message': 'No active order found for the user'
             }
-            return JsonResponse(message, status=404)
+            return Response(message, status=status.HTTP_404_NOT_FOUND)
         except Exception as e:
             message = {
                 'success': False,
                 'message': str(e)
             }
-            return JsonResponse(message, status=500)
+            return Response(message, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
 class CustomerDetailView(APIView):
     permission_classes = [IsAuthenticated]
@@ -308,36 +323,6 @@ class CustomerOrdersView(APIView):
             return Response(serializer.data)
         except Customer.DoesNotExist:
             return Response({"message": "Orders not found."}, status=404)
-
-# class CustomerAddAddressView(APIView):
-#     permission_classes = [IsAuthenticated]
-
-#     def post(self, request):
-#         try:
-#             customer = Customer.objects.get(user=request.user)
-
-#             address_data = request.data
-#             address_data['customer'] = customer.id
-
-#             serializer = CustomerAddressSerializer(data=address_data)
-#             if serializer.is_valid():
-#                 customer_address = serializer.save()
-
-#                 return Response({
-#                     'success': True,
-#                     'message': 'Address added successfully',
-#                     'customer_address': serializer.data
-#                 }, status=status.HTTP_201_CREATED)
-#             else:
-#                 return Response({
-#                     'success': False,
-#                     'errors': serializer.errors
-#                 }, status=status.HTTP_400_BAD_REQUEST)
-#         except Exception as e:
-#             return Response({
-#                 'success': False,
-#                 'message': str(e)
-#             }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
 class CustomerAddAddressView(APIView):
     permission_classes = [IsAuthenticated]
