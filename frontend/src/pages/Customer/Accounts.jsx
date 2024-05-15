@@ -78,11 +78,6 @@ const Accounts = () => {
               <div className="text-lg font-montserrat italic static">
                 Default Shipping Address{" "}
               </div>
-              <div className="flex flex-row">
-                <PrimaryButton className=" w-48 ml-40">
-                  Add New Address
-                </PrimaryButton>
-              </div>
             </div>
             <div className=" container mt-9 mb-40">
               <table className=" table-auto w-full">
