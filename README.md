@@ -60,7 +60,7 @@ In summary, **ALL Bookstore** is not just a web application; it's a gateway to a
  </p>
 
  <p align="center" style="display: flex; justify-content: center;">
-    <img src="https://i.ibb.co/gVBRph5/Categories.png" height="400" width="600">
+    <img src="https://cdn.discordapp.com/attachments/751466270494294026/1240329010182098944/Categories.png?ex=664629e8&is=6644d868&hm=56c68217a5ba319542d107d6e1e6549f27c1bdff6fac37b2f80bff9ee37dc1f8&" height="400" width="600">
     <img src="https://i.ibb.co/PZ0Sgtf/Category.png" height="400" width="600">
  </p>
  <p align="center" style="display: flex; justify-content: center;">
