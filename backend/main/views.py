@@ -10,7 +10,7 @@ from django.http import JsonResponse
 from django.db import IntegrityError
 from . import serializers, models
 from .models import Customer, Book, Order, OrderItems, BookRating
-from .serializers import BookRatingSerializer, MyTokenObtainPairSerializer, OrderItemSerializer, CustomerDetailSerializer, OrderDetailSerializer
+from .serializers import BookRatingSerializer, MyTokenObtainPairSerializer, OrderItemSerializer, CustomerDetailSerializer, OrderDetailSerializer, CustomerAddressSerializer
 from rest_framework_simplejwt.views import TokenObtainPairView
 
 class MyTokenObtainPairView(TokenObtainPairView):
@@ -309,3 +309,69 @@ class CustomerOrdersView(APIView):
         except Customer.DoesNotExist:
             return Response({"message": "Orders not found."}, status=404)
 
+# class CustomerAddAddressView(APIView):
+#     permission_classes = [IsAuthenticated]
+
+#     def post(self, request):
+#         try:
+#             customer = Customer.objects.get(user=request.user)
+
+#             address_data = request.data
+#             address_data['customer'] = customer.id
+
+#             serializer = CustomerAddressSerializer(data=address_data)
+#             if serializer.is_valid():
+#                 customer_address = serializer.save()
+
+#                 return Response({
+#                     'success': True,
+#                     'message': 'Address added successfully',
+#                     'customer_address': serializer.data
+#                 }, status=status.HTTP_201_CREATED)
+#             else:
+#                 return Response({
+#                     'success': False,
+#                     'errors': serializer.errors
+#                 }, status=status.HTTP_400_BAD_REQUEST)
+#         except Exception as e:
+#             return Response({
+#                 'success': False,
+#                 'message': str(e)
+#             }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+class CustomerAddAddressView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def post(self, request):
+        try:
+            customer = Customer.objects.get(user=request.user)
+
+            address_data = {
+                'customer': customer.id,
+                'street': request.data.get('street', ''),
+                'barangay': request.data.get('barangay', ''),
+                'city': request.data.get('city', ''),
+                'region': request.data.get('region', ''),
+                'zip_code': request.data.get('zip_code', ''),
+                'default_address': request.data.get('default_address', False)  
+            }
+
+            serializer = CustomerAddressSerializer(data=address_data)
+            if serializer.is_valid():
+                customer_address = serializer.save()
+
+                return Response({
+                    'success': True,
+                    'message': 'Address added successfully',
+                    'customer_address': serializer.data
+                }, status=status.HTTP_201_CREATED)
+            else:
+                return Response({
+                    'success': False,
+                    'errors': serializer.errors
+                }, status=status.HTTP_400_BAD_REQUEST)
+        except Exception as e:
+            return Response({
+                'success': False,
+                'message': str(e)
+            }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)

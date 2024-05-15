@@ -76,11 +76,11 @@ class CustomerDetailSerializer(serializers.ModelSerializer):
         self.Meta.depth = 1
 
 class CustomerAddressSerializer(serializers.ModelSerializer):
-    address = serializers.SerializerMethodField()
+    # address = serializers.SerializerMethodField()
 
     class Meta:
         model = models.CustomerAddress
-        fields = ['id', 'customer', 'address', 'default_address']
+        fields = ['id', 'customer', 'street', 'barangay', 'city', 'region', 'zip_code', 'default_address']
 
     def get_address(self, obj):
         return f"{obj.street}, {obj.barangay}, {obj.city}, {obj.region}, {obj.zip_code}"
