@@ -1,12 +1,7 @@
 
 <h1>ALL Bookstore</h1>
 
-  
-
-**Description:** a full-stack web application designed to revolutionize how people interact with online bookstores and libraries. It seamlessly integrates a user-friendly interface with powerful backend functionality to provide an enriching experience for book enthusiasts and knowledge seekers alike.
-
 **Description:** A full-stack web application designed to revolutionize how people interact with online bookstores and libraries. It seamlessly integrates a user-friendly interface with powerful backend functionality to ensure efficient book tracking and user interaction. **ALL Bookstore** promises to be a go-to platform in providing an enriching experience for book enthusiasts and knowledge seekers alike.
-
 
 **Database Diagram**
 <p align="center" style="display: flex; justify-content: center;">
@@ -14,39 +9,33 @@
  </p>
 
 **Key Features:**
-* User-friendly Interface: ALL Bookstore boasts a sleek and intuitive interface that allows users to effortlessly browse through a vast collection of books, ebooks, audiobooks, and other media.
-* Comprehensive Search: With an advanced search functionality, users can quickly find their desired books by title, author, genre, or keywords. The search results are accurate and tailored to meet the user's requirements.
-* Community Engagement: The platform fosters a vibrant community of book lovers by enabling users to share book reviews, ratings, and recommendations. Users can also participate in the platform's book clubs, discussions, and literary events.
-* Seamless Transactions: ALL Bookstore ensures smooth and secure transactions for purchasing or borrowing books. Users can choose from various payment options and delivery methods, making the process convenient and hassle-free.
-* Accessibility: The application is designed to be accessible to users of all abilities, with features such as screen reader compatibility, adjustable font sizes, and color contrast settings.
+* User-friendly Interface: ALL Bookstore boasts a sleek and intuitive interface that allows users to browse through a vast collection of books effortlessly.
+* Book Previews: Provide users with the ability to preview excerpts, table of contents, or sample chapters of books before making a purchase. This helps users make informed decisions and increases the likelihood of successful conversions.
+* Community Engagement: Allow users to leave reviews and ratings for books they've purchased or read. Implement a rating system with star ratings and written reviews to help other users make informed decisions about which books to buy.
+* Seamless Transactions: ALL Bookstore ensures smooth and secure transactions for purchasing books. Users can choose from various payment options and delivery methods, making the process convenient and hassle-free.
+* Order Tracking: Provide users with real-time updates on the status of their orders, including order confirmation, shipping status, and delivery tracking information. This feature enhances transparency and improves the overall shopping experience.
 
  
 **How does the full stack web application help the benefactors of it?**
 
 * Time-saving: Users can save time and effort by easily finding books of interest, accessing them from anywhere, and engaging in meaningful discussions within the community.
-* knowledge Expansion: The platform facilitates lifelong learning and knowledge expansion by providing access to a vast repository of educational resources, literature, and informational content.
+* Knowledge Expansion: The platform facilitates lifelong learning and knowledge expansion by providing access to a vast repository of educational resources, literature, and informational content.
 * Community Building: ALL Bookstore connects like-minded individuals who share a passion for reading, fostering a sense of belonging and camaraderie within the literary community.
 * Convenience: With its seamless interface and robust functionality, ALL Bookstore offers unmatched convenience in discovering, purchasing, and consuming books online.
 
 In summary, **ALL Bookstore** is not just a web application; it's a gateway to a world of knowledge, exploration, and community for book enthusiasts and learners worldwide.
 
-  
-
 **Libraries Used**
 
-  
-
 - Django
-
+- Django REST framework
+- JWT Authentication
+- React Icons
+- Axios
 - React
-
 - React Router
-
 - Vite
-
-- Tailwind
-
-  
+- Vitest
 
 **Pictures of the Application**
 <p align="center" style="display: flex; justify-content: center;">
@@ -94,12 +83,7 @@ In summary, **ALL Bookstore** is not just a web application; it's a gateway to a
   <img src="https://i.ibb.co/j8GbBKF/Edit-Account-Information.png" height="400" width="600">
 </p>
 
-  
-
 **Contributors**
-
-  
-
 
 <p align="center" style="display: flex; justify-content: center;">
     <img src="https://i.ibb.co/Ryjd48N/78a5910a-b0f4-42ec-9a96-614160804c09.jpg" width="150">
