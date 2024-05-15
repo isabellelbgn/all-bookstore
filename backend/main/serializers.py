@@ -1,5 +1,14 @@
 from rest_framework import serializers
 from . import models
+from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
+
+class MyTokenObtainPairSerializer(TokenObtainPairSerializer):
+    @classmethod
+    def get_token(cls, user):
+        token = super().get_token(user)
+        token['id'] = user.id 
+        token['username'] = user.username
+        return token
 
 class AdminSerializer(serializers.ModelSerializer):
     class Meta:
@@ -30,7 +39,7 @@ class BookListSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = models.Book
-        fields = ['id', 'category', 'author', 'title', 'author', 'description', 'publish_date', 'price', 'book_images','book_ratings']
+        fields = ['id', 'category', 'author', 'title', 'author', 'description', 'publish_date', 'price', 'tag_list', 'isbn', 'book_images', 'book_ratings']
 
     def __init__(self, *args, **kwargs):
         super(BookListSerializer, self).__init__(*args, **kwargs)
@@ -42,7 +51,7 @@ class BookDetailSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = models.Book
-        fields = ['id', 'category', 'author', 'title', 'author', 'description', 'publish_date', 'price', 'book_images','book_ratings']
+        fields = ['id', 'category', 'author', 'title', 'author', 'description', 'publish_date', 'price', 'tag_list', 'isbn', 'book_images', 'book_ratings']
 
     def __init__(self, *args, **kwargs):
         super(BookDetailSerializer, self).__init__(*args, **kwargs)
@@ -51,7 +60,7 @@ class BookDetailSerializer(serializers.ModelSerializer):
 class CustomerSerializer(serializers.ModelSerializer):
     class Meta:
         model = models.Customer
-        fields = ['id', 'user', 'contact_number']
+        fields = ['id', 'user', 'customer_addresses']
 
     def __init__(self, *args, **kwargs):
         super(CustomerSerializer, self).__init__(*args, **kwargs)
@@ -60,43 +69,49 @@ class CustomerSerializer(serializers.ModelSerializer):
 class CustomerDetailSerializer(serializers.ModelSerializer):
     class Meta:
         model = models.Customer
-        fields = ['id', 'user', 'contact_number']
+        fields = ['id', 'user', 'customer_addresses']
 
     def __init__(self, *args, **kwargs):
         super(CustomerDetailSerializer, self).__init__(*args, **kwargs)
         self.Meta.depth = 1
 
-class OrderSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = models.Order
-        fields = ['id', 'customer']
-
-    def __init__(self, *args, **kwargs):
-        super(OrderSerializer, self).__init__(*args, **kwargs)
-        self.Meta.depth = 1
-
-class OrderDetailSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = models.OrderItems
-        fields=['id', 'order', 'book']
-
-    def __init__(self, *args, **kwargs):
-        super(OrderDetailSerializer, self).__init__(*args, **kwargs)
-        self.Meta.depth = 1
-
 class CustomerAddressSerializer(serializers.ModelSerializer):
+    # address = serializers.SerializerMethodField()
+
     class Meta:
         model = models.CustomerAddress
-        fields = ['id', 'customer', 'address', 'default_address']
+        fields = ['id', 'customer', 'street', 'barangay', 'city', 'region', 'zip_code', 'default_address']
 
-        def __init__(self, *args, **kwargs):
-            super(CustomerAddressSerializer, self).__init__(*args, **kwargs)
-            self.Meta.depth = 1
+    def get_address(self, obj):
+        return f"{obj.street}, {obj.barangay}, {obj.city}, {obj.region}, {obj.zip_code}"
+    
+class OrderItemSerializer(serializers.ModelSerializer):
+    book = BookDetailSerializer(read_only=True) 
+
+    class Meta:
+        model = models.OrderItems
+        fields = ['id', 'book', 'quantity']  
+
+class OrderSerializer(serializers.ModelSerializer):
+    order_items = OrderItemSerializer(many=True, read_only=True)
+
+    class Meta:
+        model = models.Order
+        fields = ['id', 'customer', 'order_items']
+
+class OrderDetailSerializer(serializers.ModelSerializer):
+    order_items = OrderItemSerializer(many=True, read_only=True)
+    customer_address = CustomerAddressSerializer(read_only=True)
+
+    class Meta:
+        model = models.Order
+        fields = ['id', 'order_date', 'is_ordered', 'shipping_method', 'payment_method', 'phone_number', 'total_price', 'status', 'customer_address', 'order_items']
 
 class BookRatingSerializer(serializers.ModelSerializer):
+    created_by = serializers.ReadOnlyField(source='customer.user.username')
     class Meta:
         model = models.BookRating
-        fields = ['id', 'customer', 'book', 'rating', 'reviews', 'review_date']
+        fields = ['id', 'customer', 'book', 'rating', 'reviews', 'created_by', 'review_date']
 
         def __init__(self, *args, **kwargs):
             super(BookRatingSerializer, self).__init__(*args, **kwargs)

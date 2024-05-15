@@ -1,9 +1,12 @@
 import { Link } from "react-router-dom";
 import { FaCheckCircle } from "react-icons/fa";
+import Navigation from "../components/Main Components/Navigation";
+import Footer from "../components/Main Components/Footer";
 
 function OrderSuccess() {
   return (
     <>
+      <Navigation />
       <div className="container mx-auto px-4">
         <main className="mt-4">
           <div className="flex justify-center">
@@ -31,6 +34,7 @@ function OrderSuccess() {
             </div>
           </div>
         </main>
+        <Footer />
       </div>
     </>
   );

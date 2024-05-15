@@ -1,38 +1,67 @@
-import React from "react";
+import React, { useContext, useState } from "react";
 import { Link } from "react-router-dom";
-import InputBox from "../../components/InputBox";
-import { PrimaryButton } from "../../components/PrimaryButton";
+import InputBox from "../../components/Main Components/InputBox";
+import Navigation from "../../components/Main Components/Navigation";
+import Footer from "../../components/Main Components/Footer";
+import { PrimaryButton } from "../../components/Buttons/PrimaryButton";
+import { PageTemplate } from "../../components/Main Components/PageTemplate";
+import { GrayBox } from "../../components/Main Components/GrayBox";
+import AuthContext from "../../context/AuthContext";
 
 const Login = () => {
+  const [loginFormData, setLoginFormData] = useState({
+    username: "",
+    password: "",
+  });
+
+  const { loginCustomer, error, errorMessage } = useContext(AuthContext);
+
+  const handleInputChange = (event) => {
+    setLoginFormData({
+      ...loginFormData,
+      [event.target.name]: event.target.value,
+    });
+  };
+
+  const isFormReady = () =>
+    loginFormData.username.trim() !== "" &&
+    loginFormData.password.trim() !== "";
+
+  const handleSubmit = async (event) => {
+    event.preventDefault();
+    try {
+      await loginCustomer(event);
+    } catch (error) {
+      console.error("Login error:", error);
+    }
+  };
+
   return (
     <div>
-      <section className="bg-white">
-        <div className="flex flex-col items-center justify-center px-6 py-8">
-          <div className="w-full bg-gray-50 rounded-2xl md:mt-0 sm:max-w-2xl xl:p-10  ">
-            <div className="font-montserrat p-6 space-y-4 md:space-y-6 sm:p-8">
+      <Navigation />
+      <PageTemplate>
+        <GrayBox>
+          <main>
+            <section className="container mx-auto py-8">
               <h1 className="text-xl text-center leading-tight tracking-tight text-gray-900 md:text-2xl dark:text-black">
                 Log In
               </h1>
-              <form className="font-normal space-y-4 md:space-y-6" action="#">
-                <div>
-                  <label
-                    htmlFor="email"
-                    className="block mb-2 text-sm text-black "
-                  >
-                    Email
+              <form onSubmit={handleSubmit}>
+                <div className="mb-4">
+                  <label htmlFor="username" className="block mb-2 text-sm">
+                    Username
                   </label>
                   <InputBox
-                    type="email"
-                    name="email"
-                    id="email"
-                    placeholder="name@email.com"
+                    type="text"
+                    name="username"
+                    id="username"
+                    placeholder="Enter username"
+                    value={loginFormData.username}
+                    onChange={handleInputChange}
                   />
                 </div>
-                <div>
-                  <label
-                    htmlFor="password"
-                    className="block mb-2 text-sm text-black"
-                  >
+                <div className="mb-4">
+                  <label htmlFor="password" className="block mb-2 text-sm">
                     Password
                   </label>
                   <InputBox
@@ -40,52 +69,40 @@ const Login = () => {
                     name="password"
                     id="password"
                     placeholder="••••••••"
+                    value={loginFormData.password}
+                    onChange={handleInputChange}
                   />
                 </div>
-                <div className="flex items-center justify-between">
-                  <div className="flex items-start">
-                    <div className="flex items-center h-5">
-                      <input
-                        id="remember"
-                        aria-describedby="remember"
-                        type="checkbox"
-                        className="w-4 h-4 border border-gray-300 rounded bg-gray-50 focus:ring-3 focus:ring-primary-300 dark:bg-gray-700 dark:border-gray-600 dark:focus:ring-primary-600 dark:ring-offset-gray-800"
-                        required=""
-                      />
-                    </div>
-                    <div className="ml-3 text-sm">
-                      <label htmlFor="remember" className="text-gray-400">
-                        Remember me
-                      </label>
-                    </div>
+                {error && (
+                  <div className="text-red-500 text-sm mb-4">
+                    {errorMessage}
                   </div>
-                  <a
-                    href="#"
-                    className="text-sm font-medium text-primary-600 hover:underline"
-                  >
-                    Forgot password?
-                  </a>
-                </div>
-                <PrimaryButton className="w-full font-medium text-sm">
+                )}
+                <PrimaryButton disabled={!isFormReady()} className="w-full">
                   Log in
                 </PrimaryButton>
-                <hr className="my-12 border-dotted border-t-1 bg-gray-500" />
-                <div className="flex items-center justify-between">
-                  <p className="text-sm font-light text-gray-400 mt-6">
-                    Don’t have an account yet?
-                  </p>
-                  <Link
-                    to="/customer/register"
-                    className="text-sm text-green-50 hover:underline mt-6"
-                  >
-                    Sign up
-                  </Link>
-                </div>
               </form>
-            </div>
-          </div>
-        </div>
-      </section>
+
+              <hr className="my-12 border-dotted border-t-1 bg-gray-500" />
+
+              <div className="flex items-center justify-between">
+                <p className="text-sm font-light mt-6">
+                  Don’t have an account yet?
+                </p>
+
+                <Link
+                  to="/customer/register"
+                  className="text-sm text-green-50 hover:underline mt-6"
+                >
+                  Sign up
+                </Link>
+              </div>
+            </section>
+          </main>
+        </GrayBox>
+      </PageTemplate>
+
+      <Footer />
     </div>
   );
 };

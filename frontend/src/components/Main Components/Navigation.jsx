@@ -1,9 +1,13 @@
-import React, { useState, useRef, useEffect } from "react";
-import { Link } from "react-router-dom";
+import React, { useState, useRef, useEffect, useContext } from "react";
+import { Link, useLocation } from "react-router-dom";
 import { VscAccount, VscBook } from "react-icons/vsc";
 import { IoSearchSharp } from "react-icons/io5";
+import AuthContext from "../../context/AuthContext";
 
 export default function Navigation() {
+  const { customer, logoutCustomer } = useContext(AuthContext);
+  const location = useLocation();
+
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const dropdownRef = useRef(null);
 
@@ -25,7 +29,7 @@ export default function Navigation() {
   }, []);
 
   return (
-    <header className="sticky top-0 z-10 bg-gray-100 rounded-b-2xl py-5 px-10 rounded-md">
+    <header className="top-0 z-10 bg-gray-100 rounded-b-2xl py-5 mb-5 px-10 rounded-md">
       <nav className="flex flex-col lg:flex-row justify-between items-center">
         <div className="font-montserrat flex items-center mb-4 lg:mb-0">
           <Link to="/">
@@ -42,15 +46,9 @@ export default function Navigation() {
         </div>
 
         <div className="font-montserrat text-sm flex items-center space-x-5 lg:space-x-12">
-          <Link to="/" className="text-black">
-            Home
-          </Link>
-          <Link to="/categories" className="text-black">
-            Shop
-          </Link>
-          <Link to="/cart" className="text-black">
-            Cart
-          </Link>
+          <NavLink to="/" text="Home" />
+          <NavLink to="/categories" text="Shop" />
+          <NavLink to="/cart" text="Cart" />
           <div className="relative" ref={dropdownRef}>
             <h1
               className="text-black flex items-center"
@@ -59,38 +57,48 @@ export default function Navigation() {
               <VscAccount className="icon" />
             </h1>
             {isDropdownOpen && (
-              <div className="absolute right-0 mt-2 w-44 bg-white divide-y divide-gray-100 rounded-lg shadow-lg">
+              <div className="absolute right-0 mt-2 w-44 bg-white divide-y divide-gray-100 rounded-lg shadow-lg z-50">
                 <ul className="py-2 text-sm text-gray-700">
                   <li>
-                    <Link
-                      to="/customer/login"
-                      className="block px-4 py-2 hover:bg-gray-100"
-                    >
-                      Login
-                    </Link>
-                  </li>
-                  <li>
-                    <Link
-                      to="/customer/register"
-                      className="block px-4 py-2 hover:bg-gray-100"
-                    >
-                      Register
-                    </Link>
+                    {customer ? (
+                      <>
+                        <p className="block px-4 py-2 hover:bg-gray-100 cursor-pointer">
+                          <NavLink to="/customer/dashboard" text="Dashboard" />
+                        </p>
+                        <p
+                          onClick={logoutCustomer}
+                          className="block px-4 py-2 hover:bg-gray-100 cursor-pointer"
+                        >
+                          Logout
+                        </p>
+                      </>
+                    ) : (
+                      <>
+                        <NavLink to="/customer/register" text="Register" />
+                        <NavLink to="/customer/login" text="Login" />
+                      </>
+                    )}
                   </li>
                 </ul>
-                <div className="py-2">
-                  <Link
-                    to="/customer/dashboard"
-                    className="block px-4 py-2 hover:bg-gray-100"
-                  >
-                    Dashboard
-                  </Link>
-                </div>
               </div>
             )}
           </div>
         </div>
       </nav>
     </header>
+  );
+}
+
+function NavLink({ to, text }) {
+  const location = useLocation();
+  return (
+    <Link
+      to={to}
+      className={`text-black ${
+        location.pathname === to ? "text-green-50" : ""
+      } hover:text-primary-500 hover:underline`}
+    >
+      {text}
+    </Link>
   );
 }
