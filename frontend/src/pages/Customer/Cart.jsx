@@ -30,26 +30,17 @@ function Cart() {
       });
       if (response.ok) {
         const data = await response.json();
-        const sortedCartItems = data.sort((a, b) => a.book.id - b.book.id);
-        const cartItemsWithImages = await Promise.all(
-          sortedCartItems.map(async (item) => {
-            const response = await fetch(
-              `http://127.0.0.1:8000/api/book/${item.book.id}`
-            );
-            if (response.ok) {
-              const imageData = await response.json();
-              const images = imageData.book_images.map((image) => image.image);
-              return { ...item, images };
-            } else {
-              console.error(
-                "Failed to fetch images for book with ID:",
-                item.book.id
-              );
-              return item;
-            }
-          })
+        const modifiedData = data.map((item) => ({
+          ...item,
+          book: {
+            ...item.book,
+            image: `http://127.0.0.1:8000${item.book.image}`,
+          },
+        }));
+        const sortedCartItems = modifiedData.sort(
+          (a, b) => a.book.id - b.book.id
         );
-        setCartItems(cartItemsWithImages);
+        setCartItems(sortedCartItems);
       } else {
         console.error("Failed to fetch cart items:", response.statusText);
         logoutCustomer();
@@ -171,15 +162,16 @@ function Cart() {
                       >
                         <td className="px-6 py-4">
                           <div className="flex items-center">
-                            {item.images.map((image, index) => (
+                            <a
+                              href={`/book/${item.book.title}/${item.book.id}`}
+                              className="flex items-center space-x-2"
+                            >
                               <img
-                                key={index}
-                                src={image}
-                                alt={`Book Image ${index + 1}`}
-                                className="w-10 h-10 mr-2"
+                                src={item.book.image}
+                                className="w-20 h-30 mr-2"
                               />
-                            ))}
-                            {item.book.title}
+                              <span>{item.book.title}</span>
+                            </a>
                           </div>
                         </td>
                         <td className="px-6 py-4">
@@ -206,7 +198,7 @@ function Cart() {
                                 />
                               </svg>
                             </button>
-                            <div>
+                            <div class="flex items-center justify-center">
                               <input
                                 type="number"
                                 id={`quantity-${item.id}`}

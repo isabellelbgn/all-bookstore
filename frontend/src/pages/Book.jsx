@@ -63,13 +63,6 @@ function Book() {
     setShowModal(!showModal);
   };
 
-  const handleAddToCart = () => {
-    // Implement logic to add book to cart with specified quantity
-    // For example:
-    // addToCart(bookData.id, quantity);
-    setShowModal(true); // Show the modal when item is added to cart
-  };
-
   return (
     <div>
       <Navigation />

@@ -179,144 +179,143 @@ const Checkout = () => {
               <div className="lg:col-span-3 sm:rounded-lg">
                 <div className="flex flex-col p-2 rounded border sm:rounded-lg mt-16 mb-6">
                   <div>
-                    <div className="text-xs p-6">
-                      <div className="flex justify-between mb-6">
-                        <div className="font-bold flex">Contact:</div>
+                    <div className="text-sm p-6">
+                      <div className="flex items-center">
+                        <div className="font-bold mr-3">Contact:</div>
                         <div>
                           <input
                             type="text"
+                            className="mt-1 p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm"
                             value={phoneNumber}
                             onChange={handlePhoneNumberChange}
                             placeholder="Enter phone number"
                           />
-                          <button className="ml-4 rounded-xl hover:rounded-3xl hover:bg-gray-50 transition-all duration-300 text-gray-400">
-                            <svg
-                              xmlns="http://www.w3.org/2000/svg"
-                              className="h-4 w-4"
-                              fill="none"
-                              viewBox="0 0 24 24"
-                              stroke="currentColor"
-                              strokeWidth="2"
-                            >
-                              <path
-                                strokeLinecap="round"
-                                strokeLinejoin="round"
-                                d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"
-                              />
-                            </svg>
-                          </button>
-                        </div>
+                        </div>{" "}
                       </div>
-                      <div className="flex justify-between mt-6">
+                      <div className="mt-3 mb-3">
                         <div className="font-bold">Ship to:</div>
                         <form className="mt-4">
-                          <div className="flex items-center mb-4">
-                            <input
-                              type="checkbox"
-                              id="useExistingAddress"
-                              className="h-4 w-4 text-indigo-600 focus:ring-indigo-500 border-gray-300 rounded"
-                              checked={useExistingAddress}
-                              onChange={handleUseExistingAddress}
-                            />
-                            <label
-                              htmlFor="useExistingAddress"
-                              className="ml-2 block text-sm text-gray-900"
-                            >
-                              Use existing address
-                            </label>
-                          </div>
-                          {useExistingAddress ? (
-                            <div className="text-sm">
-                              <p>
-                                {existingAddress.customer_addresses[0].street}
-                              </p>
-                              <p>
-                                {existingAddress.customer_addresses[0].barangay}
-                              </p>
-                              <p>
-                                {existingAddress.customer_addresses[0].city}
-                              </p>
-                              <p>
-                                {existingAddress.customer_addresses[0].region}
-                              </p>
-                              <p>
-                                {existingAddress.customer_addresses[0].zip_code}
-                              </p>
+                          <div className="flex flex-col space-y-">
+                            {" "}
+                            <div className="flex items-center">
+                              <input
+                                type="checkbox"
+                                id="useExistingAddress"
+                                className="h-4 w-4 text-indigo-600 focus:ring-indigo-500 border-gray-300 rounded"
+                                checked={useExistingAddress}
+                                onChange={handleUseExistingAddress}
+                              />
+                              <label
+                                htmlFor="useExistingAddress"
+                                className="ml-2 block text-sm text-gray-900"
+                              >
+                                Use existing address
+                              </label>
                             </div>
-                          ) : (
-                            <>
-                              <div className="mb-4">
-                                <label
-                                  htmlFor="street"
-                                  className="block text-sm font-medium text-gray-700"
-                                >
-                                  Street
-                                </label>
-                                <input
-                                  type="text"
-                                  id="street"
-                                  className="mt-1 p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm"
-                                  placeholder="Enter street"
-                                />
+                            {useExistingAddress ? (
+                              <div className="text-sm">
+                                <p>
+                                  {existingAddress.customer_addresses[0].street}
+                                </p>
+                                <p>
+                                  {
+                                    existingAddress.customer_addresses[0]
+                                      .barangay
+                                  }
+                                </p>
+                                <p>
+                                  {existingAddress.customer_addresses[0].city}
+                                </p>
+                                <p>
+                                  {existingAddress.customer_addresses[0].region}
+                                </p>
+                                <p>
+                                  {
+                                    existingAddress.customer_addresses[0]
+                                      .zip_code
+                                  }
+                                </p>
                               </div>
-                              <div className="mb-4">
-                                <label
-                                  htmlFor="barangay"
-                                  className="block text-sm font-medium text-gray-700"
-                                >
-                                  Barangay
-                                </label>
-                                <input
-                                  type="text"
-                                  id="barangay"
-                                  className="mt-1 p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm"
-                                  placeholder="Enter barangay"
-                                />
-                              </div>
-                              <div className="mb-4">
-                                <label
-                                  htmlFor="city"
-                                  className="block text-sm font-medium text-gray-700"
-                                >
-                                  City
-                                </label>
-                                <input
-                                  type="text"
-                                  id="city"
-                                  className="mt-1 p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm"
-                                  placeholder="Enter city"
-                                />
-                              </div>
-                              <div className="mb-4">
-                                <label
-                                  htmlFor="region"
-                                  className="block text-sm font-medium text-gray-700"
-                                >
-                                  Region
-                                </label>
-                                <input
-                                  type="text"
-                                  id="region"
-                                  className="mt-1 p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm"
-                                  placeholder="Enter region"
-                                />
-                              </div>
-                              <div className="mb-4">
-                                <label
-                                  htmlFor="zip_code"
-                                  className="block text-sm font-medium text-gray-700"
-                                >
-                                  Zip Code
-                                </label>
-                                <input
-                                  type="text"
-                                  id="zip_code"
-                                  className="mt-1 p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm"
-                                  placeholder="Enter zip code"
-                                />
-                              </div>
-                            </>
-                          )}
+                            ) : (
+                              <>
+                                <div className="flex flex-col">
+                                  {" "}
+                                  <label
+                                    htmlFor="street"
+                                    className="block text-sm font-medium text-gray-700 mt-2"
+                                  >
+                                    Street
+                                  </label>
+                                  <input
+                                    type="text"
+                                    id="street"
+                                    className="mt-1 p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm"
+                                    placeholder="Enter street"
+                                  />
+                                </div>
+                                <div className="flex flex-col">
+                                  {" "}
+                                  <label
+                                    htmlFor="barangay"
+                                    className="block text-sm font-medium text-gray-700 mt-2"
+                                  >
+                                    Barangay
+                                  </label>
+                                  <input
+                                    type="text"
+                                    id="barangay"
+                                    className="mt-1 p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm"
+                                    placeholder="Enter barangay"
+                                  />
+                                </div>
+                                <div className="flex flex-col">
+                                  {" "}
+                                  <label
+                                    htmlFor="city"
+                                    className="block text-sm font-medium text-gray-700 mt-2"
+                                  >
+                                    City
+                                  </label>
+                                  <input
+                                    type="text"
+                                    id="city"
+                                    className="mt-1 p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm"
+                                    placeholder="Enter city"
+                                  />
+                                </div>
+                                <div className="flex flex-col">
+                                  {" "}
+                                  <label
+                                    htmlFor="region"
+                                    className="block text-sm font-medium text-gray-700 mt-2"
+                                  >
+                                    Region
+                                  </label>
+                                  <input
+                                    type="text"
+                                    id="region"
+                                    className="mt-1 p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm"
+                                    placeholder="Enter region"
+                                  />
+                                </div>
+                                <div className="flex flex-col">
+                                  {" "}
+                                  <label
+                                    htmlFor="zip_code"
+                                    className="block text-sm font-medium text-gray-700 mt-2"
+                                  >
+                                    Zip Code
+                                  </label>
+                                  <input
+                                    type="text"
+                                    id="zip_code"
+                                    className="mt-1 p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm"
+                                    placeholder="Enter zip code"
+                                  />
+                                </div>
+                              </>
+                            )}
+                          </div>
                         </form>
                       </div>
                     </div>{" "}

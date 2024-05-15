@@ -21,7 +21,7 @@ function Books() {
       .then((data) => {
         setBooks(data.results);
         setTotalResult(data.count);
-        setTotalPages(Math.ceil(data.count / 15)); // PAGE_SIZE is 15
+        setTotalPages(Math.ceil(data.count / 15));
       });
   }
   function changeUrl(baseUrl) {
@@ -49,7 +49,10 @@ function Books() {
       <PageTemplate>
         <div className="container mx-auto px-1">
           <main className="mt-4">
-            <div className="grid font-montserrat grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3">
+            <h1 className="text-xl font-medium mb-4 flex justify-between items-center">
+              All Books{" "}
+            </h1>
+            <div className="grid font-montserrat grid-cols-1 sm:grid-cols-2 md:grid-cols-5 gap-3">
               {books &&
                 books.map((book) => (
                   <div key={book.id} className="">

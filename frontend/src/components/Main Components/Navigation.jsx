@@ -33,7 +33,7 @@ export default function Navigation() {
       <nav className="flex flex-col lg:flex-row justify-between items-center">
         <div className="font-montserrat flex items-center mb-4 lg:mb-0">
           <Link to="/">
-            <VscBook className="mr-5 icon" />
+            <VscBook className="mr-5 text-green-100 icon" />
           </Link>
           <div className="relative flex items-center">
             <IoSearchSharp className="absolute right-0 mr-2 text-search icon-search" />
@@ -74,8 +74,12 @@ export default function Navigation() {
                       </>
                     ) : (
                       <>
-                        <NavLink to="/customer/register" text="Register" />
-                        <NavLink to="/customer/login" text="Login" />
+                        <p className="block px-4 py-2 hover:bg-gray-100 cursor-pointer">
+                          <NavLink to="/customer/register" text="Register" />
+                        </p>
+                        <p className="block px-4 py-2 hover:bg-gray-100 cursor-pointer">
+                          <NavLink to="/customer/login" text="Login" />
+                        </p>
                       </>
                     )}
                   </li>

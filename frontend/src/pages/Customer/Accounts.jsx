@@ -3,10 +3,7 @@ import Navigation from "../../components/Main Components/Navigation";
 import Footer from "../../components/Main Components/Footer";
 import Sidebar from "../../components/Sidebar";
 import GrayTable from "../../components/Containers/GrayTable";
-import { PrimaryButton } from "../../components/Buttons/PrimaryButton";
-import { PageTemplate } from "../../components/Main Components/PageTemplate";
 import AuthContext from "../../context/AuthContext";
-import { SecondaryButton } from "../../components/Buttons/SecondaryButton";
 
 const Accounts = () => {
   const { authTokens } = useContext(AuthContext);
@@ -85,7 +82,7 @@ const Accounts = () => {
                       className={index % 2 === 0 ? "bg-gray-100" : "bg-gray-50"}
                     >
                       <td
-                        className="px-4 py-6 text-left w-full font-[montserrat] font-bold"
+                        className="px-4 py-6 text-left w-2/3 font-[montserrat] font-bold"
                         colSpan="2"
                       >
                         Street

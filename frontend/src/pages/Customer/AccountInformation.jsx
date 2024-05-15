@@ -2,14 +2,16 @@ import React, { useContext, useState, useEffect } from "react";
 import Navigation from "../../components/Main Components/Navigation";
 import Footer from "../../components/Main Components/Footer";
 import Sidebar from "../../components/Sidebar";
-import { PrimaryButton } from "../../components/Buttons/PrimaryButton";
 import AuthContext from "../../context/AuthContext";
+import { useNavigate } from "react-router-dom";
 
 const AccountInformation = () => {
   const { authTokens } = useContext(AuthContext);
   const [customer, setCustomer] = useState(null);
   const [loading, setLoading] = useState(true);
   const [editableMode, setEditableMode] = useState(false);
+  const navigate = useNavigate();
+
   const [editableFields, setEditableFields] = useState({
     firstName: "",
     lastName: "",
@@ -96,7 +98,8 @@ const AccountInformation = () => {
         const updatedCustomer = await response.json();
         console.log("Updated Customer:", updatedCustomer);
         setCustomer(updatedCustomer);
-        setEditableMode(false); // Disable editable mode after successful save
+        setEditableMode(false);
+        navigate("/customer/dashboard");
       } else {
         console.error("Failed to save customer data:", response.statusText);
       }
@@ -131,31 +134,36 @@ const AccountInformation = () => {
                 <div className="flex">
                   {console.log("Editable Fields:", editableFields)}{" "}
                   {editableMode ? (
-                    <button className="w-28 ml-4" onClick={handleSave}>
+                    <button
+                      className="w-28 ml-4 text-white bg-green-50 hover:bg-primary-700 focus:ring-4 focus:outline-none focus:ring-primary-300 rounded-full px-5 py-3 text-center"
+                      onClick={handleSave}
+                    >
                       Save
                     </button>
                   ) : (
-                    <button className="w-28 ml-4" onClick={handleEdit}>
+                    <button
+                      className="w-28 ml-4 text-white bg-green-50 hover:bg-primary-700 focus:ring-4 focus:outline-none focus:ring-primary-300 rounded-full px-5 py-3 text-center"
+                      onClick={handleEdit}
+                    >
                       Edit
                     </button>
                   )}
-                  <PrimaryButton className="w-48 ml-4">
-                    Change Password
-                  </PrimaryButton>
                 </div>
               </div>
               <div className="container">
                 <table className="table-auto w-full">
                   <tbody>
                     <tr className="bg-gray-100">
-                      <td className="px-4 py-6 text-left font-[montserrat] font-bold">
+                      <td className="px-4 py-6 text-left font-[montserrat] font-bold w-1/3">
                         First Name
                       </td>
-                      <td className="px-4 py-6 text-right font-[montserrat] w-2/3">
+                      <td className="px-4 py-6 font-[montserrat] w-2/3">
+                        {" "}
                         {editableMode ? (
                           <input
                             type="text"
                             name="firstName"
+                            className="w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 shadow-sm sm:text-sm"
                             value={editableFields.firstName}
                             onChange={handleInputChange}
                           />
@@ -168,11 +176,12 @@ const AccountInformation = () => {
                       <td className="px-4 py-6 text-left font-[montserrat] font-bold">
                         Last Name
                       </td>
-                      <td className="px-4 py-6 text-right font-[montserrat] w-2/3">
+                      <td className="px-4 py-6 font-[montserrat] w-2/3">
                         {editableMode ? (
                           <input
                             type="text"
                             name="lastName"
+                            className="w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 shadow-sm sm:text-sm"
                             value={editableFields.lastName}
                             onChange={handleInputChange}
                           />
@@ -185,11 +194,12 @@ const AccountInformation = () => {
                       <td className="px-4 py-6 text-left font-[montserrat] font-bold">
                         Email
                       </td>
-                      <td className="px-4 py-6 text-right font-[montserrat] w-2/3">
+                      <td className="px-4 py-6 font-[montserrat] w-2/3">
                         {editableMode ? (
                           <input
                             type="email"
                             name="email"
+                            className="w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 shadow-sm sm:text-sm"
                             value={editableFields.email}
                             onChange={handleInputChange}
                           />
@@ -202,11 +212,12 @@ const AccountInformation = () => {
                       <td className="px-4 py-6 text-left font-[montserrat] font-bold">
                         Username
                       </td>
-                      <td className="px-4 py-6 text-right font-[montserrat] w-2/3">
+                      <td className="px-4 py-6 font-[montserrat] w-2/3">
                         {editableMode ? (
                           <input
                             type="text"
                             name="username"
+                            className="w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 shadow-sm sm:text-sm"
                             value={editableFields.username}
                             onChange={handleInputChange}
                           />
@@ -219,8 +230,8 @@ const AccountInformation = () => {
                       <td className="px-4 py-6 text-left font-[montserrat] font-bold">
                         Password
                       </td>
-                      <td className="px-4 py-6 text-right font-[montserrat] w-2/3">
-                        ******** {/* Password should not be editable */}
+                      <td className="px-4 py-6 font-[montserrat] w-2/3">
+                        ********
                       </td>
                     </tr>
                   </tbody>

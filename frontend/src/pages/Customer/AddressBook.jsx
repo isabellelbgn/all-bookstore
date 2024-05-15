@@ -3,15 +3,16 @@ import Navigation from "../../components/Main Components/Navigation";
 import Footer from "../../components/Main Components/Footer";
 import Sidebar from "../../components/Sidebar";
 import { PrimaryButton } from "../../components/Buttons/PrimaryButton";
-import { PageTemplate } from "../../components/Main Components/PageTemplate";
 import AuthContext from "../../context/AuthContext";
-import { SecondaryButton } from "../../components/Buttons/SecondaryButton";
+import axios from "axios";
+import { useNavigate } from "react-router-dom";
 
 const AddressBook = () => {
   const { authTokens } = useContext(AuthContext);
   const [customer, setCustomer] = useState(null);
   const [loading, setLoading] = useState(true);
   const [addresses, setAddresses] = useState([]);
+  const navigate = useNavigate();
   const [addressFormData, setAddressFormData] = useState({
     customer: "",
     street: "",
@@ -34,13 +35,6 @@ const AddressBook = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    const formData = new FormData();
-    formData.append("street", addressFormData.first_name);
-    formData.append("barangay", addressFormData.last_name);
-    formData.append("city", addressFormData.email);
-    formData.append("region", addressFormData.username);
-    formData.append("zip_code", addressFormData.password);
-
     try {
       const response = await fetch(
         "http://127.0.0.1:8000/api/customer/address/add/",
@@ -57,7 +51,7 @@ const AddressBook = () => {
         const data = await response.json();
         console.log("Received data:", data);
         setAddressFormData({
-          customer: data.id,
+          customer: "",
           street: "",
           barangay: "",
           city: "",
@@ -70,11 +64,42 @@ const AddressBook = () => {
           ...bgColors,
           addresses.length % 2 === 0 ? "bg-gray-100" : "bg-gray-100",
         ]);
+        navigate("/customer/dashboard");
       } else {
         console.error("Failed to add address:", response.statusText);
       }
     } catch (error) {
       console.error("Error adding address:", error);
+    }
+  };
+
+  const handleDelete = async (addressId) => {
+    console.log("Deleting address with ID:", addressId);
+    try {
+      const response = await axios.delete(
+        `http://127.0.0.1:8000/api/customer/address/${addressId}`,
+        {
+          headers: {
+            Authorization: "Bearer " + authTokens.access,
+          },
+        }
+      );
+      console.log("Delete address response:", response);
+      if (response.data.success) {
+        console.log("Address deleted successfully.");
+        const updatedAddresses = addresses.filter(
+          (address) => address.id !== addressId
+        );
+        setAddresses(updatedAddresses);
+        setCustomer((prevCustomer) => ({
+          ...prevCustomer,
+          customer_addresses: updatedAddresses,
+        }));
+      } else {
+        console.error("Failed to delete address:", response.data.message);
+      }
+    } catch (error) {
+      console.error("Error deleting address:", error);
     }
   };
 
@@ -135,9 +160,8 @@ const AddressBook = () => {
               <div className="text-lg font-montserrat text-green-50 mb-6">
                 Address Book
               </div>
-
               <button
-                className="mb-6 flex"
+                className="mb-6 flex text-white bg-green-50 hover:bg-primary-700 focus:ring-4 focus:outline-none focus:ring-primary-300 rounded-full px-5 py-3 text-center"
                 onClick={() => {
                   setShowAddAddressForm(true);
                   console.log("Add address form should show up");
@@ -242,12 +266,6 @@ const AddressBook = () => {
               <div className="text-lg font-montserrat italic mr-56">
                 Default Shipping Address
               </div>
-              <div className="flex">
-                <PrimaryButton className="w-28 ml-4">Edit</PrimaryButton>
-                <PrimaryButton className="w-48 ml-4">
-                  Delete Address
-                </PrimaryButton>
-              </div>
             </div>
 
             <div className="container mt-9 ml-6 mb-80">
@@ -258,14 +276,19 @@ const AddressBook = () => {
                       Address #{index + 1}
                     </div>
                   )}{" "}
-                  {/* Display address number except for the first one */}
+                  <button
+                    className="w-48 ml-4 text-white bg-green-50 hover:bg-primary-700 focus:ring-4 focus:outline-none focus:ring-primary-300 rounded-full px-5 py-3 text-center mb-5"
+                    onClick={() => handleDelete(address.id)}
+                  >
+                    Delete Address
+                  </button>
                   <React.Fragment>
                     <tr
                       key={`street-${index}`}
                       className={index % 2 === 0 ? "bg-gray-100" : "bg-gray-50"}
                     >
                       <td
-                        className="px-4 py-6 text-left w-full font-[montserrat] font-bold"
+                        className="px-4 py-6 text-left w-2/3 font-[montserrat] font-bold"
                         colSpan="2"
                       >
                         Street

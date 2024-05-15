@@ -13,7 +13,7 @@ const CategoryContainer = (props) => {
             to={`/category/${props.category.title}/${props.category.id}`}
             className="flex flex-col items-center"
           >
-            <h5 className="text-lg text-white mb-4 mt-4">
+            <h5 className="text-lg text-white mb-4 mt-0">
               {props.category.title}
             </h5>
             <SecondaryButton className="text-xs">View All</SecondaryButton>

@@ -18,18 +18,24 @@ const BookContainer = ({ book }) => {
   const [bookData, setBookData] = useState(null);
   const containerStyle = {
     width: "250px",
+    height: "450px",
     padding: "4px",
     overflowWrap: "break-word",
     wordBreak: "break-word",
     textAlign: "center",
     maxWidth: "calc(250px - 8px)",
+    display: "flex",
+    flexDirection: "column",
+    justifyContent: "space-between",
   };
+
   const imageContainerStyle = {
     display: "flex",
     justifyContent: "center",
     alignItems: "center",
     height: "200px",
   };
+
   const imageStyle = {
     maxWidth: "100%",
     maxHeight: "100%",
@@ -86,13 +92,9 @@ const BookContainer = ({ book }) => {
             </div>
             <h5 className="text-s mt-6 font-normal">{title}</h5>
           </Link>
-          <p className="text-gray-500 text-xs mb-6 mt-1 text-base">
-            {book.author}
-          </p>
+          <p className="text-gray-500 text-xs mb-6 mt-1 text-base">{author}</p>
           <p className="text-gray-700 text-s font-semibold">P{book.price}</p>
           <AddToCartButton bookId={book.id} toggleModal={toggleModal} />
-          <p className="text-gray-500 text-xs mb-6 mt-1 text-base">{author}</p>
-          <AddToCartButton bookId={book.id} />
         </div>
       </div>
       {showModal && (
