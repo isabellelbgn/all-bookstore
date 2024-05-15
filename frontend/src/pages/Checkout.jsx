@@ -112,7 +112,7 @@ const Checkout = () => {
       }
 
       const addressData = useExistingAddress
-        ? { address_id: existingAddress.id }
+        ? { address_id: existingAddress.customer_addresses[0].id }
         : {
             street: document.getElementById("street").value,
             barangay: document.getElementById("barangay").value,

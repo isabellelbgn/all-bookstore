@@ -248,10 +248,27 @@ const AddressBook = () => {
               <tbody>
                 {customer.customer_addresses.map((address, index) => (
                   <React.Fragment key={index}>
-                    <tr
-                      key={`street-${index}`}
-                      className={index % 2 === 0 ? "bg-gray-100" : ""}
-                    >
+                    {index === 0 ? (
+                      <tr className={index % 2 === 0 ? "bg-gray-100" : ""}>
+                        <td
+                          colSpan="2"
+                          className="px-4 py-6 text-left font-[montserrat] font-bold"
+                        >
+                          Default Shipping Address
+                        </td>
+                      </tr>
+                    ) : (
+                      <tr className={index % 2 === 0 ? "bg-gray-100" : ""}>
+                        <td
+                          colSpan="2"
+                          className="px-4 py-6 text-left font-[montserrat] font-bold"
+                        >
+                          Address {index}
+                        </td>
+                      </tr>
+                    )}
+
+                    <tr key={`street-${index}`}>
                       <td className="px-4 py-6 text-left font-[montserrat] font-bold">
                         Street
                       </td>
@@ -267,10 +284,7 @@ const AddressBook = () => {
                         {address.barangay}
                       </td>
                     </tr>
-                    <tr
-                      key={`city-${index}`}
-                      className={index % 2 === 0 ? "bg-gray-100" : ""}
-                    >
+                    <tr key={`city-${index}`}>
                       <td className="px-4 py-6 text-left font-[montserrat] font-bold">
                         City
                       </td>
@@ -286,10 +300,7 @@ const AddressBook = () => {
                         {address.region}
                       </td>
                     </tr>
-                    <tr
-                      key={`zip-${index}`}
-                      className={index % 2 === 0 ? "bg-gray-100" : ""}
-                    >
+                    <tr key={`zip-${index}`}>
                       <td className="px-4 py-6 text-left font-[montserrat] font-bold">
                         Zip Code
                       </td>
