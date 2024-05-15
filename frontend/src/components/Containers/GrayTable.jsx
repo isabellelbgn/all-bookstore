@@ -61,7 +61,7 @@ const GrayTable = () => {
               {loading ? "Loading..." : customer?.user.last_name}
             </td>
           </tr>
-          <tr>
+          <tr className="bg-gray-100">
             <td className="px-4 py-6 text-left font-[montserrat] font-bold">
               Email
             </td>
@@ -69,7 +69,7 @@ const GrayTable = () => {
               {loading ? "Loading..." : customer?.user.email}
             </td>
           </tr>
-          <tr className="bg-gray-100">
+          <tr>
             <td className="px-4 py-6 text-left font-[montserrat] font-bold">
               Username
             </td>
@@ -77,7 +77,7 @@ const GrayTable = () => {
               {loading ? "Loading..." : customer?.user.username}
             </td>
           </tr>
-          <tr>
+          <tr className="bg-gray-100">
             <td className="px-4 py-6 text-left font-[montserrat] font-bold">
               Password
             </td>

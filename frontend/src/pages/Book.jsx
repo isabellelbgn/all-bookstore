@@ -73,7 +73,7 @@ function Book() {
         <div>
           <div className="container mx-auto px-4">
             <main className="mt-10 font-montserrat">
-              <div className="grid grid-cols-12 gap-4">
+              <div className="grid grid-cols-12 gap-10">
                 <div className="col-span-3">
                   {bookImages.map((image, index) => (
                     <img
@@ -175,7 +175,9 @@ function Book() {
                 </div>
               </div>
 
-              <p className="text-md font-bold mb-6">Product Specifications</p>
+              <p className="text-md font-bold mb-6 mt-10">
+                Product Specifications
+              </p>
               <div class="relative overflow-x-auto w-3/4 shadow-md sm:rounded-2xl font-montserrat">
                 <table class=" w-full text-sm text-left rtl:text-right ">
                   <tbody>

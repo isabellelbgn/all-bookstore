@@ -74,69 +74,104 @@ const Accounts = () => {
               </div>
             </div>
             <GrayTable className="mb-8 " />
-            <div className="flex justify-between mt-4">
+            <div className="flex justify-between mt-20">
               <div className="text-lg font-montserrat italic static">
                 Default Shipping Address{" "}
               </div>
             </div>
-            <div className=" container mt-9 mb-40">
-              <table className=" table-auto w-full">
-                <tbody>
-                  {customer.customer_addresses.map((address, index) => (
-                    <React.Fragment key={index}>
-                      <tr
-                        key={`street-${index}`}
-                        className={index % 2 === 0 ? "bg-gray-100" : ""}
+            <div className="container mt-9  mb-80">
+              {customer.customer_addresses.map((address, index) => (
+                <div key={index} className="mb-6">
+                  {index > 0 && (
+                    <div className="font-montserrat text-lg mb-6 mt-20 italic ">
+                      Address #{index + 1}
+                    </div>
+                  )}{" "}
+                  <React.Fragment>
+                    <tr
+                      key={`street-${index}`}
+                      className={index % 2 === 0 ? "bg-gray-100" : "bg-gray-50"}
+                    >
+                      <td
+                        className="px-4 py-6 text-left w-full font-[montserrat] font-bold"
+                        colSpan="2"
                       >
-                        <td className="px-4 py-6 text-left font-[montserrat] font-bold">
-                          Street
-                        </td>
-                        <td className="px-4 py-6 text-right font-[montserrat] w-2/3">
-                          {address.street}
-                        </td>
-                      </tr>
-                      <tr key={`barangay-${index}`}>
-                        <td className="px-4 py-6 text-left font-[montserrat] font-bold">
-                          Barangay
-                        </td>
-                        <td className="px-4 py-6 text-right font-[montserrat] w-2/3">
-                          {address.barangay}
-                        </td>
-                      </tr>
-                      <tr
-                        key={`city-${index}`}
-                        className={index % 2 === 0 ? "bg-gray-100" : ""}
+                        Street
+                      </td>
+                      <td
+                        className="px-4 py-6 text-right font-[montserrat] w-2/3"
+                        colSpan="2"
                       >
-                        <td className="px-4 py-6 text-left font-[montserrat] font-bold">
-                          City
-                        </td>
-                        <td className="px-4 py-6 text-right font-[montserrat] w-2/3">
-                          {address.city}
-                        </td>
-                      </tr>
-                      <tr key={`region-${index}`}>
-                        <td className="px-4 py-6 text-left font-[montserrat] font-bold">
-                          Region
-                        </td>
-                        <td className="px-4 py-6 text-right font-[montserrat] w-2/3">
-                          {address.region}
-                        </td>
-                      </tr>
-                      <tr
-                        key={`zip-${index}`}
-                        className={index % 2 === 0 ? "bg-gray-100" : ""}
+                        {address.street}
+                      </td>
+                    </tr>
+                    <tr key={`barangay-${index}`}>
+                      <td
+                        className="px-4 py-6 text-left font-[montserrat] font-bold"
+                        colSpan="2"
                       >
-                        <td className="px-4 py-6 text-left font-[montserrat] font-bold">
-                          Zip Code
-                        </td>
-                        <td className="px-4 py-6 text-right font-[montserrat] w-2/3">
-                          {address.zip_code}
-                        </td>
-                      </tr>
-                    </React.Fragment>
-                  ))}
-                </tbody>
-              </table>
+                        Barangay
+                      </td>
+                      <td
+                        className="px-4 py-6 text-right font-[montserrat] w-2/3"
+                        colSpan="2"
+                      >
+                        {address.barangay}
+                      </td>
+                    </tr>
+                    <tr
+                      key={`city-${index}`}
+                      className={
+                        index % 2 === 0 ? "bg-gray-100" : "bg-gray-100"
+                      }
+                    >
+                      <td
+                        className="px-4 py-6 text-left font-[montserrat] font-bold"
+                        colSpan="2"
+                      >
+                        City
+                      </td>
+                      <td
+                        className="px-4 py-6 text-right font-[montserrat] w-2/3"
+                        colSpan="2"
+                      >
+                        {address.city}
+                      </td>
+                    </tr>
+                    <tr key={`region-${index}`}>
+                      <td
+                        className="px-4 py-6 text-left font-[montserrat] font-bold"
+                        colSpan="2"
+                      >
+                        Region
+                      </td>
+                      <td
+                        className="px-4 py-6 text-right font-[montserrat] w-2/3"
+                        colSpan="2"
+                      >
+                        {address.region}
+                      </td>
+                    </tr>
+                    <tr
+                      key={`zip-${index}`}
+                      className={index % 2 === 0 ? "bg-gray-100" : "bg-gray-50"}
+                    >
+                      <td
+                        className="px-4 py-6 text-left font-[montserrat] font-bold"
+                        colSpan="2"
+                      >
+                        Zip Code
+                      </td>
+                      <td
+                        className="px-4 py-6 text-right font-[montserrat] w-2/3"
+                        colSpan="2"
+                      >
+                        {address.zip_code}
+                      </td>
+                    </tr>
+                  </React.Fragment>
+                </div>
+              ))}
             </div>
           </div>
         </div>
