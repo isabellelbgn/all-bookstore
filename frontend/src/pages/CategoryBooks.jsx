@@ -67,12 +67,12 @@ function CategoryBooks() {
     <div>
       <Navigation />
       <PageTemplate>
-        <div className="container mx-auto px-1">
+        <div className="container font-montserrat mt-10 mx-auto px-1">
           <main className="mt-4">
             <h1 className="text-xl font-medium flex justify-between items-center">
               {categoryTitle ? categoryTitle : "Category Title"}
             </h1>
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-3">
+            <div className="grid grid-cols-1 mt-10 md:grid-cols-2 lg:grid-cols-4 gap-3">
               {books &&
                 books.map((book) => (
                   <div key={book.id} className="col-span-1">

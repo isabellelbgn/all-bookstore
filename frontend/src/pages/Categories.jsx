@@ -48,12 +48,12 @@ function Categories() {
     <div>
       <Navigation />
       <PageTemplate>
-        <div className="container mx-auto px-1">
+        <div className="container mx-auto mt-10 font-montserrat px-1">
           <main className="mt-4">
             <p className="text-xl mb-4 font-medium flex justify-between items-center">
               All Categories
             </p>
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-3">
+            <div className="grid grid-cols-1 mt-10 md:grid-cols-2 lg:grid-cols-4 gap-3">
               {categories &&
                 categories.map((category) => (
                   <div key={category.id} className="col-span-1">

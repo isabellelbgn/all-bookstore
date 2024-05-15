@@ -7,6 +7,7 @@ import { AddToCartButton } from "../components/Buttons/AddToCartButton";
 import { TagButton } from "../components/Buttons/TagButton";
 import ReactStars from "react-rating-stars-component";
 import { parseISO, format } from "date-fns";
+import AddedtoCart from "../components/Modals/AddedtoCart";
 
 function Book() {
   const baseUrl = "http://127.0.0.1:8000/api";
@@ -15,6 +16,7 @@ function Book() {
   const [bookImages, setBookImages] = useState([]);
   const [ratings, setRatings] = useState([]);
   const [quantity, setQuantity] = useState(1);
+  const [showModal, setShowModal] = useState(false);
 
   const { book_id } = useParams();
 
@@ -59,13 +61,16 @@ function Book() {
       setQuantity(quantity - 1);
     }
   };
+  const toggleModal = () => {
+    setShowModal(!showModal);
+  };
 
   const handleAddToCart = () => {
     // Implement logic to add book to cart with specified quantity
     // For example:
     // addToCart(bookData.id, quantity);
+    setShowModal(true); // Show the modal when item is added to cart
   };
-
   return (
     <div>
       <Navigation />
@@ -167,7 +172,10 @@ function Book() {
                           </svg>
                         </button>
                         <div className="ml-4">
-                          <AddToCartButton bookId={bookData.id} />
+                          <AddToCartButton
+                            bookId={bookData.id}
+                            toggleModal={toggleModal}
+                          />
                         </div>
                       </div>
                     </div>
@@ -277,6 +285,7 @@ function Book() {
         </div>
       </PageTemplate>
       <Footer />
+      {showModal && <AddedtoCart closeModal={toggleModal} />}
     </div>
   );
 }
