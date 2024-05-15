@@ -10,7 +10,7 @@
 
 **Database Diagram**
 <p align="center" style="display: flex; justify-content: center;">
-<img src="https://i.ibb.co/PTrLwKF/updated-db.png" >
+<img src="https://cdn.discordapp.com/attachments/751466270494294026/1240330537025933474/updated-db_1.png?ex=66462b54&is=6644d9d4&hm=dc4cb0ebd9a96c1b317ebba67013c7240bd8e02d03f9e03ea2e0dee7aea9f465&" >
  </p>
 
 **Key Features:**
